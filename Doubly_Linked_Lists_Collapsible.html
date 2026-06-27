@@ -469,79 +469,79 @@
         const OPERATIONS_DATA = {
         "node-structure": {
                 "name": "Node Structure",
-                "algorithm": "",
+                "algorithm": "1. Define structure with data, prev, and next pointers.",
                 "code": "struct Node\n{\n    int data;\n    struct Node *prev;\n    struct Node *next;\n};\n\nstruct Node *head = NULL;",
                 "complexity": "No Time Complexity"
         },
         "traversal-forward": {
                 "name": "Traversal (Forward)",
-                "algorithm": "",
+                "algorithm": "1. Start from head\n2. Print data\n3. Move to next pointer\n4. Repeat until NULL\n5. Stop",
                 "code": "void displayForward()\n{\n    struct Node *temp = head;\n\n    while(temp != NULL)\n    {\n        printf(\"%d \", temp->data);\n        temp = temp->next;\n    }\n}",
                 "complexity": "O(n)"
         },
         "traversal-backward": {
                 "name": "Traversal (Backward)",
-                "algorithm": "",
+                "algorithm": "1. Traverse to last node\n2. Print node data\n3. Move to prev pointer\n4. Repeat until NULL\n5. Stop",
                 "code": "void displayBackward()\n{\n    struct Node *temp = head;\n\n    while(temp->next != NULL)\n        temp = temp->next;\n\n    while(temp != NULL)\n    {\n        printf(\"%d \", temp->data);\n        temp = temp->prev;\n    }\n}",
                 "complexity": "O(n)"
         },
         "insertion-beginning": {
                 "name": "Insertion (Beginning)",
-                "algorithm": "",
+                "algorithm": "1. Create a new node\n2. Insert data into the node\n3. Set newNode->prev = NULL\n4. Set newNode->next = Head\n5. If list not Empty, Set head->prev = newNode\n6. Update Head",
                 "code": "void insertBeginning(int data)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n\n    newNode->data = data;\n    newNode->prev = NULL;\n    newNode->next = head;\n\n    if(head != NULL)\n        head->prev = newNode;\n\n    head = newNode;\n}",
                 "complexity": "O(1)"
         },
         "insertion-end": {
                 "name": "Insertion (End)",
-                "algorithm": "",
+                "algorithm": "1. Create a new node\n2. Set next = NULL\n3. If list is empty, make it head\n4. Traverse to last node\n5. Link last node and new node",
                 "code": "void insertEnd(int data)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = data;\n    newNode->next = NULL;\n    if(head == NULL)\n    {\n        newNode->prev = NULL;\n        head = newNode;\n        return;\n    }\n    struct Node *temp = head;\n    while(temp->next != NULL)\n        temp = temp->next;\n    temp->next = newNode;\n    newNode->prev = temp;}",
                 "complexity": "O(n)"
         },
         "insertion-at-specific-position": {
                 "name": "Insertion (At Specific Position)",
-                "algorithm": "",
+                "algorithm": "1. Create a new node\n2. Traverse to position-1\n3. Connect new node between nodes\n4. Update prev and next links",
                 "code": "void insertPosition(int data, int pos)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = data;\n    struct Node *temp = head;\n    for(int i=1;i < pos-1; i++)\n        temp = temp->next;\n    newNode->next = temp->next;\n    newNode->prev = temp;\n    if(temp->next != NULL)\n        temp->next->prev = newNode;\n    temp->next = newNode;\n}",
                 "complexity": "O(n)"
         },
         "deletion-at-beginning": {
                 "name": "Deletion (At Beginning)",
-                "algorithm": "",
+                "algorithm": "1. Store first node\n2. Move head to next node\n3. Set new head's prev as NULL\n4. Delete old first node",
                 "code": "void deleteBeginning()\n{\n    if(head == NULL)\n        return;\n\n    struct Node *temp = head;\n\n    head = head->next;\n\n    if(head != NULL)\n        head->prev = NULL;\n\n    free(temp);\n}",
                 "complexity": "O(1)"
         },
         "deletion-at-end": {
                 "name": "Deletion (At End)",
-                "algorithm": "",
+                "algorithm": "1. Traverse to last node\n2. Move to previous node\n3. Set prev node's next as NULL\n4. Delete last node",
                 "code": "void deleteEnd()\n{\n    if(head == NULL)\n        return;\n    struct Node *temp = head;\n    while(temp->next != NULL)\n        temp = temp->next;\n    if(temp == head)\n    {\n        free(head);\n        head = NULL;\n        return;\n    }\n    temp->prev->next = NULL;\n    free(temp);\n}",
                 "complexity": "O(n)"
         },
         "deletion-at-specific-position": {
                 "name": "Deletion (At Specific Position)",
-                "algorithm": "",
+                "algorithm": "1. Traverse to desired node\n2. Connect previous nodes and next nodes\n3. Delete current node",
                 "code": "void deletePosition(int pos)\n{\n    struct Node *temp = head;\n\n    for(int i=1;i < pos; i++)\n        temp = temp->next;\n\n    temp->prev->next = temp->next;\n\n    if(temp->next != NULL)\n        temp->next->prev = temp->prev;\n\n    free(temp);\n}",
                 "complexity": "O(n)"
         },
         "searching-a-node": {
                 "name": "Searching a node",
-                "algorithm": "",
+                "algorithm": "1. Start from head\n2. Compare each node with key\n3. If found, return position\n4. Otherwise continue\n5. If end reached, element not found",
                 "code": "void search(int key)\n{\n    struct Node *temp = head;\n    int pos = 1;\n    while(temp != NULL)\n    {\n        if(temp->data == key)\n        {\n            printf(\"Found at position %d\", pos);\n            return;\n        }\n        temp = temp->next;\n        pos++;\n    }\n    printf(\"Not Found\");\n}",
                 "complexity": "O(n)"
         },
         "updating-a-node": {
                 "name": "Updating a node",
-                "algorithm": "",
+                "algorithm": "1. Search required node\n2. Replace old value with new value",
                 "code": "void update(int oldValue, int newValue)\n{\n    struct Node *temp = head;\n\n    while(temp != NULL)\n    {\n        if(temp->data == oldValue)\n        {\n            temp->data = newValue;\n            return;\n        }\n\n        temp = temp->next;\n    }\n}",
                 "complexity": "O(n)"
         },
         "reversing": {
                 "name": "Reversing",
-                "algorithm": "",
+                "algorithm": "1. Traverse each node\n2. Swap prev and next pointers\n3. Move using swapped prev\n4. Make last processed node the new head",
                 "code": "void reverse()\n{\n    struct Node *temp = NULL;\n    struct Node *current = head;\n    while(current != NULL)\n    {\n        temp = current->prev;\n        current->prev = current->next;\n        current->next = temp;\n        current = current->prev;\n    }\n    if(temp != NULL)\n        head = temp->prev;\n}",
                 "complexity": "O(n)"
         },
         "count-number-of-nodes": {
                 "name": "Count number of nodes",
-                "algorithm": "",
+                "algorithm": "1. Initialize count = 0\n2. Traverse entire list\n3. Increment count for each node\n4. Print count",
                 "code": "int countNodes()\n{\n    int count = 0;\n\n    struct Node *temp = head;\n\n    while(temp != NULL)\n    {\n        count++;\n        temp = temp->next;\n    }\n\n    return count;\n}",
                 "complexity": "O(n)"
         }
