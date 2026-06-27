@@ -1,351 +1,625 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Queue Operations </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Operations - Operations and Complexity</title>
+    <style>
+        /* CSS Variables & Theme */
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --radius: 8px;
+        }
 
-<link href="style.css" rel="stylesheet"/></head>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Navbar Dropdowns */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--primary);
+            min-width: 180px;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            list-style: none;
+            padding: 8px 0;
+            top: 100%;
+            left: 0;
+            z-index: 1001;
+        }
+
+        .dropdown-content li {
+            width: 100%;
+        }
+
+        .dropdown-content li a {
+            display: block;
+            padding: 10px 16px;
+            font-size: 13.5px;
+            color: #cbd5e1 !important;
+            background: none !important;
+            border-radius: 0;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .dropdown-content li a:hover,
+        .dropdown-content li a.active {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Page Header */
+        .page-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 30px 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .layout-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px 24px;
+            gap: 30px;
+        }
+
+        /* Sidebar for Tabs */
+        .tab-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.5px;
+        }
+
+        .tab-button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            text-align: left;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+            transition: all 0.2s;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .tab-button:hover {
+            background-color: #f1f5f9;
+            color: var(--accent);
+        }
+
+        .tab-button.active {
+            background-color: #eff6ff;
+            color: var(--accent);
+            border-left-color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Main Content Viewport */
+        .content-viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .op-header {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .op-title {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .complexity-badge {
+            background-color: #eff6ff;
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #bfdbfe;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .algorithm-text {
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap; /* Supports tabs/indentations and linebreaks */
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        pre {
+            margin: 0;
+            padding: 15px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                height: 60px;
+                padding: 0 16px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links li a {
+                display: block;
+                width: 100%;
+                padding: 10px 16px;
+            }
+
+            /* Display dropdown contents inline on mobile */
+            .dropdown-content {
+                position: static;
+                display: block;
+                background-color: rgba(0, 0, 0, 0.1);
+                box-shadow: none;
+                padding-left: 15px;
+                border-radius: 0;
+                width: 100%;
+            }
+
+            .layout-container {
+                flex-direction: column;
+                padding: 0 16px 30px 16px;
+                gap: 20px;
+            }
+
+            .tab-sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
 <body>
-<nav class="navbar">
-<a class="nav-brand" href="index.html">AlgoInsight</a>
-<button aria-label="Toggle navigation" class="hamburger">
-<span></span>
-<span></span>
-<span></span>
-</button>
-<ul class="nav-links">
-<li><a href="index.html">Home</a></li>
-<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
-<li><a href="Stack.html">Stack &amp; Queue</a></li>
-<li><a href="Binary_Tree.html">Trees</a></li>
-<li><a href="Graphs.html">Graphs</a></li>
-<li><a href="Linear_Search.html">Searching</a></li>
-<li><a href="Insertion_Sort.html">Sorting</a></li>
-<li><a href="Hashtable.html">Hashing</a></li>
-</ul>
-</nav>
-<header class="page-header"><h1>Queue Operations</h1><p>Learn about the operations, implementation, and time complexity of Queue Operations.</p></header><div class="container"><input id="searchBox" onkeyup="searchOperation()" placeholder="Search operation..." type="text"/><div class="table-responsive"><table>
-<thead>
-<tr>
-<th>Operation</th>
-<th>Algorithm (Text / Code)</th>
-<th>Time Complexity</th>
-</tr>
-</thead>
-<tbody>
-<!-- Declaration -->
-<tr>
-<td><b>Declaration</b></td>
-<td>
-<div class="result codeBox">
-<pre><b>
-#define MAX 100
 
-int queue[MAX];
-int front = -1;
-int rear = -1;
-</b></pre>
-</div>
-<div class="result textBox hidden">
-<b>
-                    1. Create an array of size Max<br/>
-                    2. Initialise:<br/>
-                        front = - 1<br/>
-                        rear = -1 <br/>
-</b>
-</div>
-</td>
-<td><b>No Time Complexity</b></td>
-</tr>
+    
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">AlgoInsight</a>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Linked Lists</a>
+                <ul class="dropdown-content">
+                    <li><a href="Singly_Linked_Lists_Collapsible.html">Singly Linked List</a></li>
+                    <li><a href="Doubly_Linked_Lists_Collapsible.html">Doubly Linked List</a></li>
+                    <li><a href="Circularly_Linked_Lists_Collapsible.html">Circular Linked List</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Stack & Queue</a>
+                <ul class="dropdown-content">
+                    <li><a href="Stack.html">Stack Operations</a></li>
+                    <li><a href="Queue.html">Queue Operations</a></li>
+                    <li><a href="Infix.html">Infix to Postfix</a></li>
+                    <li><a href="Postfix.html">Postfix Evaluation</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Trees</a>
+                <ul class="dropdown-content">
+                    <li><a href="Binary_Tree.html">Binary Tree</a></li>
+                    <li><a href="Binary_Search_Tree.html">Binary Search Tree</a></li>
+                </ul>
+            </li>
+            <li><a href="Graphs.html">Graphs</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Searching</a>
+                <ul class="dropdown-content">
+                    <li><a href="Linear_Search.html">Linear Search</a></li>
+                    <li><a href="Binary_Search.html">Binary Search</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Sorting</a>
+                <ul class="dropdown-content">
+                    <li><a href="Insertion_Sort.html">Insertion Sort</a></li>
+                    <li><a href="Quick_Sort.html">Quick Sort</a></li>
+                    <li><a href="Merge_Sort.html">Merge Sort</a></li>
+                    <li><a href="Heap_Sort.html">Heap Sort</a></li>
+                </ul>
+            </li>
+            <li><a href="Hashtable.html">Hashing</a></li>
+        </ul>
+    </nav>
 
-<!-- Enqueue -->
-<tr>
-<td><b>Enqueue</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Check if queue is full<br/>
-                    2. If full, print Overflow<br/>
-                    3. If queue is empty :<br/>
-                            set front = rear = 0<br/>
-                    4. Else:<br/>
-                        Increment rear<br/>
-                    5. Insert elements at rear<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>void enqueue(int data)
-{
-    if(rear == MAX - 1)
-    {
-        printf("Queue Overflow");
-        return;
-    }
 
-    if(front == -1)
-        front = rear = 0;
-    else
-        rear++;
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Queue Operations</h1>
+        <p>Learn about the operations, implementation, and time complexity of Queue Operations.</p>
+    </header>
 
-    queue[rear] = data;
-}</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(1)</b></td>
-</tr>
-<!-- Dequeue -->
-<tr>
-<td><b>Dequeue</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Check if queue is empty<br/>
-                    2. If empty, print Underflow<br/>
-                    3. Store front element<br/>
-                    4. If only one element : <br/>
-                        Set front = rear = -1<br/>
-                    5. Else:<br/>
-                        Increment front<br/>
-                    6. Return deleted element<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>int dequeue()
-{
-    if(front == -1)
-    {
-        printf("Queue Underflow");
-        return -1;
-    }
+    <!-- Layout Container -->
+    <div class="layout-container">
+        <!-- Sidebar Navigation (Tabs) -->
+        <aside class="tab-sidebar">
+            <div class="sidebar-title">Operations</div>
+            <div id="tabButtons">
+                <!-- Tab buttons will be generated dynamically -->
+            </div>
+        </aside>
 
-    int item = queue[front];
+        <!-- Main Content Panel -->
+        <main class="content-viewport">
+            <!-- Header for Selected Operation -->
+            <div class="op-header">
+                <h2 class="op-title" id="opTitle">Operation Title</h2>
+                <div class="complexity-badge" id="complexityBadge">Time Complexity</div>
+            </div>
 
-    if(front == rear)
-        front = rear = -1;
-    else
-        front++;
+            <!-- Algorithm Section -->
+            <div class="content-card" id="algoCard">
+                <div class="card-title">Algorithm Description</div>
+                <div class="algorithm-text" id="algoContent">Step-by-step description...</div>
+            </div>
 
-    return item;
-}</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(1)</b></td>
-</tr>
-<!--Peek-->
-<tr>
-<td><b>Peek</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Check whether queue is empty<br/>
-                    2. Return front element<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>int peek()
-{
-    if(front == -1)
-    {
-        printf("Queue Empty");
-        return -1;
-    }
+            <!-- Code Section -->
+            <div class="content-card" id="codeCard">
+                <div class="card-title">C Source Code</div>
+                <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
+            </div>
+        </main>
+    </div>
 
-    return queue[front];
-}</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(1)</b></td>
-</tr>
-<!--Display-->
-<tr>
-<td><b>Display</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Check if queue is empty<br/>
-                    2. Traverse from front to rear<br/>
-                    3. Print all elements<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>void display()
-{
-    if(front == -1)
-    {
-        printf("Queue Empty");
-        return;
-    }
+    <!-- Inline Logic Database & Page Switching Script -->
+    <script>
+        // Inline Database of Operations
+        const OPERATIONS_DATA = {
+        "declaration": {
+                "name": "Declaration",
+                "algorithm": "",
+                "code": "#define MAX 100\n\nint queue[MAX];\nint front = -1;\nint rear = -1;",
+                "complexity": "No Time Complexity"
+        },
+        "enqueue": {
+                "name": "Enqueue",
+                "algorithm": "",
+                "code": "void enqueue(int data)\n{\n    if(rear == MAX - 1)\n    {\n        printf(\"Queue Overflow\");\n        return;\n    }\n\n    if(front == -1)\n        front = rear = 0;\n    else\n        rear++;\n\n    queue[rear] = data;\n}",
+                "complexity": "O(1)"
+        },
+        "dequeue": {
+                "name": "Dequeue",
+                "algorithm": "",
+                "code": "int dequeue()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Underflow\");\n        return -1;\n    }\n    int item = queue[front];\n    if(front == rear)\n        front = rear = -1;\n    else\n        front++;\n    return item;\n}",
+                "complexity": "O(1)"
+        },
+        "peek": {
+                "name": "Peek",
+                "algorithm": "",
+                "code": "int peek()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Empty\");\n        return -1;\n    }\n\n    return queue[front];\n}",
+                "complexity": "O(1)"
+        },
+        "display": {
+                "name": "Display",
+                "algorithm": "",
+                "code": "void display()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Empty\");\n        return;\n    }\n\n    for(int i = front; i <= rear; i++)\n        printf(\"%d \", queue[i]);\n}",
+                "complexity": "O(n)"
+        },
+        "isempty": {
+                "name": "isEmpty()",
+                "algorithm": "",
+                "code": "int isEmpty()\n{\n    return (front == -1);\n}",
+                "complexity": "O(1)"
+        },
+        "isfull": {
+                "name": "isFull()",
+                "algorithm": "",
+                "code": "int isFull()\n{\n    return (rear == MAX - 1);\n}",
+                "complexity": "O(1)"
+        },
+        "size": {
+                "name": "Size",
+                "algorithm": "",
+                "code": "int size()\n{\n    if(front == -1)\n        return 0;\n\n    return rear - front + 1;\n}",
+                "complexity": "O(1)"
+        }
+};
 
-    for(int i = front; i &lt;= rear; i++)
-        printf("%d ", queue[i]);
-}</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(n)</b></td>
-</tr>
-<!--isEmpty()-->
-<tr>
-<td><b>isEmpty()</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Check whether front = -1<br/>
-                    2. If yes, queue is empty<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>int isEmpty()
-{
-    return (front == -1);
-}
-</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(1)</b></td>
-</tr>
-<!--isFull()-->
-<tr>
-<td><b>isFull()</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Check if top = Max - 1<br/>
-                    2. If yes, queue is full<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>int isFull()
-{
-    return (rear == MAX - 1);
-}
-</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(1)</b></td>
-</tr>
-<!--Size-->
-<tr>
-<td><b>Size</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Check if queue is empty<br/>
-                    2. If empty return 0<br/>
-                    3. Otherwise calculate :<br/>
-                        Size = rear - front + 1<br/>
-                    4. Return size<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>int size()
-{
-    if(front == -1)
-        return 0;
+        // DOM elements
+        const tabButtonsContainer = document.getElementById("tabButtons");
+        const opTitle = document.getElementById("opTitle");
+        const complexityBadge = document.getElementById("complexityBadge");
+        const algoCard = document.getElementById("algoCard");
+        const algoContent = document.getElementById("algoContent");
+        const codeCard = document.getElementById("codeCard");
+        const codeContent = document.getElementById("codeContent");
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
 
-    return rear - front + 1;
-}
-</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(1)</b></td>
-</tr>
-</tbody>
-</table></div><script>
-function toggleAlgorithm(checkbox) {
+        // Mobile Hamburger menu toggle
+        if (hamburger && navLinks) {
+            hamburger.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+                const spans = hamburger.querySelectorAll("span");
+                if (navLinks.classList.contains("active")) {
+                    spans[0].style.transform = "rotate(-45deg) translate(-5px, 6px)";
+                    spans[1].style.opacity = "0";
+                    spans[2].style.transform = "rotate(45deg) translate(-5px, -6px)";
+                } else {
+                    spans[0].style.transform = "none";
+                    spans[1].style.opacity = "1";
+                    spans[2].style.transform = "none";
+                }
+            });
+        }
 
-    const parentCell = checkbox.closest("td");
+        // Dynamic Active Navbar Link Highlight
+        const currentPath = window.location.pathname.split("/").pop().toLowerCase();
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            const linkPath = link.getAttribute("href").toLowerCase();
+            if (currentPath === linkPath) {
+                link.classList.add("active");
+            } else if (currentPath === "" || currentPath === "index.html") {
+                if (linkPath === "index.html") link.classList.add("active");
+            } else {
+                // Dropdown link active matches
+                if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
+                    if (currentPath.includes("linked_lists") && linkPath.includes("singly_linked_lists")) {
+                        link.classList.add("active");
+                    }
+                }
+            }
+        });
 
-    const codeBox = parentCell.querySelector(".codeBox");
-    const textBox = parentCell.querySelector(".textBox");
+        // Generate Sidebar Buttons
+        function generateSidebar() {
+            const keys = Object.keys(OPERATIONS_DATA);
+            tabButtonsContainer.innerHTML = "";
+            
+            keys.forEach((key, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "tab-button" + (idx === 0 ? " active" : "");
+                btn.textContent = OPERATIONS_DATA[key].name;
+                btn.setAttribute("data-tab", key);
+                btn.onclick = () => selectTab(key);
+                tabButtonsContainer.appendChild(btn);
+            });
 
-    if (checkbox.checked) {
-        codeBox.classList.add("hidden");
-        textBox.classList.remove("hidden");
-    } else {
-        codeBox.classList.remove("hidden");
-        textBox.classList.add("hidden");
-    }
-}
+            // Load initial tab
+            if (keys.length > 0) {
+                selectTab(keys[0]);
+            }
+        }
 
-function searchOperation() {
+        // Switch Tab Content
+        function selectTab(tabId) {
+            // Toggle tab active styles
+            document.querySelectorAll(".tab-button").forEach(btn => {
+                if (btn.getAttribute("data-tab") === tabId) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
 
-    let input = document
-        .getElementById("searchBox")
-        .value
-        .toLowerCase();
+            const data = OPERATIONS_DATA[tabId];
+            if (!data) return;
 
-    let rows = document.querySelectorAll("tbody tr");
+            // Update content viewport
+            opTitle.textContent = data.name;
+            complexityBadge.textContent = data.complexity;
 
-    rows.forEach(row => {
+            // Algorithm Card show/hide
+            if (data.algorithm && data.algorithm.trim() !== "") {
+                algoCard.style.display = "block";
+                algoContent.textContent = data.algorithm;
+            } else {
+                algoCard.style.display = "none";
+            }
 
-        let operation =
-            row.cells[0]
-            .innerText
-            .toLowerCase();
+            // Code Card show/hide
+            if (data.code && data.code.trim() !== "") {
+                codeCard.style.display = "block";
+                codeContent.textContent = data.code;
+            } else {
+                codeCard.style.display = "none";
+            }
+        }
 
-        if(operation.includes(input))
-            row.style.display = "";
-        else
-            row.style.display = "none";
-    });
-}
-</script></div><script src="nav.js"></script></body>
+        // Initialize view
+        window.onload = generateSidebar;
+    </script>
+</body>
 </html>

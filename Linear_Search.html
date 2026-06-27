@@ -1,150 +1,588 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Linear Search</title>
-
-<link href="style.css" rel="stylesheet"/></head>
-<body>
-<nav class="navbar">
-<a class="nav-brand" href="index.html">AlgoInsight</a>
-<button aria-label="Toggle navigation" class="hamburger">
-<span></span>
-<span></span>
-<span></span>
-</button>
-<ul class="nav-links">
-<li><a href="index.html">Home</a></li>
-<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
-<li><a href="Stack.html">Stack &amp; Queue</a></li>
-<li><a href="Binary_Tree.html">Trees</a></li>
-<li><a href="Graphs.html">Graphs</a></li>
-<li><a href="Linear_Search.html">Searching</a></li>
-<li><a href="Insertion_Sort.html">Sorting</a></li>
-<li><a href="Hashtable.html">Hashing</a></li>
-</ul>
-</nav>
-<header class="page-header"><h1>Linear Search</h1><p>Learn about the operations, implementation, and time complexity of Linear Search.</p></header><div class="container"><div class="table-responsive"><table>
-<thead>
-<tr>
-<th width="35%">Algorithm</th>
-<th width="55%">Code</th>
-<th width="10%">Time Complexity</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<div class="box">
-<b>
-                    1. Start<br/><br/>
-
-                    2. Read n (number of elements)<br/><br/>
-
-                    3. Read array elements<br/><br/>
-
-                    4. Read element to search (key)<br/><br/>
-
-                    5. Set position = -1<br/><br/>
-
-                    6. Run a loop i = 0 to n - 1<br/>
-
-                        If array[i] == key<br/>
-
-                            position = i<br/>
-
-                            break<br/><br/>
-
-                    7. If position != -1<br/>
-
-                        Print "Element Found"<br/>
-
-                    Else<br/>
-
-                        Print "Element Not Found"<br/><br/>
-
-                    8. Stop
-                    </b>
-</div>
-</td>
-<td>
-<div class="box">
-<pre><code><b>Without Function : <br/>
-#include &lt;stdio.h&gt;
-
-int main()
-{
-    int arr[100], n, key;
-    int found = 0;
-
-    printf("Enter number of elements: ");
-    scanf("%d", &amp;n);
-
-    printf("Enter array elements:\n");
-
-    for(int i = 0; i &lt; n; i++)
-        scanf("%d", &amp;arr[i]);
-
-    printf("Enter element to search: ");
-    scanf("%d", &amp;key);
-
-    for(int i = 0; i &lt; n; i++)
-    {
-        if(arr[i] == key)
-        {
-            printf("Element Found at Position %d",
-                   i + 1);
-            found = 1;
-            break;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Search - Operations and Complexity</title>
+    <style>
+        /* CSS Variables & Theme */
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --radius: 8px;
         }
-    }
 
-    if(found == 0)
-        printf("Element Not Found");
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    return 0;
-}
-<b>------------------------------------------------------------------------------------------</b>
-With Function: <br/>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-top: 70px;
+        }
 
-#include &lt;stdio.h&gt;
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--shadow);
+        }
 
-int linearSearch(int arr[], int n, int key)
-{
-    for(int i = 0; i &lt; n; i++)
-    {
-        if(arr[i] == key)
-            return i;
-    }
+        .nav-brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+        }
 
-    return -1;
-}
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            align-items: center;
+        }
 
-int main()
-{
-    int arr[] = {10, 20, 30, 40, 50};
-    int n = 5;
-    int key = 30;
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
 
-    int result = linearSearch(arr, n, key);
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
 
-    if(result == -1)
-        printf("Element Not Found");
-    else
-        printf("Element Found at Position %d", result + 1);
+        /* Navbar Dropdowns */
+        .dropdown {
+            position: relative;
+        }
 
-    return 0;
-}
-</b>
-</code></pre>
-</div>
-</td>
-<td style="text-align:center;">
-<b>O(n)</b>
-</td>
-</tr>
-</tbody>
-</table></div></div><script src="nav.js"></script></body>
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--primary);
+            min-width: 180px;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            list-style: none;
+            padding: 8px 0;
+            top: 100%;
+            left: 0;
+            z-index: 1001;
+        }
+
+        .dropdown-content li {
+            width: 100%;
+        }
+
+        .dropdown-content li a {
+            display: block;
+            padding: 10px 16px;
+            font-size: 13.5px;
+            color: #cbd5e1 !important;
+            background: none !important;
+            border-radius: 0;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .dropdown-content li a:hover,
+        .dropdown-content li a.active {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Page Header */
+        .page-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 30px 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .layout-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px 24px;
+            gap: 30px;
+        }
+
+        /* Sidebar for Tabs */
+        .tab-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.5px;
+        }
+
+        .tab-button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            text-align: left;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+            transition: all 0.2s;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .tab-button:hover {
+            background-color: #f1f5f9;
+            color: var(--accent);
+        }
+
+        .tab-button.active {
+            background-color: #eff6ff;
+            color: var(--accent);
+            border-left-color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Main Content Viewport */
+        .content-viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .op-header {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .op-title {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .complexity-badge {
+            background-color: #eff6ff;
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #bfdbfe;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .algorithm-text {
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        pre {
+            margin: 0;
+            padding: 15px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                height: 60px;
+                padding: 0 16px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links li a {
+                display: block;
+                width: 100%;
+                padding: 10px 16px;
+            }
+
+            /* Display dropdown contents inline on mobile */
+            .dropdown-content {
+                position: static;
+                display: block;
+                background-color: rgba(0, 0, 0, 0.1);
+                box-shadow: none;
+                padding-left: 15px;
+                border-radius: 0;
+                width: 100%;
+            }
+
+            .layout-container {
+                flex-direction: column;
+                padding: 0 16px 30px 16px;
+                gap: 20px;
+            }
+
+            .tab-sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">AlgoInsight</a>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Linked Lists</a>
+                <ul class="dropdown-content">
+                    <li><a href="Singly_Linked_Lists_Collapsible.html">Singly Linked List</a></li>
+                    <li><a href="Doubly_Linked_Lists_Collapsible.html">Doubly Linked List</a></li>
+                    <li><a href="Circularly_Linked_Lists_Collapsible.html">Circular Linked List</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Stack & Queue</a>
+                <ul class="dropdown-content">
+                    <li><a href="Stack.html">Stack Operations</a></li>
+                    <li><a href="Queue.html">Queue Operations</a></li>
+                    <li><a href="Infix.html">Infix to Postfix</a></li>
+                    <li><a href="Postfix.html">Postfix Evaluation</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Trees</a>
+                <ul class="dropdown-content">
+                    <li><a href="Binary_Tree.html">Binary Tree</a></li>
+                    <li><a href="Binary_Search_Tree.html">Binary Search Tree</a></li>
+                </ul>
+            </li>
+            <li><a href="Graphs.html">Graphs</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Searching</a>
+                <ul class="dropdown-content">
+                    <li><a href="Linear_Search.html">Linear Search</a></li>
+                    <li><a href="Binary_Search.html">Binary Search</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Sorting</a>
+                <ul class="dropdown-content">
+                    <li><a href="Insertion_Sort.html">Insertion Sort</a></li>
+                    <li><a href="Quick_Sort.html">Quick Sort</a></li>
+                    <li><a href="Merge_Sort.html">Merge Sort</a></li>
+                    <li><a href="Heap_Sort.html">Heap Sort</a></li>
+                </ul>
+            </li>
+            <li><a href="Hashtable.html">Hashing</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Linear Search</h1>
+        <p>Learn about the operations, implementation, and time complexity of Linear Search.</p>
+    </header>
+
+    <!-- Layout Container -->
+    <div class="layout-container">
+        <!-- Sidebar Navigation (Tabs) -->
+        <aside class="tab-sidebar">
+            <div class="sidebar-title">Operations</div>
+            <div id="tabButtons">
+                <!-- Tab buttons will be generated dynamically -->
+            </div>
+        </aside>
+
+        <!-- Main Content Panel -->
+        <main class="content-viewport">
+            <!-- Header for Selected Operation -->
+            <div class="op-header">
+                <h2 class="op-title" id="opTitle">Operation Title</h2>
+                <div class="complexity-badge" id="complexityBadge">Time Complexity</div>
+            </div>
+
+            <!-- Algorithm Section -->
+            <div class="content-card" id="algoCard">
+                <div class="card-title">Algorithm Description</div>
+                <div class="algorithm-text" id="algoContent">Step-by-step description...</div>
+            </div>
+
+            <!-- Code Section -->
+            <div class="content-card" id="codeCard">
+                <div class="card-title">C Source Code</div>
+                <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
+            </div>
+        </main>
+    </div>
+
+    <!-- Inline Logic Database & Page Switching Script -->
+    <script>
+        // Inline Database of Operations
+        const OPERATIONS_DATA = {
+            "linear-search": {
+                "name": "Linear Search",
+                "algorithm": "1. Start\n2. Read n (number of elements)\n3. Read array elements\n4. Read element to search (key)\n5. Set position = -1\n6. Run a loop i = 0 to n - 1\n\u00a0\u00a0\u00a0\u00a0If array[i] == key\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0position = i\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0break\n7. If position != -1\n\u00a0\u00a0\u00a0\u00a0Print \"Element Found\"\nElse\n\u00a0\u00a0\u00a0\u00a0Print \"Element Not Found\"\n8. Stop",
+                "code": "Without Function :\n\n#include <stdio.h>\n\nint main()\n{\n    int arr[100], n, key;\n    int found = 0;\n\n    printf(\"Enter number of elements: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter array elements:\\n\");\n\n    for(int i = 0; i < n; i++)\n        scanf(\"%d\", &arr[i]);\n\n    printf(\"Enter element to search: \");\n    scanf(\"%d\", &key);\n\n    for(int i = 0; i < n; i++)\n    {\n        if(arr[i] == key)\n        {\n            printf(\"Element Found at Position %d\",\n                   i + 1);\n            found = 1;\n            break;\n        }\n    }\n\n    if(found == 0)\n        printf(\"Element Not Found\");\n\n    return 0;\n}\n------------------------------------------------------------------------------------------\nWith Function:\n\n\n#include <stdio.h>\n\nint linearSearch(int arr[], int n, int key)\n{\n    for(int i = 0; i < n; i++)\n    {\n        if(arr[i] == key)\n            return i;\n    }\n\n    return -1;\n}\n\nint main()\n{\n    int arr[] = {10, 20, 30, 40, 50};\n    int n = 5;\n    int key = 30;\n\n    int result = linearSearch(arr, n, key);\n\n    if(result == -1)\n        printf(\"Element Not Found\");\n    else\n        printf(\"Element Found at Position %d\", result + 1);\n\n    return 0;\n}",
+                "complexity": "O(n)"
+            }
+        };
+
+        // DOM elements
+        const tabButtonsContainer = document.getElementById("tabButtons");
+        const opTitle = document.getElementById("opTitle");
+        const complexityBadge = document.getElementById("complexityBadge");
+        const algoCard = document.getElementById("algoCard");
+        const algoContent = document.getElementById("algoContent");
+        const codeCard = document.getElementById("codeCard");
+        const codeContent = document.getElementById("codeContent");
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        // Mobile Hamburger menu toggle
+        if (hamburger && navLinks) {
+            hamburger.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+                const spans = hamburger.querySelectorAll("span");
+                if (navLinks.classList.contains("active")) {
+                    spans[0].style.transform = "rotate(-45deg) translate(-5px, 6px)";
+                    spans[1].style.opacity = "0";
+                    spans[2].style.transform = "rotate(45deg) translate(-5px, -6px)";
+                } else {
+                    spans[0].style.transform = "none";
+                    spans[1].style.opacity = "1";
+                    spans[2].style.transform = "none";
+                }
+            });
+        }
+
+        // Dynamic Active Navbar Link Highlight
+        const currentPath = window.location.pathname.split("/").pop().toLowerCase();
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            const linkPath = link.getAttribute("href").toLowerCase();
+            if (currentPath === linkPath) {
+                link.classList.add("active");
+            } else if (currentPath === "" || currentPath === "index.html") {
+                if (linkPath === "index.html") link.classList.add("active");
+            } else {
+                // Dropdown link active matches
+                if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
+                    if (currentPath.includes("linked_lists") && linkPath.includes("singly_linked_lists")) {
+                        link.classList.add("active");
+                    }
+                }
+            }
+        });
+
+        // Generate Sidebar Buttons
+        function generateSidebar() {
+            const keys = Object.keys(OPERATIONS_DATA);
+            tabButtonsContainer.innerHTML = "";
+
+            keys.forEach((key, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "tab-button" + (idx === 0 ? " active" : "");
+                btn.textContent = OPERATIONS_DATA[key].name;
+                btn.setAttribute("data-tab", key);
+                btn.onclick = () => selectTab(key);
+                tabButtonsContainer.appendChild(btn);
+            });
+
+            // Load initial tab
+            if (keys.length > 0) {
+                selectTab(keys[0]);
+            }
+        }
+
+        // Switch Tab Content
+        function selectTab(tabId) {
+            // Toggle tab active styles
+            document.querySelectorAll(".tab-button").forEach(btn => {
+                if (btn.getAttribute("data-tab") === tabId) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+
+            const data = OPERATIONS_DATA[tabId];
+            if (!data) return;
+
+            // Update content viewport
+            opTitle.textContent = data.name;
+            complexityBadge.textContent = data.complexity;
+
+            // Algorithm Card show/hide
+            if (data.algorithm && data.algorithm.trim() !== "") {
+                algoCard.style.display = "block";
+                algoContent.textContent = data.algorithm;
+            } else {
+                algoCard.style.display = "none";
+            }
+
+            // Code Card show/hide
+            if (data.code && data.code.trim() !== "") {
+                codeCard.style.display = "block";
+                codeContent.textContent = data.code;
+            } else {
+                codeCard.style.display = "none";
+            }
+        }
+
+        // Initialize view
+        window.onload = generateSidebar;
+    </script>
+</body>
+
 </html>
