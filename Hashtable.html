@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +71,8 @@
             transition: all 0.3s;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: #ffffff;
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -144,7 +146,7 @@
             padding: 30px 24px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .page-header h1 {
@@ -279,7 +281,8 @@
         .algorithm-text {
             font-size: 14px;
             line-height: 1.7;
-            white-space: pre-wrap; /* Supports tabs/indentations and linebreaks */
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
             color: var(--text);
             font-family: inherit;
         }
@@ -365,11 +368,51 @@
                 margin-bottom: 10px;
             }
         }
+    
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
     </style>
 </head>
+
 <body>
 
-    
+
     <nav class="navbar">
         <a href="index.html" class="nav-brand">DEVENU</a>
         <button class="hamburger" aria-label="Toggle navigation">
@@ -457,7 +500,14 @@
 
             <!-- Code Section -->
             <div class="content-card" id="codeCard">
-                <div class="card-title">C Source Code</div>
+            <div class="card-header-actions">
+                <div class="card-title">Source Code</div>
+                <div class="lang-selector">
+                    <button class="lang-btn" data-lang="c">C</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                </div>
+            </div>
                 <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
             </div>
         </main>
@@ -467,31 +517,48 @@
     <script>
         // Inline Database of Operations
         const OPERATIONS_DATA = {
-        "intro": {
-                "name": "What is Hashing?",
-                "complexity": "N/A",
-                "algorithm": "Hashing is a technique used to store and retrieve data efficiently.\nA hash function converts a key into an index of an array.\n\nHash Function Formula:\nh(key) = key % table_size\n\nExample:\nKey = 25\nTable Size = 10\nh(25) = 25 % 10 = 5\n(Store key 25 at index 5)",
-                "code": ""
-        },
-        "collision": {
-                "name": "Collisions",
-                "complexity": "N/A",
-                "algorithm": "A collision occurs when two different keys produce the same hash index.\n\nExample:\nKey A: 25 % 10 = 5\nKey B: 35 % 10 = 5\nBoth point to index 5 -> Collision Occurs!",
-                "code": ""
-        },
-        "open-hashing": {
-                "name": "Open Hashing (Chaining)",
-                "complexity": "Best: O(1) | Worst: O(n)",
-                "algorithm": "In Open Hashing (Separate Chaining), each index of the hash table stores a linked list.\nWhen a collision occurs, the new element is inserted at the head of the linked list.\n\nOperations Complexity:\n- Insert: Best O(1), Avg O(1), Worst O(n)\n- Search: Best O(1), Avg O(1), Worst O(n)\n- Delete: Best O(1), Avg O(1), Worst O(n)",
-                "code": "void insert(int key) {\n    int index = key % SIZE;\n    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = key;\n    newNode->next = table[index];\n    table[index] = newNode;\n}\n\nint search(int key) {\n    int index = key % SIZE;\n    struct Node *temp = table[index];\n    while(temp != NULL) {\n        if(temp->data == key) return 1; // Found\n        temp = temp->next;\n    }\n    return 0; // Not Found\n}"
-        },
-        "closed-hashing": {
-                "name": "Closed Hashing (Open Addressing)",
-                "complexity": "Best: O(1) | Worst: O(n)",
-                "algorithm": "In Closed Hashing (Open Addressing), all elements are stored directly inside the hash table array.\nWhen a collision occurs, a free location is searched (probed) sequentially.\n\nLinear Probing Formula:\nh(k, i) = (h(k) + i) % size\n\nOperations Complexity:\n- Insert: Best O(1), Avg O(1), Worst O(n)\n- Search: Best O(1), Avg O(1), Worst O(n)\n- Delete: Best O(1), Avg O(1), Worst O(n)",
-                "code": "void insert(int key) {\n    int index = key % SIZE;\n    while(hashTable[index] != -1) {\n        index = (index + 1) % SIZE; // Linear probe\n    }\n    hashTable[index] = key;\n}\n\nint search(int key) {\n    int index = key % SIZE;\n    while(hashTable[index] != -1) {\n        if(hashTable[index] == key) return 1; // Found\n        index = (index + 1) % SIZE;\n    }\n    return 0; // Not Found\n}"
-        }
+            "intro": {
+                        "name": "What is Hashing?",
+                        "complexity": "N/A",
+                        "algorithm": "Hashing is a technique used to store and retrieve data efficiently.\nA hash function converts a key into an index of an array.\n\nHash Function Formula:\nh(key) = key % table_size\n\nExample:\nKey = 25\nTable Size = 10\nh(25) = 25 % 10 = 5\n(Store key 25 at index 5)",
+                        "code": {
+                                    "c": "",
+                                    "java": "",
+                                    "python": ""
+                        }
+            },
+            "collision": {
+                        "name": "Collisions",
+                        "complexity": "N/A",
+                        "algorithm": "A collision occurs when two different keys produce the same hash index.\n\nExample:\nKey A: 25 % 10 = 5\nKey B: 35 % 10 = 5\nBoth point to index 5 -> Collision Occurs!",
+                        "code": {
+                                    "c": "",
+                                    "java": "",
+                                    "python": ""
+                        }
+            },
+            "open-hashing": {
+                        "name": "Open Hashing (Chaining)",
+                        "complexity": "Best: O(1) | Worst: O(n)",
+                        "algorithm": "In Open Hashing (Separate Chaining), each index of the hash table stores a linked list.\nWhen a collision occurs, the new element is inserted at the head of the linked list.\n\nOperations Complexity:\n- Insert: Best O(1), Avg O(1), Worst O(n)\n- Search: Best O(1), Avg O(1), Worst O(n)\n- Delete: Best O(1), Avg O(1), Worst O(n)",
+                        "code": {
+                                    "c": "void insert(int key) {\n    int index = key % SIZE;\n    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = key;\n    newNode->next = table[index];\n    table[index] = newNode;\n}\n\nint search(int key) {\n    int index = key % SIZE;\n    struct Node *temp = table[index];\n    while(temp != NULL) {\n        if(temp->data == key) return 1; // Found\n        temp = temp->next;\n    }\n    return 0; // Not Found\n}",
+                                    "java": "",
+                                    "python": ""
+                        }
+            },
+            "closed-hashing": {
+                        "name": "Closed Hashing (Open Addressing)",
+                        "complexity": "Best: O(1) | Worst: O(n)",
+                        "algorithm": "In Closed Hashing (Open Addressing), all elements are stored directly inside the hash table array.\nWhen a collision occurs, a free location is searched (probed) sequentially.\n\nLinear Probing Formula:\nh(k, i) = (h(k) + i) % size\n\nOperations Complexity:\n- Insert: Best O(1), Avg O(1), Worst O(n)\n- Search: Best O(1), Avg O(1), Worst O(n)\n- Delete: Best O(1), Avg O(1), Worst O(n)",
+                        "code": {
+                                    "c": "void insert(int key) {\n    int index = key % SIZE;\n    while(hashTable[index] != -1) {\n        index = (index + 1) % SIZE; // Linear probe\n    }\n    hashTable[index] = key;\n}\n\nint search(int key) {\n    int index = key % SIZE;\n    while(hashTable[index] != -1) {\n        if(hashTable[index] == key) return 1; // Found\n        index = (index + 1) % SIZE;\n    }\n    return 0; // Not Found\n}",
+                                    "java": "",
+                                    "python": ""
+                        }
+            }
 };
+
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -530,14 +597,23 @@
             } else if (currentPath === "" || currentPath === "index.html") {
                 if (linkPath === "index.html") link.classList.add("active");
             } else {
-                // Dropdown link active matches
                 if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
-                    if (currentPath.includes("linked_lists") && linkPath.includes("singly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
                         link.classList.add("active");
                     }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
                 }
             }
         });
+
+        let currentTabId = "";
 
         // Generate Sidebar Buttons
         function generateSidebar() {
@@ -561,6 +637,7 @@
 
         // Switch Tab Content
         function selectTab(tabId) {
+            currentTabId = tabId;
             // Toggle tab active styles
             document.querySelectorAll(".tab-button").forEach(btn => {
                 if (btn.getAttribute("data-tab") === tabId) {
@@ -580,22 +657,64 @@
             // Algorithm Card show/hide
             if (data.algorithm && data.algorithm.trim() !== "") {
                 algoCard.style.display = "block";
-                algoContent.textContent = data.algorithm;
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
             } else {
                 algoCard.style.display = "none";
             }
 
             // Code Card show/hide
-            if (data.code && data.code.trim() !== "") {
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
                 codeCard.style.display = "block";
-                codeContent.textContent = data.code;
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
             } else {
                 codeCard.style.display = "none";
             }
         }
 
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+                
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
+
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
+
         // Initialize view
         window.onload = generateSidebar;
+
     </script>
 </body>
+
 </html>
