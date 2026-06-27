@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +71,8 @@
             transition: all 0.3s;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: #ffffff;
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -144,7 +146,7 @@
             padding: 30px 24px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .page-header h1 {
@@ -305,7 +307,8 @@
             background-color: var(--card-bg);
         }
 
-        .inner-table th, .inner-table td {
+        .inner-table th,
+        .inner-table td {
             border: 1px solid var(--border);
             padding: 10px;
             text-align: center;
@@ -385,8 +388,51 @@
                 margin-bottom: 10px;
             }
         }
+
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
     </style>
 </head>
+
 <body>
 
     <!-- Top Navigation Bar -->
@@ -476,7 +522,14 @@
 
             <!-- Code Section -->
             <div class="content-card" id="codeCard">
-                <div class="card-title">C Source Code</div>
+                <div class="card-header-actions">
+                    <div class="card-title">Source Code</div>
+                    <div class="lang-selector">
+                        <button class="lang-btn" data-lang="c">C</button>
+                        <button class="lang-btn" data-lang="java">Java</button>
+                        <button class="lang-btn" data-lang="python">Python</button>
+                    </div>
+                </div>
                 <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
             </div>
         </main>
@@ -490,33 +543,54 @@
                 "name": "Types of Expressions",
                 "complexity": "N/A",
                 "algorithm": "Arithmetic expressions can be written in three forms based on operator position:\n\n1. Infix Expression: The operator is placed between the operands. (e.g. A + B)\n2. Prefix Expression: The operator is placed before the operands. (e.g. +AB)\n3. Postfix Expression: The operator is placed after the operands. (e.g. AB+)\n\nComparison Table:\n<table class='inner-table'><thead><tr><th>Type</th><th>Format</th><th>Example</th></tr></thead><tbody><tr><td>Infix</td><td>Operand1 Operator Operand2</td><td>A + B</td></tr><tr><td>Prefix</td><td>Operator Operand1 Operand2</td><td>+AB</td></tr><tr><td>Postfix</td><td>Operand1 Operand2 Operator</td><td>AB+</td></tr></tbody></table>",
-                "code": ""
+                "code": {
+                    "c": "",
+                    "java": "",
+                    "python": ""
+                }
             },
             "precedence": {
                 "name": "Operator Precedence",
                 "complexity": "N/A",
                 "algorithm": "Precedence determines which operator is evaluated first when scanning. Higher precedence operators are popped and outputted before lower precedence operators.\n\nPrecedence Hierarchy Table:\n<table class='inner-table'><thead><tr><th>Operator</th><th>Precedence Value</th><th>Associativity</th></tr></thead><tbody><tr><td>^ (Exponentiation)</td><td>3</td><td>Right-to-Left</td></tr><tr><td>* , / (Multiplication, Division)</td><td>2</td><td>Left-to-Right</td></tr><tr><td>+ , - (Addition, Subtraction)</td><td>1</td><td>Left-to-Right</td></tr><tr><td>( (Left Parenthesis)</td><td>0</td><td>N/A</td></tr></tbody></table>",
-                "code": ""
+                "code": {
+                    "c": "",
+                    "java": "",
+                    "python": ""
+                }
             },
             "algorithm": {
                 "name": "Conversion Algorithm",
                 "complexity": "Time: O(n) | Space: O(n)",
                 "algorithm": "1. Initialize an empty stack for operators.\n2. Scan the Infix expression from left to right symbol by symbol.\n3. If the symbol is an operand, add it directly to the Postfix output string.\n4. If the symbol is '(', push it onto the stack.\n5. If the symbol is ')':\n   - Pop and output operators from stack to Postfix until a '(' is met.\n   - Pop and discard the '(' from the stack.\n6. If the symbol is an operator:\n   - While the stack is not empty and precedence(stack[top]) >= precedence(current_operator), pop operators from stack and add to Postfix.\n   - Push the current operator onto the stack.\n7. After scanning all symbols, pop and output any remaining operators from the stack.\n8. Print/return the final Postfix expression.",
-                "code": ""
+                "code": {
+                    "c": "",
+                    "java": "",
+                    "python": ""
+                }
             },
             "example": {
                 "name": "Conversion Example",
                 "complexity": "N/A",
                 "algorithm": "Example 1: Convert infix 'A+B*C' to Postfix\n\n- Read A: Output = A\n- Read +: Push + to stack. Stack: [+]\n- Read B: Output = AB\n- Read *: Precedence(*) > Precedence(+). Push * to stack. Stack: [+, *]\n- Read C: Output = ABC\n- End of Input: Pop remaining operators (* then +). Output = ABC*+\n- Result: ABC*+\n\nExample 2: Convert infix '(A+B)*C' to Postfix\n\n<table class='inner-table'><thead><tr><th>Symbol Scanned</th><th>Stack State</th><th>Postfix Output</th></tr></thead><tbody><tr><td>(</td><td>[ ( ]</td><td></td></tr><tr><td>A</td><td>[ ( ]</td><td>A</td></tr><tr><td>+</td><td>[ (, + ]</td><td>A</td></tr><tr><td>B</td><td>[ (, + ]</td><td>AB</td></tr><tr><td>)</td><td>[ ]</td><td>AB+</td></tr><tr><td>*</td><td>[ * ]</td><td>AB+</td></tr><tr><td>C</td><td>[ * ]</td><td>AB+C</td></tr><tr><td>End</td><td>[ ]</td><td>AB+C*</td></tr></tbody></table>",
-                "code": ""
+                "code": {
+                    "c": "",
+                    "java": "",
+                    "python": ""
+                }
             },
             "program": {
-                "name": "C Program Code",
+                "name": "Program Code",
                 "complexity": "Time: O(n) | Space: O(n)",
                 "algorithm": "The complete C implementation using standard structures to convert infix arithmetic expressions into postfix form.",
-                "code": "#include <stdio.h>\n#include <ctype.h>\n#include <string.h>\n\nchar stack[100];\nint top = -1;\n\nvoid push(char x)\n{\n    stack[++top] = x;\n}\n\nchar pop()\n{\n    return stack[top--];\n}\n\nint precedence(char x)\n{\n    if(x == '^')\n        return 3;\n    if(x == '*' || x == '/')\n        return 2;\n    if(x == '+' || x == '-')\n        return 1;\n    return 0;\n}\n\nint main()\n{\n    char infix[100], postfix[100];\n    int i, j = 0;\n\n    printf(\"Enter Infix Expression: \");\n    scanf(\"%s\", infix);\n\n    for(i = 0; infix[i] != '\\0'; i++)\n    {\n        char ch = infix[i];\n\n        if(isalnum(ch))\n        {\n            postfix[j++] = ch;\n        }\n        else if(ch == '(')\n        {\n            push(ch);\n        }\n        else if(ch == ')')\n        {\n            while(stack[top] != '(')\n            {\n                postfix[j++] = pop();\n            }\n            pop(); // Discard '(' \n        }\n        else\n        {\n            while(top != -1 && precedence(stack[top]) >= precedence(ch))\n            {\n                postfix[j++] = pop();\n            }\n            push(ch);\n        }\n    }\n\n    while(top != -1)\n    {\n        postfix[j++] = pop();\n    }\n    postfix[j] = '\\0';\n\n    printf(\"Postfix = %s\\n\", postfix);\n    return 0;\n}"
+                "code": {
+                    "c": "#include <stdio.h>\n#include <ctype.h>\n#include <string.h>\n\nchar stack[100];\nint top = -1;\n\nvoid push(char x)\n{\n    stack[++top] = x;\n}\n\nchar pop()\n{\n    return stack[top--];\n}\n\nint precedence(char x)\n{\n    if(x == '^')\n        return 3;\n    if(x == '*' || x == '/')\n        return 2;\n    if(x == '+' || x == '-')\n        return 1;\n    return 0;\n}\n\nint main()\n{\n    char infix[100], postfix[100];\n    int i, j = 0;\n\n    printf(\"Enter Infix Expression: \");\n    scanf(\"%s\", infix);\n\n    for(i = 0; infix[i] != '\\0'; i++)\n    {\n        char ch = infix[i];\n\n        if(isalnum(ch))\n        {\n            postfix[j++] = ch;\n        }\n        else if(ch == '(')\n        {\n            push(ch);\n        }\n        else if(ch == ')')\n        {\n            while(stack[top] != '(')\n            {\n                postfix[j++] = pop();\n            }\n            pop(); // Discard '(' \n        }\n        else\n        {\n            while(top != -1 && precedence(stack[top]) >= precedence(ch))\n            {\n                postfix[j++] = pop();\n            }\n            push(ch);\n        }\n    }\n\n    while(top != -1)\n    {\n        postfix[j++] = pop();\n    }\n    postfix[j] = '\\0';\n\n    printf(\"Postfix = %s\\n\", postfix);\n    return 0;\n}",
+                    "java": "import java.util.Stack;\n\npublic class InfixToPostfix {\n    public static int precedence(char ch) {\n        if (ch == '^') return 3;\n        if (ch == '*' || ch == '/') return 2;\n        if (ch == '+' || ch == '-') return 1;\n        return 0;\n    }\n\n    public static String infixToPostfix(String infix) {\n        StringBuilder postfix = new StringBuilder();\n        Stack<Character> stack = new Stack<>();\n        for (int i = 0; i < infix.length(); i++) {\n            char ch = infix.charAt(i);\n            if (Character.isLetterOrDigit(ch)) {\n                postfix.append(ch);\n            } else if (ch == '(') {\n                stack.push(ch);\n            } else if (ch == ')') {\n                while (!stack.isEmpty() && stack.peek() != '(') {\n                    postfix.append(stack.pop());\n                }\n                stack.pop(); // Remove '('\n            } else {\n                while (!stack.isEmpty() && precedence(stack.peek()) >= precedence(ch)) {\n                    postfix.append(stack.pop());\n                }\n                stack.push(ch);\n            }\n        }\n        while (!stack.isEmpty()) {\n            postfix.append(stack.pop());\n        }\n        return postfix.toString();\n    }\n}",
+                    "python": "def precedence(ch):\n    if ch == '^': return 3\n    if ch in ('*', '/'): return 2\n    if ch in ('+', '-'): return 1\n    return 0\n\ndef infix_to_postfix(infix):\n    postfix = []\n    stack = []\n    for ch in infix:\n        if ch.isalnum():\n            postfix.append(ch)\n        elif ch == '(':\n            stack.append(ch)\n        elif ch == ')':\n            while stack and stack[-1] != '(':\n                postfix.append(stack.pop())\n            stack.pop()\n        else:\n            while stack and precedence(stack[-1]) >= precedence(ch):\n                postfix.append(stack.pop())\n            stack.append(ch)\n    while stack:\n        postfix.append(stack.pop())\n    return \"\".join(postfix)"
+                }
             }
         };
+
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -556,18 +630,28 @@
                 if (linkPath === "index.html") link.classList.add("active");
             } else {
                 if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
-                    if (currentPath.includes("linked_lists") && linkPath.includes("singly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
                         link.classList.add("active");
                     }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
                 }
             }
         });
+
+        let currentTabId = "";
 
         // Generate Sidebar Buttons
         function generateSidebar() {
             const keys = Object.keys(OPERATIONS_DATA);
             tabButtonsContainer.innerHTML = "";
-            
+
             keys.forEach((key, idx) => {
                 const btn = document.createElement("button");
                 btn.className = "tab-button" + (idx === 0 ? " active" : "");
@@ -585,6 +669,7 @@
 
         // Switch Tab Content
         function selectTab(tabId) {
+            currentTabId = tabId;
             // Toggle tab active styles
             document.querySelectorAll(".tab-button").forEach(btn => {
                 if (btn.getAttribute("data-tab") === tabId) {
@@ -604,8 +689,6 @@
             // Algorithm Card show/hide
             if (data.algorithm && data.algorithm.trim() !== "") {
                 algoCard.style.display = "block";
-                
-                // Render HTML if it contains comparison tables, otherwise textContent
                 if (data.algorithm.includes("<table")) {
                     algoContent.innerHTML = data.algorithm;
                 } else {
@@ -616,16 +699,54 @@
             }
 
             // Code Card show/hide
-            if (data.code && data.code.trim() !== "") {
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
                 codeCard.style.display = "block";
-                codeContent.textContent = data.code;
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
             } else {
                 codeCard.style.display = "none";
             }
         }
 
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
+
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
+
         // Initialize view
         window.onload = generateSidebar;
+
     </script>
 </body>
+
 </html>
