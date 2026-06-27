@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +71,8 @@
             transition: all 0.3s;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: #ffffff;
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -144,7 +146,7 @@
             padding: 30px 24px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .page-header h1 {
@@ -279,7 +281,8 @@
         .algorithm-text {
             font-size: 14px;
             line-height: 1.7;
-            white-space: pre-wrap; /* Supports tabs/indentations and linebreaks */
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
             color: var(--text);
             font-family: inherit;
         }
@@ -365,11 +368,51 @@
                 margin-bottom: 10px;
             }
         }
+    
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
     </style>
 </head>
+
 <body>
 
-    
+
     <nav class="navbar">
         <a href="index.html" class="nav-brand">DEVENU</a>
         <button class="hamburger" aria-label="Toggle navigation">
@@ -457,7 +500,14 @@
 
             <!-- Code Section -->
             <div class="content-card" id="codeCard">
-                <div class="card-title">C Source Code</div>
+            <div class="card-header-actions">
+                <div class="card-title">Source Code</div>
+                <div class="lang-selector">
+                    <button class="lang-btn" data-lang="c">C</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                </div>
+            </div>
                 <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
             </div>
         </main>
@@ -467,67 +517,108 @@
     <script>
         // Inline Database of Operations
         const OPERATIONS_DATA = {
-        "node-structure": {
-                "name": "Node Structure",
-                "algorithm": "",
-                "code": "struct Node\n{\n    int data;\n    struct Node *left;\n    struct Node *right;\n};",
-                "complexity": "No Time Complexity"
-        },
-        "create-a-new-node": {
-                "name": "Create a new node",
-                "algorithm": "",
-                "code": "struct Node* createNode(int data)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n\n    newNode->data = data;\n    newNode->left = NULL;\n    newNode->right = NULL;\n\n    return newNode;\n}",
-                "complexity": "O(1) or O(n)"
-        },
-        "insertion": {
-                "name": "Insertion",
-                "algorithm": "",
-                "code": "struct Node* insert(struct Node *root, int data)\n{\n    if(root == NULL)\n        return createNode(data);\n\n    if(data < root->data)\n        root->left = insert(root->left, data);\n    else\n        root->right = insert(root->right, data);\n\n    return root;\n}",
-                "complexity": "O(log n)"
-        },
-        "search": {
-                "name": "Search",
-                "algorithm": "",
-                "code": "struct Node* search(struct Node *root, int key)\n{\n    if(root == NULL || root->data == key)\n        return root;\n\n    if(key < root->data)\n        return search(root->left, key);\n\n    return search(root->right, key);\n}",
-                "complexity": "O(log n)"
-        },
-        "inorder-traversal\n\nleft-->-root->-right\n\n\n----------------first-visit-left-subtree,-then-root,-then-right-subtree": {
-                "name": "Inorder Traversal\n\n(Left -> Root-> Right)\n\n\n                First visit Left Subtree, then Root, then Right Subtree",
-                "algorithm": "",
-                "code": "void inorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        inorder(root->left);\n        printf(\"%d \", root->data);\n        inorder(root->right);\n    }\n}",
-                "complexity": "O(n)"
-        },
-        "preorder-traversal\n\nroot-->-left->-right\n\n\n----------------first-visit-root,-then-left-subtree,-then-right-subtree": {
-                "name": "Preorder Traversal\n\n(Root -> Left-> Right)\n\n\n                First visit Root, then Left Subtree, then Right Subtree",
-                "algorithm": "",
-                "code": "void preorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        printf(\"%d \", root->data);\n        preorder(root->left);\n        preorder(root->right);\n    }\n}",
-                "complexity": "O(n)"
-        },
-        "postorder-traversal\n\nleft-->-right-->-root\n\n\n----------------first-visit-left-subtree,-then-right-subtree,-then-root": {
-                "name": "Postorder Traversal\n\n(Left -> Right -> Root)\n\n\n                First visit Left Subtree, then Right Subtree, then Root",
-                "algorithm": "",
-                "code": "void postorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        postorder(root->left);\n        postorder(root->right);\n        printf(\"%d \", root->data);\n    }\n}",
-                "complexity": "O(n)"
-        },
-        "min-element-in-binary-tree": {
-                "name": "Min element in Binary Tree",
-                "algorithm": "",
-                "code": "struct Node* findMin(struct Node *root)\n{\n    while(root->left != NULL)\n        root = root->left;\n\n    return root;\n}",
-                "complexity": "O(log n)"
-        },
-        "max-element-in-binary-tree": {
-                "name": "Max Element in Binary Tree",
-                "algorithm": "",
-                "code": "struct Node* findMax(struct Node *root)\n{\n    while(root->right != NULL)\n        root = root->right;\n\n    return root;\n}",
-                "complexity": "O(log n)"
-        },
-        "deletion-of-a-node": {
-                "name": "Deletion of a node",
-                "algorithm": "",
-                "code": "struct Node* deleteNode(struct Node *root, int key)\n{\n    if(root == NULL)\n        return root;\n    if(key < root->data)\n        root->left = deleteNode(root->left, key);\n    else if(key > root->data)\n        root->right = deleteNode(root->right, key);\n    else\n    {\n        if(root->left == NULL)\n        {\n            struct Node *temp = root->right;\n            free(root);\n            return temp;\n        }\n        else if(root->right == NULL)\n        {\n            struct Node *temp = root->left;\n            free(root);\n            return temp;\n        }\n        struct Node *temp =\n            findMin(root->right);\n        root->data = temp->data;\n        root->right =\n            deleteNode(root->right,\n                       temp->data);\n    }\n    return root;\n}",
-                "complexity": "O(log n)"
-        }
+            "node-structure": {
+                        "name": "Node Structure",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node\n{\n    int data;\n    struct Node *left;\n    struct Node *right;\n};",
+                                    "java": "class Node {\n    int data;\n    Node left;\n    Node right;\n    \n    Node(int data) {\n        this.data = data;\n        this.left = null;\n        this.right = null;\n    }\n}",
+                                    "python": "class Node:\n    def __init__(self, data):\n        self.data = data\n        self.left = None\n        self.right = None"
+                        },
+                        "complexity": "No Time Complexity"
+            },
+            "create-a-new-node": {
+                        "name": "Create a new node",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* createNode(int data)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n\n    newNode->data = data;\n    newNode->left = NULL;\n    newNode->right = NULL;\n\n    return newNode;\n}",
+                                    "java": "public static Node createNode(int data) {\n    return new Node(data);\n}",
+                                    "python": "def create_node(data):\n    return Node(data)"
+                        },
+                        "complexity": "O(1) or O(n)"
+            },
+            "insertion": {
+                        "name": "Insertion",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* insert(struct Node *root, int data)\n{\n    if(root == NULL)\n        return createNode(data);\n\n    if(data < root->data)\n        root->left = insert(root->left, data);\n    else\n        root->right = insert(root->right, data);\n\n    return root;\n}",
+                                    "java": "public static Node insert(Node root, int data) {\n    if (root == null) {\n        return createNode(data);\n    }\n    if (data < root.data) {\n        root.left = insert(root.left, data);\n    } else {\n        root.right = insert(root.right, data);\n    }\n    return root;\n}",
+                                    "python": "def insert(root, data):\n    if not root:\n        return Node(data)\n    if data < root.data:\n        root.left = insert(root.left, data)\n    else:\n        root.right = insert(root.right, data)\n    return root"
+                        },
+                        "complexity": "O(log n)"
+            },
+            "search": {
+                        "name": "Search",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* search(struct Node *root, int key)\n{\n    if(root == NULL || root->data == key)\n        return root;\n\n    if(key < root->data)\n        return search(root->left, key);\n\n    return search(root->right, key);\n}",
+                                    "java": "public static Node search(Node root, int key) {\n    if (root == null || root.data == key) {\n        return root;\n    }\n    if (key < root.data) {\n        return search(root.left, key);\n    }\n    return search(root.right, key);\n}",
+                                    "python": "def search(root, key):\n    if not root or root.data == key:\n        return root\n    if key < root.data:\n        return search(root.left, key)\n    return search(root.right, key)"
+                        },
+                        "complexity": "O(log n)"
+            },
+            "inorder-traversal\n\nleft-->-root->-right\n\n\n----------------first-visit-left-subtree,-then-root,-then-right-subtree": {
+                        "name": "Inorder Traversal\n\n(Left -> Root-> Right)\n\n\n                First visit Left Subtree, then Root, then Right Subtree",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "void inorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        inorder(root->left);\n        printf(\"%d \", root->data);\n        inorder(root->right);\n    }\n}",
+                                    "java": "",
+                                    "python": ""
+                        },
+                        "complexity": "O(n)"
+            },
+            "preorder-traversal\n\nroot-->-left->-right\n\n\n----------------first-visit-root,-then-left-subtree,-then-right-subtree": {
+                        "name": "Preorder Traversal\n\n(Root -> Left-> Right)\n\n\n                First visit Root, then Left Subtree, then Right Subtree",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "void preorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        printf(\"%d \", root->data);\n        preorder(root->left);\n        preorder(root->right);\n    }\n}",
+                                    "java": "",
+                                    "python": ""
+                        },
+                        "complexity": "O(n)"
+            },
+            "postorder-traversal\n\nleft-->-right-->-root\n\n\n----------------first-visit-left-subtree,-then-right-subtree,-then-root": {
+                        "name": "Postorder Traversal\n\n(Left -> Right -> Root)\n\n\n                First visit Left Subtree, then Right Subtree, then Root",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "void postorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        postorder(root->left);\n        postorder(root->right);\n        printf(\"%d \", root->data);\n    }\n}",
+                                    "java": "",
+                                    "python": ""
+                        },
+                        "complexity": "O(n)"
+            },
+            "min-element-in-binary-tree": {
+                        "name": "Min element in Binary Tree",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* findMin(struct Node *root)\n{\n    while(root->left != NULL)\n        root = root->left;\n\n    return root;\n}",
+                                    "java": "public static Node findMin(Node root) {\n    while (root.left != null) {\n        root = root.left;\n    }\n    return root;\n}",
+                                    "python": "def find_min(root):\n    while root.left:\n        root = root.left\n    return root"
+                        },
+                        "complexity": "O(log n)"
+            },
+            "max-element-in-binary-tree": {
+                        "name": "Max Element in Binary Tree",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* findMax(struct Node *root)\n{\n    while(root->right != NULL)\n        root = root->right;\n\n    return root;\n}",
+                                    "java": "public static Node findMax(Node root) {\n    while (root.right != null) {\n        root = root.right;\n    }\n    return root;\n}",
+                                    "python": "def find_max(root):\n    while root.right:\n        root = root.right\n    return root"
+                        },
+                        "complexity": "O(log n)"
+            },
+            "deletion-of-a-node": {
+                        "name": "Deletion of a node",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* deleteNode(struct Node *root, int key)\n{\n    if(root == NULL)\n        return root;\n    if(key < root->data)\n        root->left = deleteNode(root->left, key);\n    else if(key > root->data)\n        root->right = deleteNode(root->right, key);\n    else\n    {\n        if(root->left == NULL)\n        {\n            struct Node *temp = root->right;\n            free(root);\n            return temp;\n        }\n        else if(root->right == NULL)\n        {\n            struct Node *temp = root->left;\n            free(root);\n            return temp;\n        }\n        struct Node *temp =\n            findMin(root->right);\n        root->data = temp->data;\n        root->right =\n            deleteNode(root->right,\n                       temp->data);\n    }\n    return root;\n}",
+                                    "java": "public static Node deleteNode(Node root, int key) {\n    if (root == null) return root;\n    if (key < root.data) {\n        root.left = deleteNode(root.left, key);\n    } else if (key > root.data) {\n        root.right = deleteNode(root.right, key);\n    } else {\n        if (root.left == null) {\n            return root.right;\n        } else if (root.right == null) {\n            return root.left;\n        }\n        Node temp = findMin(root.right);\n        root.data = temp.data;\n        root.right = deleteNode(root.right, temp.data);\n    }\n    return root;\n}",
+                                    "python": "def delete_node(root, key):\n    if not root: return root\n    if key < root.data:\n        root.left = delete_node(root.left, key)\n    elif key > root.data:\n        root.right = delete_node(root.right, key)\n    else:\n        if not root.left:\n            return root.right\n        elif not root.right:\n            return root.left\n        temp = find_min(root.right)\n        root.data = temp.data\n        root.right = delete_node(root.right, temp.data)\n    return root"
+                        },
+                        "complexity": "O(log n)"
+            }
 };
+
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -566,14 +657,23 @@
             } else if (currentPath === "" || currentPath === "index.html") {
                 if (linkPath === "index.html") link.classList.add("active");
             } else {
-                // Dropdown link active matches
                 if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
-                    if (currentPath.includes("linked_lists") && linkPath.includes("singly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
                         link.classList.add("active");
                     }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
                 }
             }
         });
+
+        let currentTabId = "";
 
         // Generate Sidebar Buttons
         function generateSidebar() {
@@ -597,6 +697,7 @@
 
         // Switch Tab Content
         function selectTab(tabId) {
+            currentTabId = tabId;
             // Toggle tab active styles
             document.querySelectorAll(".tab-button").forEach(btn => {
                 if (btn.getAttribute("data-tab") === tabId) {
@@ -616,22 +717,64 @@
             // Algorithm Card show/hide
             if (data.algorithm && data.algorithm.trim() !== "") {
                 algoCard.style.display = "block";
-                algoContent.textContent = data.algorithm;
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
             } else {
                 algoCard.style.display = "none";
             }
 
             // Code Card show/hide
-            if (data.code && data.code.trim() !== "") {
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
                 codeCard.style.display = "block";
-                codeContent.textContent = data.code;
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
             } else {
                 codeCard.style.display = "none";
             }
         }
 
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+                
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
+
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
+
         // Initialize view
         window.onload = generateSidebar;
+
     </script>
 </body>
+
 </html>
