@@ -368,6 +368,45 @@
                 margin-bottom: 10px;
             }
         }
+    
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
     </style>
 </head>
 
@@ -461,7 +500,14 @@
 
             <!-- Code Section -->
             <div class="content-card" id="codeCard">
-                <div class="card-title">C Source Code</div>
+            <div class="card-header-actions">
+                <div class="card-title">Source Code</div>
+                <div class="lang-selector">
+                    <button class="lang-btn" data-lang="c">C</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                </div>
+            </div>
                 <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
             </div>
         </main>
@@ -472,54 +518,87 @@
         // Inline Database of Operations
         const OPERATIONS_DATA = {
             "declaration": {
-                "name": "Declaration",
-                "algorithm": "1. Define MAX size, queue array, initialize front = rear = -1.",
-                "code": "#define MAX 100\n\nint queue[MAX];\nint front = -1;\nint rear = -1;",
-                "complexity": "No Time Complexity"
+                        "name": "Declaration",
+                        "algorithm": "1. Define MAX size, queue array, initialize front = rear = -1.",
+                        "code": {
+                                    "c": "#define MAX 100\n\nint queue[MAX];\nint front = -1;\nint rear = -1;",
+                                    "java": "public class Queue {\n    static final int MAX = 100;\n    int[] queue = new int[MAX];\n    int front = -1;\n    int rear = -1;\n}",
+                                    "python": "class Queue:\n    def __init__(self):\n        self.max = 100\n        self.queue = [0] * self.max\n        self.front = -1\n        self.rear = -1"
+                        },
+                        "complexity": "No Time Complexity"
             },
             "enqueue": {
-                "name": "Enqueue",
-                "algorithm": "1. Check if queue is full\n2. If full, print Overflow\n3. If queue is empty :\n\u00a0\u00a0\u00a0\u00a0set front = rear = 0\n4. Else:\n\u00a0\u00a0\u00a0\u00a0Increment rear\n5. Insert elements at rear",
-                "code": "void enqueue(int data)\n{\n    if(rear == MAX - 1)\n    {\n        printf(\"Queue Overflow\");\n        return;\n    }\n\n    if(front == -1)\n        front = rear = 0;\n    else\n        rear++;\n\n    queue[rear] = data;\n}",
-                "complexity": "O(1)"
+                        "name": "Enqueue",
+                        "algorithm": "1. Check if queue is full\n2. If full, print Overflow\n3. If queue is empty :\n\u00a0\u00a0\u00a0\u00a0set front = rear = 0\n4. Else:\n\u00a0\u00a0\u00a0\u00a0Increment rear\n5. Insert elements at rear",
+                        "code": {
+                                    "c": "void enqueue(int data)\n{\n    if(rear == MAX - 1)\n    {\n        printf(\"Queue Overflow\");\n        return;\n    }\n\n    if(front == -1)\n        front = rear = 0;\n    else\n        rear++;\n\n    queue[rear] = data;\n}",
+                                    "java": "void enqueue(int data) {\n    if (rear == MAX - 1) {\n        System.out.println(\"Queue Overflow\");\n        return;\n    }\n    if (front == -1) {\n        front = rear = 0;\n    } else {\n        rear++;\n    }\n    queue[rear] = data;\n}",
+                                    "python": "def enqueue(self, data):\n    if self.rear == self.max - 1:\n        print(\"Queue Overflow\")\n        return\n    if self.front == -1:\n        self.front = self.rear = 0\n    else:\n        self.rear += 1\n    self.queue[self.rear] = data"
+                        },
+                        "complexity": "O(1)"
             },
             "dequeue": {
-                "name": "Dequeue",
-                "algorithm": "1. Check if queue is empty\n2. If empty, print Underflow\n3. Store front element\n4. If only one element :\n\u00a0\u00a0\u00a0\u00a0Set front = rear = -1\n5. Else:\n\u00a0\u00a0\u00a0\u00a0Increment front\n6. Return deleted element",
-                "code": "int dequeue()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Underflow\");\n        return -1;\n    }\n    int item = queue[front];\n    if(front == rear)\n        front = rear = -1;\n    else\n        front++;\n    return item;\n}",
-                "complexity": "O(1)"
+                        "name": "Dequeue",
+                        "algorithm": "1. Check if queue is empty\n2. If empty, print Underflow\n3. Store front element\n4. If only one element :\n\u00a0\u00a0\u00a0\u00a0Set front = rear = -1\n5. Else:\n\u00a0\u00a0\u00a0\u00a0Increment front\n6. Return deleted element",
+                        "code": {
+                                    "c": "int dequeue()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Underflow\");\n        return -1;\n    }\n    int item = queue[front];\n    if(front == rear)\n        front = rear = -1;\n    else\n        front++;\n    return item;\n}",
+                                    "java": "int dequeue() {\n    if (front == -1) {\n        System.out.println(\"Queue Underflow\");\n        return -1;\n    }\n    int item = queue[front];\n    if (front == rear) {\n        front = rear = -1;\n    } else {\n        front++;\n    }\n    return item;\n}",
+                                    "python": "def dequeue(self):\n    if self.front == -1:\n        print(\"Queue Underflow\")\n        return -1\n    item = self.queue[self.front]\n    if self.front == self.rear:\n        self.front = self.rear = -1\n    else:\n        self.front += 1\n    return item"
+                        },
+                        "complexity": "O(1)"
             },
             "peek": {
-                "name": "Peek",
-                "algorithm": "1. Check whether queue is empty\n2. Return front element",
-                "code": "int peek()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Empty\");\n        return -1;\n    }\n\n    return queue[front];\n}",
-                "complexity": "O(1)"
+                        "name": "Peek",
+                        "algorithm": "1. Check whether queue is empty\n2. Return front element",
+                        "code": {
+                                    "c": "int peek()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Empty\");\n        return -1;\n    }\n\n    return queue[front];\n}",
+                                    "java": "int peek() {\n    if (front == -1) {\n        System.out.println(\"Queue Empty\");\n        return -1;\n    }\n    return queue[front];\n}",
+                                    "python": "def peek(self):\n    if self.front == -1:\n        print(\"Queue Empty\")\n        return -1\n    return self.queue[self.front]"
+                        },
+                        "complexity": "O(1)"
             },
             "display": {
-                "name": "Display",
-                "algorithm": "1. Check if queue is empty\n2. Traverse from front to rear\n3. Print all elements",
-                "code": "void display()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Empty\");\n        return;\n    }\n\n    for(int i = front; i <= rear; i++)\n        printf(\"%d \", queue[i]);\n}",
-                "complexity": "O(n)"
+                        "name": "Display",
+                        "algorithm": "1. Check if queue is empty\n2. Traverse from front to rear\n3. Print all elements",
+                        "code": {
+                                    "c": "void display()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Empty\");\n        return;\n    }\n\n    for(int i = front; i <= rear; i++)\n        printf(\"%d \", queue[i]);\n}",
+                                    "java": "void display() {\n    if (front == -1) {\n        System.out.println(\"Queue Empty\");\n        return;\n    }\n    for (int i = front; i <= rear; i++) {\n        System.out.print(queue[i] + \" \");\n    }\n}",
+                                    "python": "def display(self):\n    if self.front == -1:\n        print(\"Queue Empty\")\n        return\n    for i in range(self.front, self.rear + 1):\n        print(self.queue[i], end=\" \")"
+                        },
+                        "complexity": "O(n)"
             },
             "isempty": {
-                "name": "isEmpty()",
-                "algorithm": "1. Check whether front = -1\n2. If yes, queue is empty",
-                "code": "int isEmpty()\n{\n    return (front == -1);\n}",
-                "complexity": "O(1)"
+                        "name": "isEmpty()",
+                        "algorithm": "1. Check whether front = -1\n2. If yes, queue is empty",
+                        "code": {
+                                    "c": "int isEmpty()\n{\n    return (front == -1);\n}",
+                                    "java": "boolean isEmpty() {\n    return (front == -1);\n}",
+                                    "python": "def is_empty(self):\n    return self.front == -1"
+                        },
+                        "complexity": "O(1)"
             },
             "isfull": {
-                "name": "isFull()",
-                "algorithm": "1. Check if top = Max - 1\n2. If yes, queue is full",
-                "code": "int isFull()\n{\n    return (rear == MAX - 1);\n}",
-                "complexity": "O(1)"
+                        "name": "isFull()",
+                        "algorithm": "1. Check if top = Max - 1\n2. If yes, queue is full",
+                        "code": {
+                                    "c": "int isFull()\n{\n    return (rear == MAX - 1);\n}",
+                                    "java": "boolean isFull() {\n    return (rear == MAX - 1);\n}",
+                                    "python": "def is_full(self):\n    return self.rear == self.max - 1"
+                        },
+                        "complexity": "O(1)"
             },
             "size": {
-                "name": "Size",
-                "algorithm": "1. Check if queue is empty\n2. If empty return 0\n3. Otherwise calculate :\nSize = rear - front + 1\n4. Return size",
-                "code": "int size()\n{\n    if(front == -1)\n        return 0;\n\n    return rear - front + 1;\n}",
-                "complexity": "O(1)"
+                        "name": "Size",
+                        "algorithm": "1. Check if queue is empty\n2. If empty return 0\n3. Otherwise calculate :\nSize = rear - front + 1\n4. Return size",
+                        "code": {
+                                    "c": "int size()\n{\n    if(front == -1)\n        return 0;\n\n    return rear - front + 1;\n}",
+                                    "java": "int size() {\n    if (front == -1) return 0;\n    return rear - front + 1;\n}",
+                                    "python": "def size(self):\n    if self.front == -1:\n        return 0\n    return self.rear - self.front + 1"
+                        },
+                        "complexity": "O(1)"
             }
-        };
+};
+
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -558,20 +637,29 @@
             } else if (currentPath === "" || currentPath === "index.html") {
                 if (linkPath === "index.html") link.classList.add("active");
             } else {
-                // Dropdown link active matches
                 if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
-                    if (currentPath.includes("linked_lists") && linkPath.includes("singly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
                         link.classList.add("active");
                     }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
                 }
             }
         });
+
+        let currentTabId = "";
 
         // Generate Sidebar Buttons
         function generateSidebar() {
             const keys = Object.keys(OPERATIONS_DATA);
             tabButtonsContainer.innerHTML = "";
-
+            
             keys.forEach((key, idx) => {
                 const btn = document.createElement("button");
                 btn.className = "tab-button" + (idx === 0 ? " active" : "");
@@ -589,6 +677,7 @@
 
         // Switch Tab Content
         function selectTab(tabId) {
+            currentTabId = tabId;
             // Toggle tab active styles
             document.querySelectorAll(".tab-button").forEach(btn => {
                 if (btn.getAttribute("data-tab") === tabId) {
@@ -608,22 +697,63 @@
             // Algorithm Card show/hide
             if (data.algorithm && data.algorithm.trim() !== "") {
                 algoCard.style.display = "block";
-                algoContent.textContent = data.algorithm;
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
             } else {
                 algoCard.style.display = "none";
             }
 
             // Code Card show/hide
-            if (data.code && data.code.trim() !== "") {
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
                 codeCard.style.display = "block";
-                codeContent.textContent = data.code;
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
             } else {
                 codeCard.style.display = "none";
             }
         }
 
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+                
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
+
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
+
         // Initialize view
         window.onload = generateSidebar;
+
     </script>
 </body>
 
