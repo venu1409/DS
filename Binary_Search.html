@@ -368,6 +368,45 @@
                 margin-bottom: 10px;
             }
         }
+    
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
     </style>
 </head>
 
@@ -461,7 +500,14 @@
 
             <!-- Code Section -->
             <div class="content-card" id="codeCard">
-                <div class="card-title">C Source Code</div>
+            <div class="card-header-actions">
+                <div class="card-title">Source Code</div>
+                <div class="lang-selector">
+                    <button class="lang-btn" data-lang="c">C</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                </div>
+            </div>
                 <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
             </div>
         </main>
@@ -472,12 +518,17 @@
         // Inline Database of Operations
         const OPERATIONS_DATA = {
             "binary-search": {
-                "name": "Binary Search",
-                "algorithm": "1. Start\n2. Read n (number of elements)\n3. Read Sorted array elements\n4. Read element to search (key)\n5. Set low = 0, high = n - 1\n6. While low <= high :\nmid = (high + low) / 2\n\u00a0\u00a0\u00a0\u00a0If arr[mid] == key\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0print \"Element Found\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0break\n\u00a0\u00a0\u00a0\u00a0Else if key < arr[mid]\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0high = mid - 1\n\u00a0\u00a0\u00a0\u00a0Else\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0low = mid + 1\n7. If not found, print \"Element not found\"\n8. Stop",
-                "code": "Without Function:\n\n#include <stdio.h>\n\nint main()\n{\n    int arr[100], n, key;\n    int low, high, mid, found = 0;\n\n    printf(\"Enter number of elements: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter sorted array elements:\\n\");\n    for(int i = 0; i < n; i++)\n        scanf(\"%d\", &arr[i]);\n\n    printf(\"Enter element to search: \");\n    scanf(\"%d\", &key);\n\n    low = 0;\n    high = n - 1;\n\n    while(low <= high)\n    {\n        mid = (low + high) / 2;\n\n        if(arr[mid] == key)\n        {\n            printf(\"Element Found at Position %d\", mid + 1);\n            found = 1;\n            break;\n        }\n        else if(key < arr[mid])\n        {\n            high = mid - 1;\n        }\n        else\n        {\n            low = mid + 1;\n        }\n    }\n\n    if(found == 0)\n        printf(\"Element Not Found\");\n\n    return 0;\n}\n------------------------------------------------------------------------------------------\nWith Function :\n\n#include <stdio.h>\n\nint binarySearch(int arr[], int n, int key)\n{\n    int low = 0, high = n - 1;\n\n    while(low <= high)\n    {\n        int mid = (low + high) / 2;\n\n        if(arr[mid] == key)\n            return mid;\n        else if(key < arr[mid])\n            high = mid - 1;\n        else\n            low = mid + 1;\n    }\n\n    return -1;\n}\n\nint main()\n{\n    int arr[] = {10, 20, 30, 40, 50, 60, 70};\n    int n = 7;\n    int key = 40;\n\n    int result = binarySearch(arr, n, key);\n\n    if(result == -1)\n        printf(\"Element Not Found\");\n    else\n        printf(\"Element Found at Position %d\", result + 1);\n\n    return 0;\n}",
-                "complexity": "O(log n)"
+                        "name": "Binary Search",
+                        "algorithm": "1. Start\n2. Read n (number of elements)\n3. Read Sorted array elements\n4. Read element to search (key)\n5. Set low = 0, high = n - 1\n6. While low <= high :\nmid = (high + low) / 2\n\u00a0\u00a0\u00a0\u00a0If arr[mid] == key\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0print \"Element Found\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0break\n\u00a0\u00a0\u00a0\u00a0Else if key < arr[mid]\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0high = mid - 1\n\u00a0\u00a0\u00a0\u00a0Else\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0low = mid + 1\n7. If not found, print \"Element not found\"\n8. Stop",
+                        "code": {
+                                    "c": "Without Function:\n\n#include <stdio.h>\n\nint main()\n{\n    int arr[100], n, key;\n    int low, high, mid, found = 0;\n\n    printf(\"Enter number of elements: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter sorted array elements:\\n\");\n    for(int i = 0; i < n; i++)\n        scanf(\"%d\", &arr[i]);\n\n    printf(\"Enter element to search: \");\n    scanf(\"%d\", &key);\n\n    low = 0;\n    high = n - 1;\n\n    while(low <= high)\n    {\n        mid = (low + high) / 2;\n\n        if(arr[mid] == key)\n        {\n            printf(\"Element Found at Position %d\", mid + 1);\n            found = 1;\n            break;\n        }\n        else if(key < arr[mid])\n        {\n            high = mid - 1;\n        }\n        else\n        {\n            low = mid + 1;\n        }\n    }\n\n    if(found == 0)\n        printf(\"Element Not Found\");\n\n    return 0;\n}\n------------------------------------------------------------------------------------------\nWith Function :\n\n#include <stdio.h>\n\nint binarySearch(int arr[], int n, int key)\n{\n    int low = 0, high = n - 1;\n\n    while(low <= high)\n    {\n        int mid = (low + high) / 2;\n\n        if(arr[mid] == key)\n            return mid;\n        else if(key < arr[mid])\n            high = mid - 1;\n        else\n            low = mid + 1;\n    }\n\n    return -1;\n}\n\nint main()\n{\n    int arr[] = {10, 20, 30, 40, 50, 60, 70};\n    int n = 7;\n    int key = 40;\n\n    int result = binarySearch(arr, n, key);\n\n    if(result == -1)\n        printf(\"Element Not Found\");\n    else\n        printf(\"Element Found at Position %d\", result + 1);\n\n    return 0;\n}",
+                                    "java": "public static int binarySearch(int[] arr, int key) {\n    int low = 0, high = arr.length - 1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (arr[mid] == key) {\n            return mid;\n        } else if (key < arr[mid]) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return -1;\n}",
+                                    "python": "def binary_search(arr, key):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == key:\n            return mid\n        elif key < arr[mid]:\n            high = mid - 1\n        else:\n            low = mid + 1\n    return -1"
+                        },
+                        "complexity": "O(log n)"
             }
-        };
+};
+
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -516,20 +567,29 @@
             } else if (currentPath === "" || currentPath === "index.html") {
                 if (linkPath === "index.html") link.classList.add("active");
             } else {
-                // Dropdown link active matches
                 if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
-                    if (currentPath.includes("linked_lists") && linkPath.includes("singly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
                         link.classList.add("active");
                     }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
                 }
             }
         });
+
+        let currentTabId = "";
 
         // Generate Sidebar Buttons
         function generateSidebar() {
             const keys = Object.keys(OPERATIONS_DATA);
             tabButtonsContainer.innerHTML = "";
-
+            
             keys.forEach((key, idx) => {
                 const btn = document.createElement("button");
                 btn.className = "tab-button" + (idx === 0 ? " active" : "");
@@ -547,6 +607,7 @@
 
         // Switch Tab Content
         function selectTab(tabId) {
+            currentTabId = tabId;
             // Toggle tab active styles
             document.querySelectorAll(".tab-button").forEach(btn => {
                 if (btn.getAttribute("data-tab") === tabId) {
@@ -566,22 +627,63 @@
             // Algorithm Card show/hide
             if (data.algorithm && data.algorithm.trim() !== "") {
                 algoCard.style.display = "block";
-                algoContent.textContent = data.algorithm;
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
             } else {
                 algoCard.style.display = "none";
             }
 
             // Code Card show/hide
-            if (data.code && data.code.trim() !== "") {
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
                 codeCard.style.display = "block";
-                codeContent.textContent = data.code;
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
             } else {
                 codeCard.style.display = "none";
             }
         }
 
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+                
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
+
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
+
         // Initialize view
         window.onload = generateSidebar;
+
     </script>
 </body>
 
