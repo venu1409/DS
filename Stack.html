@@ -469,49 +469,49 @@
         const OPERATIONS_DATA = {
         "declaration": {
                 "name": "Declaration",
-                "algorithm": "",
+                "algorithm": "1. Define MAX size, array stack, initialize top = -1.",
                 "code": "#define MAX 100\n\nint stack[MAX];\nint top = -1;",
                 "complexity": "No Time Complexity"
         },
         "push": {
                 "name": "Push",
-                "algorithm": "",
+                "algorithm": "1. Check if stack is full\n2. If full, print Overflow\n3. Increment top\n4. Insert element at top",
                 "code": "void push(int data)\n{\n    if(top == MAX - 1)\n    {\n        printf(\"Stack Overflow\");\n        return;\n    }\n\n    top++;\n    stack[top] = data;\n}",
                 "complexity": "O(1)"
         },
         "pop": {
                 "name": "Pop",
-                "algorithm": "",
+                "algorithm": "1. Check if stack is empty\n2. If empty, print Underflow\n3. Store top Element\n4. Decrement top\n5. Return deleted element",
                 "code": "int pop()\n{\n    if(top == -1)\n    {\n        printf(\"Stack Underflow\");\n        return -1;\n    }\n\n    int item = stack[top];\n    top--;\n\n    return item;\n}",
                 "complexity": "O(1)"
         },
         "peek": {
                 "name": "Peek",
-                "algorithm": "",
+                "algorithm": "1. Check whether stack is empty\n2. Return top element",
                 "code": "int peek()\n{\n    if(top == -1)\n    {\n        printf(\"Stack Empty\");\n        return -1;\n    }\n\n    return stack[top];\n}",
                 "complexity": "O(1)"
         },
         "display": {
                 "name": "Display",
-                "algorithm": "",
+                "algorithm": "1. Check if stack is empty\n2. Traverse from top to bottom\n3. Print all elements",
                 "code": "void display()\n{\n    if(top == -1)\n    {\n        printf(\"Stack Empty\");\n        return;\n    }\n\n    for(int i = top; i >= 0; i--)\n        printf(\"%d \", stack[i]);\n}",
                 "complexity": "O(n)"
         },
         "isempty": {
                 "name": "isEmpty()",
-                "algorithm": "",
+                "algorithm": "1. Check whether top = -1\n2. If yes, stack is empty",
                 "code": "int isEmpty()\n{\n    if(top == -1)\n        return 1;\n\n    return 0;\n}",
                 "complexity": "O(1)"
         },
         "isfull": {
                 "name": "isFull()",
-                "algorithm": "",
+                "algorithm": "1. Check whether top = Max - 1\n2. If yes, stack is full",
                 "code": "int isFull()\n{\n    if(top == MAX - 1)\n        return 1;\n\n    return 0;\n}",
                 "complexity": "O(1)"
         },
         "string-reversal": {
                 "name": "String Reversal",
-                "algorithm": "",
+                "algorithm": "1. Push all characters of string onto stack.\n2. Pop characters from stack to reverse string.",
                 "code": "#include < stdio.h>\n#include < string.h>\n\n#define MAX 100\n\nchar stack[MAX];\nint top = -1;\n\nvoid push(char ch)\n{\n    if(top == MAX - 1)\n        return;\n\n    stack[++top] = ch;\n}\n\nchar pop()\n{\n    if(top == -1)\n        return '\\0';\n\n    return stack[top--];\n}\n\nint main()\n{\n    char str[100];\n\n    printf(\"Enter a string: \");\n    scanf(\"%s\", str);\n\n    int len = strlen(str);\n\n    for(int i = 0; i < len; i++)\n        push(str[i]);\n\n    for(int i = 0; i < len; i++)\n        str[i] = pop();\n\n    printf(\"Reversed String = %s\", str);\n\n    return 0;\n}",
                 "complexity": "O(n)"
         }
