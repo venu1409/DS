@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +71,8 @@
             transition: all 0.3s;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: #ffffff;
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -144,7 +146,7 @@
             padding: 30px 24px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .page-header h1 {
@@ -279,7 +281,8 @@
         .algorithm-text {
             font-size: 14px;
             line-height: 1.7;
-            white-space: pre-wrap; /* Supports tabs/indentations and linebreaks */
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
             color: var(--text);
             font-family: inherit;
         }
@@ -365,11 +368,51 @@
                 margin-bottom: 10px;
             }
         }
+    
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
     </style>
 </head>
+
 <body>
 
-    
+
     <nav class="navbar">
         <a href="index.html" class="nav-brand">DEVENU</a>
         <button class="hamburger" aria-label="Toggle navigation">
@@ -457,23 +500,34 @@
 
             <!-- Code Section -->
             <div class="content-card" id="codeCard">
-                <div class="card-title">C Source Code</div>
+            <div class="card-header-actions">
+                <div class="card-title">Source Code</div>
+                <div class="lang-selector">
+                    <button class="lang-btn" data-lang="c">C</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                </div>
+            </div>
                 <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
             </div>
         </main>
     </div>
-
     <!-- Inline Logic Database & Page Switching Script -->
     <script>
         // Inline Database of Operations
         const OPERATIONS_DATA = {
-        "insertion-sort": {
-                "name": "Insertion Sort",
-                "algorithm": "1. Start\n2. Read n (number of elements)\n3. Read array elements\n4. Assume first element is sorted\n5. Run a loop i = 1 to n - 1\nkey = arr[i]\nj = i - 1\n\u00a0\u00a0\u00a0\u00a0While j >= 0 and arr[j] > key :\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0arr[j+ 1] = arr[j]\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0j = j - 1\n\u00a0\u00a0\u00a0\u00a0arr[j + 1] = key\n6. Stop",
-                "code": "Without Function:\n\n#include <stdio.h>\n\nint main()\n{\n    int arr[100], n, i, j, key;\n\n    printf(\"Enter number of elements: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter array elements:\\n\");\n    for(i = 0; i < n; i++)\n        scanf(\"%d\", &arr[i]);\n\n    for(i = 1; i < n; i++)\n    {\n        key = arr[i];\n        j = i - 1;\n\n        while(j >= 0 && arr[j] > key)\n        {\n            arr[j + 1] = arr[j];\n            j--;\n        }\n\n        arr[j + 1] = key;\n    }\n\n    printf(\"Sorted array:\\n\");\n    for(i = 0; i < n; i++)\n        printf(\"%d \", arr[i]);\n\n    return 0;\n}\n------------------------------------------------------------------------------------------\nWith Function :\n#include <stdio.h>\n\nvoid insertionSort(int arr[], int n)\n{\n    int i, j, key;\n\n    for(i = 1; i < n; i++)\n    {\n        key = arr[i];\n        j = i - 1;\n\n        while(j >= 0 && arr[j] > key)\n        {\n            arr[j + 1] = arr[j];\n            j--;\n        }\n\n        arr[j + 1] = key;\n    }\n}\n\nint main()\n{\n    int arr[] = {50, 20, 40, 10, 30};\n    int n = 5;\n    int i;\n\n    insertionSort(arr, n);\n\n    printf(\"Sorted array:\\n\");\n    for(i = 0; i < n; i++)\n        printf(\"%d \", arr[i]);\n\n    return 0;\n}",
-                "complexity": "O(n\u00b2)"
-        }
+            "insertion-sort": {
+                        "name": "Insertion Sort",
+                        "algorithm": "1. Start\n2. Read n (number of elements)\n3. Read array elements\n4. Assume first element is sorted\n5. Run a loop i = 1 to n - 1\nkey = arr[i]\nj = i - 1\n\u00a0\u00a0\u00a0\u00a0While j >= 0 and arr[j] > key :\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0arr[j+ 1] = arr[j]\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0j = j - 1\n\u00a0\u00a0\u00a0\u00a0arr[j + 1] = key\n6. Stop",
+                        "code": {
+                                    "c": "Without Function:\n\n#include <stdio.h>\n\nint main()\n{\n    int arr[100], n, i, j, key;\n\n    printf(\"Enter number of elements: \");\n    scanf(\"%d\", &n);\n\n    printf(\"Enter array elements:\\n\");\n    for(i = 0; i < n; i++)\n        scanf(\"%d\", &arr[i]);\n\n    for(i = 1; i < n; i++)\n    {\n        key = arr[i];\n        j = i - 1;\n\n        while(j >= 0 && arr[j] > key)\n        {\n            arr[j + 1] = arr[j];\n            j--;\n        }\n\n        arr[j + 1] = key;\n    }\n\n    printf(\"Sorted array:\\n\");\n    for(i = 0; i < n; i++)\n        printf(\"%d \", arr[i]);\n\n    return 0;\n}\n------------------------------------------------------------------------------------------\nWith Function :\n#include <stdio.h>\n\nvoid insertionSort(int arr[], int n)\n{\n    int i, j, key;\n\n    for(i = 1; i < n; i++)\n    {\n        key = arr[i];\n        j = i - 1;\n\n        while(j >= 0 && arr[j] > key)\n        {\n            arr[j + 1] = arr[j];\n            j--;\n        }\n\n        arr[j + 1] = key;\n    }\n}\n\nint main()\n{\n    int arr[] = {50, 20, 40, 10, 30};\n    int n = 5;\n    int i;\n\n    insertionSort(arr, n);\n\n    printf(\"Sorted array:\\n\");\n    for(i = 0; i < n; i++)\n        printf(\"%d \", arr[i]);\n\n    return 0;\n}",
+                                    "java": "public static void insertionSort(int[] arr) {\n    int n = arr.length;\n    for (int i = 1; i < n; i++) {\n        int key = arr[i];\n        int j = i - 1;\n        while (j >= 0 && arr[j] > key) {\n            arr[j + 1] = arr[j];\n            j--;\n        }\n        arr[j + 1] = key;\n    }\n}",
+                                    "python": "def insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > key:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key"
+                        },
+                        "complexity": "O(n\u00b2)"
+            }
 };
+
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -512,14 +566,23 @@
             } else if (currentPath === "" || currentPath === "index.html") {
                 if (linkPath === "index.html") link.classList.add("active");
             } else {
-                // Dropdown link active matches
                 if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
-                    if (currentPath.includes("linked_lists") && linkPath.includes("singly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
                         link.classList.add("active");
                     }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
                 }
             }
         });
+
+        let currentTabId = "";
 
         // Generate Sidebar Buttons
         function generateSidebar() {
@@ -543,6 +606,7 @@
 
         // Switch Tab Content
         function selectTab(tabId) {
+            currentTabId = tabId;
             // Toggle tab active styles
             document.querySelectorAll(".tab-button").forEach(btn => {
                 if (btn.getAttribute("data-tab") === tabId) {
@@ -562,22 +626,64 @@
             // Algorithm Card show/hide
             if (data.algorithm && data.algorithm.trim() !== "") {
                 algoCard.style.display = "block";
-                algoContent.textContent = data.algorithm;
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
             } else {
                 algoCard.style.display = "none";
             }
 
             // Code Card show/hide
-            if (data.code && data.code.trim() !== "") {
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
                 codeCard.style.display = "block";
-                codeContent.textContent = data.code;
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
             } else {
                 codeCard.style.display = "none";
             }
         }
 
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+                
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
+
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
+
         // Initialize view
         window.onload = generateSidebar;
+
     </script>
 </body>
+
 </html>
