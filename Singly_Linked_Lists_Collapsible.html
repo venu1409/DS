@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +71,8 @@
             transition: all 0.3s;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: #ffffff;
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -144,7 +146,7 @@
             padding: 30px 24px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .page-header h1 {
@@ -279,7 +281,8 @@
         .algorithm-text {
             font-size: 14px;
             line-height: 1.7;
-            white-space: pre-wrap; /* Supports tabs/indentations and linebreaks */
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
             color: var(--text);
             font-family: inherit;
         }
@@ -367,9 +370,10 @@
         }
     </style>
 </head>
+
 <body>
 
-    
+
     <nav class="navbar">
         <a href="index.html" class="nav-brand">AlgoInsight</a>
         <button class="hamburger" aria-label="Toggle navigation">
@@ -467,7 +471,6 @@
     <script>
         // Inline Database of Operations
         const OPERATIONS_DATA = {
-        "node-structure": {
             "node-structure": {
                 "name": "Node Structure",
                 "algorithm": "",
@@ -540,7 +543,7 @@
                 "code": "int countNodes()\n{\n    int count = 0;\n\n    struct Node *temp = head;\n\n    while(temp != NULL)\n    {\n        count++;\n        temp = temp->next;\n    }\n\n    return count;\n}",
                 "complexity": "O(n)"
             }
-    };
+        };
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -592,7 +595,7 @@
         function generateSidebar() {
             const keys = Object.keys(OPERATIONS_DATA);
             tabButtonsContainer.innerHTML = "";
-            
+
             keys.forEach((key, idx) => {
                 const btn = document.createElement("button");
                 btn.className = "tab-button" + (idx === 0 ? " active" : "");
@@ -647,4 +650,5 @@
         window.onload = generateSidebar;
     </script>
 </body>
+
 </html>
