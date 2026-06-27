@@ -485,7 +485,7 @@
             },
             "insertion-beginning": {
                 "name": "Insertion (Beginning)",
-                "algorithm": " 1. Create a new node\n2. Insert data into the node\n3. Set newNode->next = head\n4. Update head = newNode",
+                "algorithm": "1. Create a new node\n2. Insert data into the node\n3. Set newNode->next = head\n4. Update head = newNode",
                 "code": "void insertBeginning(int data)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n\n    newNode->data = data;\n    newNode->next = head;\n    head = newNode;\n}",
                 "complexity": "O(1)"
             },
