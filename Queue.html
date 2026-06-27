@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +71,8 @@
             transition: all 0.3s;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: #ffffff;
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -144,7 +146,7 @@
             padding: 30px 24px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .page-header h1 {
@@ -279,7 +281,8 @@
         .algorithm-text {
             font-size: 14px;
             line-height: 1.7;
-            white-space: pre-wrap; /* Supports tabs/indentations and linebreaks */
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
             color: var(--text);
             font-family: inherit;
         }
@@ -367,9 +370,10 @@
         }
     </style>
 </head>
+
 <body>
 
-    
+
     <nav class="navbar">
         <a href="index.html" class="nav-brand">AlgoInsight</a>
         <button class="hamburger" aria-label="Toggle navigation">
@@ -467,55 +471,55 @@
     <script>
         // Inline Database of Operations
         const OPERATIONS_DATA = {
-        "declaration": {
+            "declaration": {
                 "name": "Declaration",
-                "algorithm": "",
+                "algorithm": "1. Define MAX size, queue array, initialize front = rear = -1.",
                 "code": "#define MAX 100\n\nint queue[MAX];\nint front = -1;\nint rear = -1;",
                 "complexity": "No Time Complexity"
-        },
-        "enqueue": {
+            },
+            "enqueue": {
                 "name": "Enqueue",
-                "algorithm": "",
+                "algorithm": "1. Check if queue is full\n2. If full, print Overflow\n3. If queue is empty :\n\u00a0\u00a0\u00a0\u00a0set front = rear = 0\n4. Else:\n\u00a0\u00a0\u00a0\u00a0Increment rear\n5. Insert elements at rear",
                 "code": "void enqueue(int data)\n{\n    if(rear == MAX - 1)\n    {\n        printf(\"Queue Overflow\");\n        return;\n    }\n\n    if(front == -1)\n        front = rear = 0;\n    else\n        rear++;\n\n    queue[rear] = data;\n}",
                 "complexity": "O(1)"
-        },
-        "dequeue": {
+            },
+            "dequeue": {
                 "name": "Dequeue",
-                "algorithm": "",
+                "algorithm": "1. Check if queue is empty\n2. If empty, print Underflow\n3. Store front element\n4. If only one element :\n\u00a0\u00a0\u00a0\u00a0Set front = rear = -1\n5. Else:\n\u00a0\u00a0\u00a0\u00a0Increment front\n6. Return deleted element",
                 "code": "int dequeue()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Underflow\");\n        return -1;\n    }\n    int item = queue[front];\n    if(front == rear)\n        front = rear = -1;\n    else\n        front++;\n    return item;\n}",
                 "complexity": "O(1)"
-        },
-        "peek": {
+            },
+            "peek": {
                 "name": "Peek",
-                "algorithm": "",
+                "algorithm": "1. Check whether queue is empty\n2. Return front element",
                 "code": "int peek()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Empty\");\n        return -1;\n    }\n\n    return queue[front];\n}",
                 "complexity": "O(1)"
-        },
-        "display": {
+            },
+            "display": {
                 "name": "Display",
-                "algorithm": "",
+                "algorithm": "1. Check if queue is empty\n2. Traverse from front to rear\n3. Print all elements",
                 "code": "void display()\n{\n    if(front == -1)\n    {\n        printf(\"Queue Empty\");\n        return;\n    }\n\n    for(int i = front; i <= rear; i++)\n        printf(\"%d \", queue[i]);\n}",
                 "complexity": "O(n)"
-        },
-        "isempty": {
+            },
+            "isempty": {
                 "name": "isEmpty()",
-                "algorithm": "",
+                "algorithm": "1. Check whether front = -1\n2. If yes, queue is empty",
                 "code": "int isEmpty()\n{\n    return (front == -1);\n}",
                 "complexity": "O(1)"
-        },
-        "isfull": {
+            },
+            "isfull": {
                 "name": "isFull()",
-                "algorithm": "",
+                "algorithm": "1. Check if top = Max - 1\n2. If yes, queue is full",
                 "code": "int isFull()\n{\n    return (rear == MAX - 1);\n}",
                 "complexity": "O(1)"
-        },
-        "size": {
+            },
+            "size": {
                 "name": "Size",
-                "algorithm": "",
+                "algorithm": "1. Check if queue is empty\n2. If empty return 0\n3. Otherwise calculate :\nSize = rear - front + 1\n4. Return size",
                 "code": "int size()\n{\n    if(front == -1)\n        return 0;\n\n    return rear - front + 1;\n}",
                 "complexity": "O(1)"
-        }
-};
+            }
+        };
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -567,7 +571,7 @@
         function generateSidebar() {
             const keys = Object.keys(OPERATIONS_DATA);
             tabButtonsContainer.innerHTML = "";
-            
+
             keys.forEach((key, idx) => {
                 const btn = document.createElement("button");
                 btn.className = "tab-button" + (idx === 0 ? " active" : "");
@@ -622,4 +626,5 @@
         window.onload = generateSidebar;
     </script>
 </body>
+
 </html>
