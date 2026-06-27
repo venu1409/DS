@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hash Tables - Open and Closed Hashing</title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>Hash Tables</h1><p>Learn about the operations, implementation, and time complexity of Hash Tables.</p></header><div class="container"><div class="container">
+
+<div class="card">
+<h2>What is Hashing?</h2>
+<p>
+Hashing is a technique used to store and retrieve data efficiently
+A hash function converts a key into an index of an array
+</p>
+<pre>
+Hash Function
+
+h(key) = key % table_size
+
+Example:
+
+Key = 25
+Table Size = 10
+
+h(25) = 25 % 10 = 5
+</pre>
+<div class="highlight">
+Store key 25 at index 5
+</div>
+</div>
+<div class="card">
+<h2>Collision</h2>
+<p>
+A collision occurs when two different keys produce the same hash index
+</p>
+<pre>
+25 % 10 = 5
+35 % 10 = 5
+
+Collision Occurs
+</pre>
+</div>
+<div class="card">
+<h2>Types of Hashing</h2>
+<ul>
+<li>Open Hashing (Separate Chaining)</li>
+<li>Closed Hashing (Open Addressing)</li>
+</ul>
+</div>
+<div class="card">
+<h2>Open Hashing (Separate Chaining)</h2>
+<p>
+In Open Hashing, each index stores a linked list
+When a collision occurs, the new element is inserted into the linked list
+</p>
+<pre>
+Keys:
+25, 35, 45
+
+Hash Function:
+h(key) = key % 10
+
+25 -&gt; 5
+35 -&gt; 5
+45 -&gt; 5
+</pre>
+<pre>
+Index
+
+0
+1
+2
+3
+4
+5 -&gt; 25 -&gt; 35 -&gt; 45
+6
+7
+8
+9
+</pre>
+</div>
+<div class="card">
+<h2>Open Hashing Operations</h2>
+<h3>Insertion Algorithm</h3>
+<pre>
+1. Compute hash index
+2. Create new node
+3. Insert node into linked list
+4. End
+</pre>
+<h3>Insertion Code</h3>
+<pre>
+void insert(int key)
+{
+    int index = key % SIZE;
+
+    struct Node *newNode =
+    (struct Node*)malloc(sizeof(struct Node));
+
+    newNode-&gt;data = key;
+    newNode-&gt;next = table[index];
+
+    table[index] = newNode;
+}
+</pre>
+<h3>Search Algorithm</h3>
+<pre>
+1. Compute hash index
+2. Traverse linked list
+3. Compare each node
+4. Return found/not found
+</pre>
+<h3>Search Code</h3>
+<pre>
+int search(int key)
+{
+    int index = key % SIZE;
+
+    struct Node *temp = table[index];
+
+    while(temp != NULL)
+    {
+        if(temp-&gt;data == key)
+            return 1;
+
+        temp = temp-&gt;next;
+    }
+
+    return 0;
+}
+</pre>
+</div>
+<div class="card">
+<h2>Open Hashing Complexity</h2>
+<div class="table-responsive"><table>
+<tr>
+<th>Operation</th>
+<th>Best</th>
+<th>Average</th>
+<th>Worst</th>
+</tr>
+<tr>
+<td>Insert</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Search</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+</table></div>
+</div>
+<div class="card">
+<h2>Closed Hashing (Open Addressing)</h2>
+<p>
+In Closed Hashing, all elements are stored inside the hash table
+When a collision occurs, another free location is searched
+</p>
+<h3>Linear Probing Formula</h3>
+<pre>
+h(k,i) = (h(k) + i) % size
+</pre>
+<h3>Example</h3>
+<pre>
+25 -&gt; Index 5
+
+35 -&gt; Collision at 5
+      Place at 6
+
+45 -&gt; Collision at 5
+      Collision at 6
+      Place at 7
+</pre>
+<pre>
+0
+1
+2
+3
+4
+5 -&gt; 25
+6 -&gt; 35
+7 -&gt; 45
+8
+9
+</pre>
+</div>
+<div class="card">
+<h2>Closed Hashing Operations</h2>
+<h3>Insertion Algorithm</h3>
+<pre>
+1. Compute hash index
+2. If empty insert
+3. Else probe next slot
+4. Repeat until free slot found
+</pre>
+<h3>Insertion Code</h3>
+<pre>
+void insert(int key)
+{
+    int index = key % SIZE;
+
+    while(hashTable[index] != -1)
+    {
+        index = (index + 1) % SIZE;
+    }
+
+    hashTable[index] = key;
+}
+</pre>
+<h3>Search Algorithm</h3>
+<pre>
+1. Compute hash index
+2. Compare current slot
+3. Continue probing
+4. Stop when found
+</pre>
+<h3>Search Code</h3>
+<pre>
+int search(int key)
+{
+    int index = key % SIZE;
+
+    while(hashTable[index] != -1)
+    {
+        if(hashTable[index] == key)
+            return 1;
+
+        index = (index + 1) % SIZE;
+    }
+
+    return 0;
+}
+</pre>
+</div>
+<div class="card">
+<h2>Closed Hashing Complexity</h2>
+<div class="table-responsive"><table>
+<tr>
+<th>Operation</th>
+<th>Best</th>
+<th>Average</th>
+<th>Worst</th>
+</tr>
+<tr>
+<td>Insert</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Search</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+</table></div>
+</div>
+<div class="card">
+<h2>Open vs Closed Hashing</h2>
+<div class="table-responsive"><table>
+<tr>
+<th>Open Hashing</th>
+<th>Closed Hashing</th>
+</tr>
+<tr>
+<td>Uses Linked Lists</td>
+<td>Uses Array Only</td>
+</tr>
+<tr>
+<td>Separate Chaining</td>
+<td>Open Addressing</td>
+</tr>
+<tr>
+<td>Extra Memory Needed</td>
+<td>No Extra Memory</td>
+</tr>
+<tr>
+<td>Easier Deletion</td>
+<td>Complex Deletion</td>
+</tr>
+<tr>
+<td>Less Clustering</td>
+<td>More Clustering</td>
+</tr>
+</table></div>
+</div>
+</div></div><script src="nav.js"></script></body>
+</html>

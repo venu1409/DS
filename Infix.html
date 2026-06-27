@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Infix to Postfix Conversion Using Stack</title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>Infix to Postfix Conversion Using Stack</h1><p>Learn about the operations, implementation, and time complexity of Infix to Postfix Conversion Using Stack.</p></header><div class="container"><div class="section">
+<h2>Contents</h2>
+<ul>
+<li><a href="#types">Types of Expressions</a></li>
+<li><a href="#precedence">Operator Precedence</a></li>
+<li><a href="#algorithm">Algorithm</a></li>
+<li><a href="#example1">Example 1</a></li>
+<li><a href="#example2">Example 2</a></li>
+<li><a href="#program">C Program</a></li>
+<li><a href="#complexity">Complexity Analysis</a></li>
+</ul>
+</div><div class="section">
+<h2 id="types">Types of Expressions</h2>
+<div class="table-responsive"><table>
+<tr>
+<th>Expression Type</th>
+<th>Example</th>
+</tr>
+<tr>
+<td><b>Infix</b></td>
+<td><b>A + B</b></td>
+</tr>
+<tr>
+<td><b>Prefix</b></td>
+<td><b>+AB</b></td>
+</tr>
+<tr>
+<td><b>Postfix</b></td>
+<td><b>AB+</b></td>
+</tr>
+</table></div>
+</div><div class="section">
+<h2 id="precedence">Operator Precedence Table</h2>
+<div class="table-responsive"><table>
+<tr>
+<th>Operator</th>
+<th>Precedence</th>
+</tr>
+<tr>
+<td><b>^</b></td>
+<td><b>3</b></td>
+</tr>
+<tr>
+<td><b>*, /</b></td>
+<td><b>2</b></td>
+</tr>
+<tr>
+<td><b>+, -</b></td>
+<td><b>1</b></td>
+</tr>
+<tr>
+<td><b>(</b></td>
+<td><b>0</b></td>
+</tr>
+</table></div>
+</div><div class="section">
+<h2 id="algorithm">Algorithm</h2>
+<ol>
+<b>
+<li>Create an empty stack</li>
+<li>Scan the infix expression from left to right</li>
+<li>If the symbol is an operand, add it directly to the postfix expression</li>
+<li>If the symbol is '(', push it onto the stack</li>
+<li>If the symbol is ')':
+<ul>
+<li>Pop and output operators until '(' is encountered</li>
+<li>Remove '(' from the stack</li>
+</ul>
+</li>
+<li>If the symbol is an operator:
+<ul>
+<li>While stack top has higher or equal precedence, pop operators</li>
+<li>Push current operator</li>
+</ul>
+</li>
+<li>After scanning the expression, pop all remaining operators</li>
+<li>Display the postfix expression</li>
+</b></ol>
+
+</div><div class="section">
+<h2 id="example1">Example 1</h2>
+<h3>Infix Expression</h3>
+<pre><b>A+B*C</b></pre>
+<h3>Conversion Steps</h3>
+<pre><b>
+Read A → Output = A
+
+Read + → Push +
+
+Read B → Output = AB
+
+Read * → Push *
+
+Read C → Output = ABC
+
+Pop * → Output = ABC*
+
+Pop + → Output = ABC*+
+</b>
+</pre>
+<h3>Postfix Expression</h3>
+<pre><b>ABC*+</b></pre>
+</div><div class="section">
+<h2 id="example2">Example 2</h2>
+<h3>Infix Expression</h3>
+<pre>(A+B)*C</pre>
+<h3>Example Table</h3>
+<div class="table-responsive"><table>
+<tr>
+<th>Symbol</th>
+<th>Stack</th>
+<th>Postfix</th>
+</tr>
+<tr>
+<td>(</td>
+<td>(</td>
+<td></td>
+</tr>
+<tr>
+<td>A</td>
+<td>(</td>
+<td>A</td>
+</tr>
+<tr>
+<td>+</td>
+<td>( +</td>
+<td>A</td>
+</tr>
+<tr>
+<td>B</td>
+<td>( +</td>
+<td>AB</td>
+</tr>
+<tr>
+<td>)</td>
+<td>Empty</td>
+<td>AB+</td>
+</tr>
+<tr>
+<td>*</td>
+<td>*</td>
+<td>AB+</td>
+</tr>
+<tr>
+<td>C</td>
+<td>*</td>
+<td>AB+C</td>
+</tr>
+<tr>
+<td>End</td>
+<td>Empty</td>
+<td>AB+C*</td>
+</tr>
+</table></div>
+<h3>Result</h3>
+<pre>AB+C*</pre>
+</div><div class="section">
+<h2 id="program">C Program</h2><details open=""><summary>C Program</summary><pre>
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+
+char stack[100];
+int top = -1;
+
+void push(char x)
+{
+    stack[++top] = x;
+}
+
+char pop()
+{
+    return stack[top--];
+}
+
+int precedence(char x)
+{
+    if(x == '^')
+        return 3;
+
+    if(x == '*' || x == '/')
+        return 2;
+
+    if(x == '+' || x == '-')
+        return 1;
+
+    return 0;
+}
+
+int main()
+{
+    char infix[100], postfix[100];
+    int i, j = 0;
+
+    printf("Enter Infix Expression: ");
+    scanf("%s", infix);
+
+    for(i = 0; infix[i] != '\0'; i++)
+    {
+        char ch = infix[i];
+
+        if(isalnum(ch))
+        {
+            postfix[j++] = ch;
+        }
+
+        else if(ch == '(')
+        {
+            push(ch);
+        }
+
+        else if(ch == ')')
+        {
+            while(stack[top] != '(')
+            {
+                postfix[j++] = pop();
+            }
+
+            pop();
+        }
+
+        else
+        {
+            while(top != -1 &amp;&amp;
+                  precedence(stack[top]) &gt;= precedence(ch))
+            {
+                postfix[j++] = pop();
+            }
+
+            push(ch);
+        }
+    }
+
+    while(top != -1)
+    {
+        postfix[j++] = pop();
+    }
+
+    postfix[j] = '\0';
+
+    printf("Postfix = %s", postfix);
+
+    return 0;
+}
+</pre></details></div><div class="section">
+<h2 id="complexity">Time Complexity</h2>
+<div class="table-responsive"><table>
+<tr>
+<th>Case</th>
+<th>Complexity</th>
+</tr>
+<tr>
+<td>Best Case</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Average Case</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Worst Case</td>
+<td>O(n)</td>
+</tr>
+</table></div>
+<h3>Space Complexity</h3>
+<pre>O(n)</pre>
+</div></div><script src="nav.js"></script></body>
+</html>

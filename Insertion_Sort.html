@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Insertion Sort</title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>Insertion Sort</h1><p>Learn about the operations, implementation, and time complexity of Insertion Sort.</p></header><div class="container"><div class="table-responsive"><table>
+<thead>
+<tr>
+<th width="35%">Algorithm</th>
+<th width="55%">Code</th>
+<th width="10%">Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div class="box">
+<b>
+                    1. Start<br/><br/>
+
+                    2. Read n (number of elements)<br/><br/>
+
+                    3. Read array elements<br/><br/>
+
+                    4. Assume first element is sorted<br/><br/>
+
+                    5. Run a loop i = 1 to n - 1<br/>
+                            key = arr[i]<br/><br/>
+                            j = i - 1 <br/><br/>
+
+                        While j &gt;= 0 and arr[j] &gt; key :<br/>
+
+                            arr[j+ 1] = arr[j]<br/>
+
+                            j = j - 1<br/><br/>
+
+                        arr[j + 1] = key<br/><br/>
+
+                    6. Stop<br/>
+</b>
+</div>
+</td>
+<td>
+<div class="box">
+<pre><code><b>Without Function:    <br/> 
+#include &lt;stdio.h&gt;
+
+int main()
+{
+    int arr[100], n, i, j, key;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &amp;n);
+
+    printf("Enter array elements:\n");
+    for(i = 0; i &lt; n; i++)
+        scanf("%d", &amp;arr[i]);
+
+    for(i = 1; i &lt; n; i++)
+    {
+        key = arr[i];
+        j = i - 1;
+
+        while(j &gt;= 0 &amp;&amp; arr[j] &gt; key)
+        {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+
+        arr[j + 1] = key;
+    }
+
+    printf("Sorted array:\n");
+    for(i = 0; i &lt; n; i++)
+        printf("%d ", arr[i]);
+
+    return 0;
+}
+<b>------------------------------------------------------------------------------------------</b>
+With Function :
+#include &lt;stdio.h&gt;
+
+void insertionSort(int arr[], int n)
+{
+    int i, j, key;
+
+    for(i = 1; i &lt; n; i++)
+    {
+        key = arr[i];
+        j = i - 1;
+
+        while(j &gt;= 0 &amp;&amp; arr[j] &gt; key)
+        {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+
+        arr[j + 1] = key;
+    }
+}
+
+int main()
+{
+    int arr[] = {50, 20, 40, 10, 30};
+    int n = 5;
+    int i;
+
+    insertionSort(arr, n);
+
+    printf("Sorted array:\n");
+    for(i = 0; i &lt; n; i++)
+        printf("%d ", arr[i]);
+
+    return 0;
+}
+
+</b>
+</code></pre>
+</div>
+</td>
+<td style="text-align:center;">
+<b>O(n²)</b>
+</td>
+</tr>
+</tbody>
+</table></div></div><script src="nav.js"></script></body>
+</html>

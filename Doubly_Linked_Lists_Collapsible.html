@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Doubly Linked List Operations </title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>Doubly Linked List Operations</h1><p>Learn about the operations, implementation, and time complexity of Doubly Linked List Operations.</p></header><div class="container"><input id="searchBox" onkeyup="searchOperation()" placeholder="Search operation..." type="text"/><div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Algorithm (Text / Code)</th>
+<th>Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<!-- Node Structure -->
+<tr>
+<td><b>Node Structure</b></td>
+<td>
+<div class="result codeBox">
+<pre><b>
+struct Node
+{
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+</b></pre>
+</div>
+<div class="result textBox hidden">
+<b>
+                    1. Create a node<br/>
+                    2. Store data in node<br/>
+                    3. Store address of previous node in prev<br/>
+                    4. Store address of next node in next<br/>
+</b>
+</div>
+</td>
+<td><b>No Time Complexity</b></td>
+</tr>
+
+<!-- Traversal -->
+<tr>
+<td><b>Traversal (Forward)</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Start from head<br/>
+                    2. Print data <br/>
+                    3. Move to next pointer<br/>
+                    4. Repeat until NULL<br/>
+                    5. Stop
+                    </b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+    void displayForward()
+{
+    struct Node *temp = head;
+
+    while(temp != NULL)
+    {
+        printf("%d ", temp-&gt;data);
+        temp = temp-&gt;next;
+    }
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Traversal  -->
+<tr>
+<td><b>Traversal (Backward)</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Traverse to last node<br/>
+                    2. Print node data <br/>
+                    3. Move to prev pointer<br/>
+                    4. Repeat until NULL<br/>
+                    5. Stop
+                    </b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+void displayBackward()
+{
+    struct Node *temp = head;
+
+    while(temp-&gt;next != NULL)
+        temp = temp-&gt;next;
+
+    while(temp != NULL)
+    {
+        printf("%d ", temp-&gt;data);
+        temp = temp-&gt;prev;
+    }
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Insertion at Beginning -->
+<tr>
+<td><b>Insertion (Beginning)</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Create a new node<br/>
+                    2. Insert data into the node<br/>
+                    3. Set newNode-&gt;prev = NULL<br/>
+                    4. Set newNode-&gt;next = Head<br/>
+                    5. If list not Empty, Set head-&gt;prev = newNode<br/>
+                    6. Update Head<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void insertBeginning(int data)
+{
+    struct Node *newNode =
+        (struct Node*)malloc(sizeof(struct Node));
+
+    newNode-&gt;data = data;
+    newNode-&gt;prev = NULL;
+    newNode-&gt;next = head;
+
+    if(head != NULL)
+        head-&gt;prev = newNode;
+
+    head = newNode;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!-- Insertion at End -->
+<tr>
+<td><b>Insertion (End)</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Create a new node<br/>
+                    2. Set next = NULL <br/>
+                    3. If list is empty, make it head<br/>
+                    4. Traverse to last node<br/>
+                    5. Link last node and new node<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void insertEnd(int data)
+{
+    struct Node *newNode =
+        (struct Node*)malloc(sizeof(struct Node));
+
+    newNode-&gt;data = data;
+    newNode-&gt;next = NULL;
+
+    if(head == NULL)
+    {
+        newNode-&gt;prev = NULL;
+        head = newNode;
+        return;
+    }
+
+    struct Node *temp = head;
+
+    while(temp-&gt;next != NULL)
+        temp = temp-&gt;next;
+
+    temp-&gt;next = newNode;
+    newNode-&gt;prev = temp;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Insertion at Specific Position -->
+<tr>
+<td><b>Insertion (At Specific Position)</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Create a new node<br/>
+                    2. Traverse to position-1 <br/>
+                    3. Connect new node between nodes<br/>
+                    4. Update prev and next links<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void insertPosition(int data, int pos)
+{
+    struct Node *newNode =
+        (struct Node*)malloc(sizeof(struct Node));
+
+    newNode-&gt;data = data;
+
+    struct Node *temp = head;
+
+    for(int i=1;i &lt; pos-1; i++)
+        temp = temp-&gt;next;
+
+    newNode-&gt;next = temp-&gt;next;
+    newNode-&gt;prev = temp;
+
+    if(temp-&gt;next != NULL)
+        temp-&gt;next-&gt;prev = newNode;
+
+    temp-&gt;next = newNode;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Deletion at Beginning -->
+<tr>
+<td><b>Deletion (At Beginning)</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Store first node<br/>
+                    2. Move head to next node <br/>
+                    3. Set new head's prev as NULL<br/>
+                    4. Delete old first node<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+void deleteBeginning()
+{
+    if(head == NULL)
+        return;
+
+    struct Node *temp = head;
+
+    head = head-&gt;next;
+
+    if(head != NULL)
+        head-&gt;prev = NULL;
+
+    free(temp);
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!-- Deletion at End -->
+<tr>
+<td><b>Deletion (At End)</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Traverse to last node<br/>
+                    2. Move to previous node<br/>
+                    3. Set prev node's next as NULL<br/>
+                    4. Delete last node<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+void deleteEnd()
+{
+    if(head == NULL)
+        return;
+
+    struct Node *temp = head;
+
+    while(temp-&gt;next != NULL)
+        temp = temp-&gt;next;
+
+    if(temp == head)
+    {
+        free(head);
+        head = NULL;
+        return;
+    }
+
+    temp-&gt;prev-&gt;next = NULL;
+
+    free(temp);
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Delete at specific position -->
+<tr>
+<td><b>Deletion (At Specific Position)</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Traverse to desired node <br/>
+                    2. Connect previous nodes and next nodes <br/>
+                    3. Delete current node<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+void deletePosition(int pos)
+{
+    struct Node *temp = head;
+
+    for(int i=1;i &lt; pos; i++)
+        temp = temp-&gt;next;
+
+    temp-&gt;prev-&gt;next = temp-&gt;next;
+
+    if(temp-&gt;next != NULL)
+        temp-&gt;next-&gt;prev = temp-&gt;prev;
+
+    free(temp);
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Searching a node -->
+<tr>
+<td><b>Searching a node </b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Start from head<br/>
+                    2. Compare each node with key<br/>
+                    3. If found, return position<br/>
+                    4. Otherwise continue<br/>
+                    5. If end reached, element not found<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+void search(int key)
+{
+    struct Node *temp = head;
+    int pos = 1;
+
+    while(temp != NULL)
+    {
+        if(temp-&gt;data == key)
+        {
+            printf("Found at position %d", pos);
+            return;
+        }
+
+        temp = temp-&gt;next;
+        pos++;
+    }
+
+    printf("Not Found");
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Updating -->
+<tr>
+<td><b>Updating a node </b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Search required node<br/>
+                    2. Replace old value with new value<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+void update(int oldValue, int newValue)
+{
+    struct Node *temp = head;
+
+    while(temp != NULL)
+    {
+        if(temp-&gt;data == oldValue)
+        {
+            temp-&gt;data = newValue;
+            return;
+        }
+
+        temp = temp-&gt;next;
+    }
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Reversing -->
+<tr>
+<td><b>Reversing </b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Traverse each node<br/>
+                    2. Swap prev and next pointers <br/>
+                    3. Move using swapped prev<br/>
+                    4. Make last processed node the new head <br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+void reverse()
+{
+    struct Node *temp = NULL;
+    struct Node *current = head;
+
+    while(current != NULL)
+    {
+        temp = current-&gt;prev;
+        current-&gt;prev = current-&gt;next;
+        current-&gt;next = temp;
+
+        current = current-&gt;prev;
+    }
+
+    if(temp != NULL)
+        head = temp-&gt;prev;
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!-- Counting -->
+<tr>
+<td><b>Count number of nodes </b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Initialize count = 0 <br/>
+                    2. Traverse entire list <br/>
+                    3. Increment count for each node <br/>
+                    4. Print count <br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>
+int countNodes()
+{
+    int count = 0;
+
+    struct Node *temp = head;
+
+    while(temp != NULL)
+    {
+        count++;
+        temp = temp-&gt;next;
+    }
+
+    return count;
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+</tbody>
+</table></div><script>
+function toggleAlgorithm(checkbox) {
+
+    const parentCell = checkbox.closest("td");
+
+    const codeBox = parentCell.querySelector(".codeBox");
+    const textBox = parentCell.querySelector(".textBox");
+
+    if (checkbox.checked) {
+        codeBox.classList.add("hidden");
+        textBox.classList.remove("hidden");
+    } else {
+        codeBox.classList.remove("hidden");
+        textBox.classList.add("hidden");
+    }
+}
+
+function searchOperation() {
+
+    let input = document
+        .getElementById("searchBox")
+        .value
+        .toLowerCase();
+
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+
+        let operation =
+            row.cells[0]
+            .innerText
+            .toLowerCase();
+
+        if(operation.includes(input))
+            row.style.display = "";
+        else
+            row.style.display = "none";
+    });
+}
+</script></div><script src="nav.js"></script></body>
+</html>

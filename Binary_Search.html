@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Binary Search</title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>Binary Search</h1><p>Learn about the operations, implementation, and time complexity of Binary Search.</p></header><div class="container"><div class="table-responsive"><table>
+<thead>
+<tr>
+<th width="35%">Algorithm</th>
+<th width="55%">Code</th>
+<th width="10%">Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div class="box">
+<b>
+                    1. Start<br/><br/>
+
+                    2. Read n (number of elements)<br/><br/>
+
+                    3. Read Sorted array elements<br/><br/>
+
+                    4. Read element to search (key)<br/><br/>
+
+                    5. Set low = 0, high = n - 1<br/><br/>
+
+                    6. While low &lt;= high : <br/>
+                            mid = (high + low) / 2<br/><br/>
+
+                        If arr[mid] == key<br/>
+
+                            print "Element Found"<br/>
+
+                            break<br/><br/>
+
+                        Else if key &lt; arr[mid]<br/>
+
+                            high = mid - 1<br/><br/>
+
+                        Else <br/>
+                            low = mid + 1 <br/><br/>
+
+                    7. If not found, print "Element not found"<br/>
+                    8. Stop<br/>
+</b>
+</div>
+</td>
+<td>
+<div class="box">
+<pre><code><b>Without Function:    <br/> 
+#include &lt;stdio.h&gt;
+
+int main()
+{
+    int arr[100], n, key;
+    int low, high, mid, found = 0;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &amp;n);
+
+    printf("Enter sorted array elements:\n");
+    for(int i = 0; i &lt; n; i++)
+        scanf("%d", &amp;arr[i]);
+
+    printf("Enter element to search: ");
+    scanf("%d", &amp;key);
+
+    low = 0;
+    high = n - 1;
+
+    while(low &lt;= high)
+    {
+        mid = (low + high) / 2;
+
+        if(arr[mid] == key)
+        {
+            printf("Element Found at Position %d", mid + 1);
+            found = 1;
+            break;
+        }
+        else if(key &lt; arr[mid])
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+    }
+
+    if(found == 0)
+        printf("Element Not Found");
+
+    return 0;
+}
+<b>------------------------------------------------------------------------------------------</b>
+With Function :
+
+#include &lt;stdio.h&gt;
+
+int binarySearch(int arr[], int n, int key)
+{
+    int low = 0, high = n - 1;
+
+    while(low &lt;= high)
+    {
+        int mid = (low + high) / 2;
+
+        if(arr[mid] == key)
+            return mid;
+        else if(key &lt; arr[mid])
+            high = mid - 1;
+        else
+            low = mid + 1;
+    }
+
+    return -1;
+}
+
+int main()
+{
+    int arr[] = {10, 20, 30, 40, 50, 60, 70};
+    int n = 7;
+    int key = 40;
+
+    int result = binarySearch(arr, n, key);
+
+    if(result == -1)
+        printf("Element Not Found");
+    else
+        printf("Element Found at Position %d", result + 1);
+
+    return 0;
+}
+
+
+</b>
+</code></pre>
+</div>
+</td>
+<td style="text-align:center;">
+<b>O(log n)</b>
+</td>
+</tr>
+</tbody>
+</table></div></div><script src="nav.js"></script></body>
+</html>

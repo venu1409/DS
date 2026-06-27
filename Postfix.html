@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Postfix Conversion Using Stack</title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>Postfix Conversion Using Stack</h1><p>Learn about the operations, implementation, and time complexity of Postfix Conversion Using Stack.</p></header><div class="container"><div class="section">
+<h2>Contents</h2>
+<ul>
+<li><a href="#precedence">Postfix Expression</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
+<li><a href="#algorithm">Algorithm</a></li>
+<li><a href="#example1">Example 1</a></li>
+<li><a href="#example2">Example 2</a></li>
+<li><a href="#program">C Program</a></li>
+<li><a href="#complexity">Complexity Analysis</a></li>
+</ul>
+</div><div class="section">
+<h2 id="precedence">Postfix Expression</h2>
+<h4>A postfix expression is an expression in which the operator comes after the operands
+<div class="table-responsive"><table>
+<tr>
+<th>Infix</th>
+<th>Postfix</th>
+</tr>
+<tr>
+<td><b>A+B</b></td>
+<td><b>AB+</b></td>
+</tr>
+<tr>
+<td><b>A-B</b></td>
+<td><b>AB-</b></td>
+</tr>
+<tr>
+<td><b>A*B</b></td>
+<td><b>AB*</b></td>
+</tr>
+<tr>
+<td><b>(A+B)*C</b></td>
+<td><b>AB+C*</b></td>
+</tr>
+<tr>
+<td><b>A+B*C</b></td>
+<td><b>ABC*+</b></td>
+</tr>
+</table></div>
+</h4></div><div class="section">
+<h2 id="evaluation">Evaluation</h2>
+<ol>
+<b>
+<li>Create an empty stack</li>
+<li>Scan the expression from left to right</li>
+<li>If operator is found:
+<ul>
+<li>Pop two operands</li>
+<li>Perform operation</li>
+<li>Push result back into stack </li>
+</ul>
+</li>
+<li>Continue untill expression ends</li>
+<li>Remaining element in the stack is the final answer</li>
+</b></ol>
+
+</div><div class="section">
+<h2 id="algorithm">Algorithm</h2>
+<ol>
+<b>
+<li>Create an empty stack</li>
+<li>Scan the expression from left to right</li>
+<li>If symbol is an operand:
+<ul>
+<li>Push into stack</li>
+</ul>
+</li>
+<li>If symbol is an operator:
+<ul>
+<li>Pop operand2</li>
+<li>Pop operand1</li>
+<li>result = operand1 operator operand2 </li>
+<li>Push result</li>
+</ul>
+</li>
+<li>Repeat untill expression ends</li>
+<li>Pop final result from stack </li>
+<li>Display result</li>
+</b></ol>
+
+</div><div class="section">
+<h2 id="example1">Example 1</h2>
+<h3>Postfix Expression</h3>
+<pre><b>23+</b></pre>
+<h3>Evaluation</h3>
+<pre><b>Read 2
+Push 2
+
+Stack:
+2
+
+Read 3
+Push 3
+
+Stack:
+2 3
+
+Read +
+
+Pop 3
+Pop 2
+
+2 + 3 = 5
+
+Push 5
+
+Stack:
+5
+</b>
+</pre>
+<h3>Postfix Expression</h3>
+<pre><b>5</b></pre>
+</div><div class="section">
+<h2 id="example1">Example 2</h2>
+<h3>Postfix Expression</h3>
+<pre><b>23+5*</b></pre>
+<h3>Evaluation</h3>
+<pre><b>Read 2
+Push 2
+
+Stack:
+2
+
+Read 3
+Push 3
+
+Stack:
+2 3
+
+Read +
+
+Pop 3
+Pop 2
+
+2 + 3 = 5
+
+Push 5
+
+Stack:
+5
+
+
+Read 5
+Push 5
+
+Read *
+
+Pop 5
+Pop 5
+
+5 * 5 = 25
+
+Push 25
+
+Stack:25
+</b>
+</pre>
+<h3>Postfix Expression</h3>
+<pre><b>25</b></pre>
+</div><div class="section">
+<h2 id="program">C Program</h2><details open=""><summary>C Program</summary><pre>
+#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int stack[100];
+int top = -1;
+
+void push(int value)
+{
+    stack[++top] = value;
+}
+
+int pop()
+{
+    return stack[top--];
+}
+
+int main()
+{
+    char postfix[100];
+
+    printf("Enter Postfix Expression: ");
+    scanf("%s", postfix);
+
+    int i = 0;
+
+    while(postfix[i] != '\0')
+    {
+        char ch = postfix[i];
+
+        if(isdigit(ch))
+        {
+            push(ch - '0');
+        }
+
+        else
+        {
+            int operand2 = pop();
+            int operand1 = pop();
+
+            switch(ch)
+            {
+                case '+':
+                    push(operand1 + operand2);
+                    break;
+
+                case '-':
+                    push(operand1 - operand2);
+                    break;
+
+                case '*':
+                    push(operand1 * operand2);
+                    break;
+
+                case '/':
+                    push(operand1 / operand2);
+                    break;
+            }
+        }
+
+        i++;
+    }
+
+    printf("Result = %d", pop());
+
+    return 0;
+}
+</pre></details></div><div class="section">
+<h2 id="complexity">Time Complexity</h2>
+<div class="table-responsive"><table>
+<tr>
+<th>Case</th>
+<th>Complexity</th>
+</tr>
+<tr>
+<td>Best Case</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Average Case</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Worst Case</td>
+<td>O(n)</td>
+</tr>
+</table></div>
+<h3>Space Complexity</h3>
+<pre>O(n)</pre>
+</div></div><script src="nav.js"></script></body>
+</html>

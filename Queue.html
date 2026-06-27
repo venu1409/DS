@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Queue Operations </title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>Queue Operations</h1><p>Learn about the operations, implementation, and time complexity of Queue Operations.</p></header><div class="container"><input id="searchBox" onkeyup="searchOperation()" placeholder="Search operation..." type="text"/><div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Algorithm (Text / Code)</th>
+<th>Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<!-- Declaration -->
+<tr>
+<td><b>Declaration</b></td>
+<td>
+<div class="result codeBox">
+<pre><b>
+#define MAX 100
+
+int queue[MAX];
+int front = -1;
+int rear = -1;
+</b></pre>
+</div>
+<div class="result textBox hidden">
+<b>
+                    1. Create an array of size Max<br/>
+                    2. Initialise:<br/>
+                        front = - 1<br/>
+                        rear = -1 <br/>
+</b>
+</div>
+</td>
+<td><b>No Time Complexity</b></td>
+</tr>
+
+<!-- Enqueue -->
+<tr>
+<td><b>Enqueue</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check if queue is full<br/>
+                    2. If full, print Overflow<br/>
+                    3. If queue is empty :<br/>
+                            set front = rear = 0<br/>
+                    4. Else:<br/>
+                        Increment rear<br/>
+                    5. Insert elements at rear<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void enqueue(int data)
+{
+    if(rear == MAX - 1)
+    {
+        printf("Queue Overflow");
+        return;
+    }
+
+    if(front == -1)
+        front = rear = 0;
+    else
+        rear++;
+
+    queue[rear] = data;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!-- Dequeue -->
+<tr>
+<td><b>Dequeue</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check if queue is empty<br/>
+                    2. If empty, print Underflow<br/>
+                    3. Store front element<br/>
+                    4. If only one element : <br/>
+                        Set front = rear = -1<br/>
+                    5. Else:<br/>
+                        Increment front<br/>
+                    6. Return deleted element<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int dequeue()
+{
+    if(front == -1)
+    {
+        printf("Queue Underflow");
+        return -1;
+    }
+
+    int item = queue[front];
+
+    if(front == rear)
+        front = rear = -1;
+    else
+        front++;
+
+    return item;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!--Peek-->
+<tr>
+<td><b>Peek</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check whether queue is empty<br/>
+                    2. Return front element<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int peek()
+{
+    if(front == -1)
+    {
+        printf("Queue Empty");
+        return -1;
+    }
+
+    return queue[front];
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!--Display-->
+<tr>
+<td><b>Display</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check if queue is empty<br/>
+                    2. Traverse from front to rear<br/>
+                    3. Print all elements<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void display()
+{
+    if(front == -1)
+    {
+        printf("Queue Empty");
+        return;
+    }
+
+    for(int i = front; i &lt;= rear; i++)
+        printf("%d ", queue[i]);
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!--isEmpty()-->
+<tr>
+<td><b>isEmpty()</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check whether front = -1<br/>
+                    2. If yes, queue is empty<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int isEmpty()
+{
+    return (front == -1);
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!--isFull()-->
+<tr>
+<td><b>isFull()</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check if top = Max - 1<br/>
+                    2. If yes, queue is full<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int isFull()
+{
+    return (rear == MAX - 1);
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!--Size-->
+<tr>
+<td><b>Size</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check if queue is empty<br/>
+                    2. If empty return 0<br/>
+                    3. Otherwise calculate :<br/>
+                        Size = rear - front + 1<br/>
+                    4. Return size<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int size()
+{
+    if(front == -1)
+        return 0;
+
+    return rear - front + 1;
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+</tbody>
+</table></div><script>
+function toggleAlgorithm(checkbox) {
+
+    const parentCell = checkbox.closest("td");
+
+    const codeBox = parentCell.querySelector(".codeBox");
+    const textBox = parentCell.querySelector(".textBox");
+
+    if (checkbox.checked) {
+        codeBox.classList.add("hidden");
+        textBox.classList.remove("hidden");
+    } else {
+        codeBox.classList.remove("hidden");
+        textBox.classList.add("hidden");
+    }
+}
+
+function searchOperation() {
+
+    let input = document
+        .getElementById("searchBox")
+        .value
+        .toLowerCase();
+
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+
+        let operation =
+            row.cells[0]
+            .innerText
+            .toLowerCase();
+
+        if(operation.includes(input))
+            row.style.display = "";
+        else
+            row.style.display = "none";
+    });
+}
+</script></div><script src="nav.js"></script></body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphs - Operations and Complexity</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Unified Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">AlgoInsight</a>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+            <li><a href="Stack.html">Stack & Queue</a></li>
+            <li><a href="Binary_Tree.html">Trees</a></li>
+            <li><a href="Graphs.html">Graphs</a></li>
+            <li><a href="Linear_Search.html">Searching</a></li>
+            <li><a href="Insertion_Sort.html">Sorting</a></li>
+            <li><a href="Hashtable.html">Hashing</a></li>
+        </ul>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Graph Operations</h1>
+        <p>Explore algorithms and operations performed on Graphs, including representation, traversal, and shortest path calculations.</p>
+    </header>
+
+    <!-- Content Container -->
+    <div class="container">
+        
+        <!-- Search Input -->
+        <div class="search-container">
+            <input type="text" id="searchBox" placeholder="Search operations..." onkeyup="searchOperation()">
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Operation</th>
+                        <th style="width: 60%;">Algorithm (Text / Code)</th>
+                        <th style="width: 15%; text-align: center;">Time Complexity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <!-- Adjacency Matrix -->
+                    <tr>
+                        <td class="op-name-cell"><b>Graph Representation<br>(Adjacency Matrix)</b></td>
+                        <td>
+                            <div class="accordion-container">
+                                <details class="algo-box">
+                                    <summary>Algorithm</summary>
+                                    <div class="details-content text-algorithm">
+                                        1. Initialize a 2D array matrix of size V x V with 0.
+                                        2. For each edge connecting vertex u to v, set matrix[u][v] = 1.
+                                        3. For undirected graphs, also set matrix[v][u] = 1.
+                                    </div>
+                                </details>
+                                <details class="code-box">
+                                    <summary>Code</summary>
+                                    <div class="details-content">
+                                        <pre><code>#include &lt;stdio.h&gt;
+#define V 5
+
+int adjMatrix[V][V];
+
+void initMatrix() {
+    for(int i = 0; i &lt; V; i++)
+        for(int j = 0; j &lt; V; j++)
+            adjMatrix[i][j] = 0;
+}
+
+void addEdge(int u, int v) {
+    adjMatrix[u][v] = 1;
+    adjMatrix[v][u] = 1; // For undirected graph
+}</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </td>
+                        <td class="op-complexity-cell"><b>O(V²)</b></td>
+                    </tr>
+
+                    <!-- BFS -->
+                    <tr>
+                        <td class="op-name-cell"><b>Breadth First Search<br>(BFS)</b></td>
+                        <td>
+                            <div class="accordion-container">
+                                <details class="algo-box">
+                                    <summary>Algorithm</summary>
+                                    <div class="details-content text-algorithm">
+                                        1. Create a queue and a visited array.
+                                        2. Mark the starting node as visited and enqueue it.
+                                        3. While the queue is not empty:
+                                           - Dequeue a node and visit/print it.
+                                           - Enqueue all its unvisited adjacent nodes and mark them visited.
+                                    </div>
+                                </details>
+                                <details class="code-box">
+                                    <summary>Code</summary>
+                                    <div class="details-content">
+                                        <pre><code>#include &lt;stdio.h&gt;
+
+int queue[100], front = -1, rear = -1;
+int visited[5];
+
+void enqueue(int val) {
+    if(front == -1) front = 0;
+    queue[++rear] = val;
+}
+
+int dequeue() {
+    int item = queue[front];
+    if(front == rear) front = rear = -1;
+    else front++;
+    return item;
+}
+
+void bfs(int adjMatrix[5][5], int startNode, int n) {
+    enqueue(startNode);
+    visited[startNode] = 1;
+
+    while(front != -1) {
+        int curr = dequeue();
+        printf("%d ", curr);
+
+        for(int i = 0; i &lt; n; i++) {
+            if(adjMatrix[curr][i] == 1 && !visited[i]) {
+                enqueue(i);
+                visited[i] = 1;
+            }
+        }
+    }
+}</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </td>
+                        <td class="op-complexity-cell"><b>O(V + E)</b></td>
+                    </tr>
+
+                    <!-- DFS -->
+                    <tr>
+                        <td class="op-name-cell"><b>Depth First Search<br>(DFS)</b></td>
+                        <td>
+                            <div class="accordion-container">
+                                <details class="algo-box">
+                                    <summary>Algorithm</summary>
+                                    <div class="details-content text-algorithm">
+                                        1. Start from the target vertex.
+                                        2. Mark the vertex as visited and print it.
+                                        3. For each adjacent vertex of this node, recursively call DFS if it has not been visited yet.
+                                    </div>
+                                </details>
+                                <details class="code-box">
+                                    <summary>Code</summary>
+                                    <div class="details-content">
+                                        <pre><code>#include &lt;stdio.h&gt;
+
+int visited[5];
+
+void dfs(int adjMatrix[5][5], int node, int n) {
+    visited[node] = 1;
+    printf("%d ", node);
+
+    for(int i = 0; i &lt; n; i++) {
+        if(adjMatrix[node][i] == 1 && !visited[i]) {
+            dfs(adjMatrix, i, n);
+        }
+    }
+}</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </td>
+                        <td class="op-complexity-cell"><b>O(V + E)</b></td>
+                    </tr>
+
+                    <!-- Dijkstra -->
+                    <tr>
+                        <td class="op-name-cell"><b>Dijkstra's Shortest Path</b></td>
+                        <td>
+                            <div class="accordion-container">
+                                <details class="algo-box">
+                                    <summary>Algorithm</summary>
+                                    <div class="details-content text-algorithm">
+                                        1. Create a dist array (initialized to infinity, source = 0) and a sptSet (Shortest Path Tree) boolean array.
+                                        2. Loop V - 1 times:
+                                           - Select vertex u not in sptSet with minimum distance.
+                                           - Include u in sptSet.
+                                           - Update distance values of all adjacent vertices of u.
+                                    </div>
+                                </details>
+                                <details class="code-box">
+                                    <summary>Code</summary>
+                                    <div class="details-content">
+                                        <pre><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+#define V 5
+
+int minDistance(int dist[], int sptSet[]) {
+    int min = INT_MAX, min_index;
+    for (int v = 0; v &lt; V; v++)
+        if (sptSet[v] == 0 && dist[v] &lt;= min)
+            min = dist[v], min_index = v;
+    return min_index;
+}
+
+void dijkstra(int graph[V][V], int src) {
+    int dist[V];
+    int sptSet[V];
+
+    for (int i = 0; i &lt; V; i++)
+        dist[i] = INT_MAX, sptSet[i] = 0;
+
+    dist[src] = 0;
+
+    for (int count = 0; count &lt; V - 1; count++) {
+        int u = minDistance(dist, sptSet);
+        sptSet[u] = 1;
+
+        for (int v = 0; v &lt; V; v++)
+            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
+                && dist[u] + graph[u][v] &lt; dist[v])
+                dist[v] = dist[u] + graph[u][v];
+    }
+}</code></pre>
+                                    </div>
+                                </details>
+                            </div>
+                        </td>
+                        <td class="op-complexity-cell"><b>O(V²)</b></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function searchOperation() {
+            let input = document.getElementById("searchBox").value.toLowerCase();
+            let rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                let operation = row.cells[0].innerText.toLowerCase();
+                if(operation.includes(input))
+                    row.style.display = "";
+                else
+                    row.style.display = "none";
+            });
+        }
+    </script>
+    <script src="nav.js"></script>
+</body>
+</html>

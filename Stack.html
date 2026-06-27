@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stack Operations </title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>Stack Operations</h1><p>Learn about the operations, implementation, and time complexity of Stack Operations.</p></header><div class="container"><input id="searchBox" onkeyup="searchOperation()" placeholder="Search operation..." type="text"/><div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Algorithm (Text / Code)</th>
+<th>Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<!-- Declaration -->
+<tr>
+<td><b>Declaration</b></td>
+<td>
+<div class="result codeBox">
+<pre><b>
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+</b></pre>
+</div>
+<div class="result textBox hidden">
+<b>
+                    1. Create an array<br/>
+                    2. Initialise top to -1 <br/>
+                    3. Maximum size = MAX <br/>
+</b>
+</div>
+</td>
+<td><b>No Time Complexity</b></td>
+</tr>
+
+<!-- Push -->
+<tr>
+<td><b>Push</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check if stack is full<br/>
+                    2. If full, print Overflow<br/>
+                    3. Increment top<br/>
+                    4. Insert element at top<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void push(int data)
+{
+    if(top == MAX - 1)
+    {
+        printf("Stack Overflow");
+        return;
+    }
+
+    top++;
+    stack[top] = data;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!-- POP -->
+<tr>
+<td><b>Pop</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check if stack is empty<br/>
+                    2. If empty, print Underflow<br/>
+                    3. Store top Element<br/>
+                    4. Decrement top<br/>
+                    5. Return deleted element<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int pop()
+{
+    if(top == -1)
+    {
+        printf("Stack Underflow");
+        return -1;
+    }
+
+    int item = stack[top];
+    top--;
+
+    return item;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!--Peek-->
+<tr>
+<td><b>Peek</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check whether stack is empty<br/>
+                    2. Return top element<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int peek()
+{
+    if(top == -1)
+    {
+        printf("Stack Empty");
+        return -1;
+    }
+
+    return stack[top];
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!--Display-->
+<tr>
+<td><b>Display</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check if stack is empty<br/>
+                    2. Traverse from top to bottom<br/>
+                    3. Print all elements<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void display()
+{
+    if(top == -1)
+    {
+        printf("Stack Empty");
+        return;
+    }
+
+    for(int i = top; i &gt;= 0; i--)
+        printf("%d ", stack[i]);
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!--isEmpty()-->
+<tr>
+<td><b>isEmpty()</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check whether top = -1<br/>
+                    2. If yes, stack is empty<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int isEmpty()
+{
+    if(top == -1)
+        return 1;
+
+    return 0;
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!--isFull()-->
+<tr>
+<td><b>isFull()</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Check whether top = Max - 1<br/>
+                    2. If yes, stack is full<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>int isFull()
+{
+    if(top == MAX - 1)
+        return 1;
+
+    return 0;
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1)</b></td>
+</tr>
+<!--String Reversal-->
+<tr>
+<td><b>String Reversal</b></td>
+<td>
+<div class="result codeBox">
+<pre><b>#include &lt; stdio.h&gt;
+#include &lt; string.h&gt;
+
+#define MAX 100
+
+char stack[MAX];
+int top = -1;
+
+void push(char ch)
+{
+    if(top == MAX - 1)
+        return;
+
+    stack[++top] = ch;
+}
+
+char pop()
+{
+    if(top == -1)
+        return '\0';
+
+    return stack[top--];
+}
+
+int main()
+{
+    char str[100];
+
+    printf("Enter a string: ");
+    scanf("%s", str);
+
+    int len = strlen(str);
+
+    for(int i = 0; i &lt; len; i++)
+        push(str[i]);
+
+    for(int i = 0; i &lt; len; i++)
+        str[i] = pop();
+
+    printf("Reversed String = %s", str);
+
+    return 0;
+}
+</b></pre>
+</div>
+<div class="result textBox hidden">
+<b>
+</b>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+
+</tbody>
+</table></div><script>
+function toggleAlgorithm(checkbox) {
+
+    const parentCell = checkbox.closest("td");
+
+    const codeBox = parentCell.querySelector(".codeBox");
+    const textBox = parentCell.querySelector(".textBox");
+
+    if (checkbox.checked) {
+        codeBox.classList.add("hidden");
+        textBox.classList.remove("hidden");
+    } else {
+        codeBox.classList.remove("hidden");
+        textBox.classList.add("hidden");
+    }
+}
+
+function searchOperation() {
+
+    let input = document
+        .getElementById("searchBox")
+        .value
+        .toLowerCase();
+
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+
+        let operation =
+            row.cells[0]
+            .innerText
+            .toLowerCase();
+
+        if(operation.includes(input))
+            row.style.display = "";
+        else
+            row.style.display = "none";
+    });
+}
+</script></div><script src="nav.js"></script></body>
+</html>

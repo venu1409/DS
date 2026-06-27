@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Binary Search Tree Operations </title>
+
+<link href="style.css" rel="stylesheet"/></head>
+<body>
+<nav class="navbar">
+<a class="nav-brand" href="index.html">AlgoInsight</a>
+<button aria-label="Toggle navigation" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
+<li><a href="Stack.html">Stack &amp; Queue</a></li>
+<li><a href="Binary_Tree.html">Trees</a></li>
+<li><a href="Graphs.html">Graphs</a></li>
+<li><a href="Linear_Search.html">Searching</a></li>
+<li><a href="Insertion_Sort.html">Sorting</a></li>
+<li><a href="Hashtable.html">Hashing</a></li>
+</ul>
+</nav>
+<header class="page-header"><h1>About Binary Search Tree</h1><p>Learn about the operations, implementation, and time complexity of About Binary Search Tree.</p></header><div class="container"><h2>Binary Search Tree Operations</h2><input id="searchBox" onkeyup="searchOperation()" placeholder="Search operation..." type="text"/><ol>
+<b>
+<li>
+    A Binary Search Tree is a binary tree in which:
+
+    <ul>
+<li><b>Left Subtree &lt; Root &lt; Right Subtree</b></li>
+</ul>
+<h4>Example:</h4>
+<div class="tree-diagram">
+<pre><b>
+          50
+         /  \
+       30    70
+      / \   / \
+    20 40 60   80
+</b></pre>
+</div>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Algorithm (Text / Code)</th>
+<th>Time Complexity</th>
+</tr>
+</thead>
+<tbody>
+<!-- Node Structure -->
+<tr>
+<td><b>Node Structure</b></td>
+<td>
+<div class="result codeBox">
+<pre><b>struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+</b></pre>
+</div>
+<div class="result textBox hidden">
+<b>
+                    1. Create a node<br/>
+                    2. Store data in node<br/>
+                    3. Initialize left and right child pointers as NULL<br/>
+</b>
+</div>
+</td>
+<td><b>No Time Complexity</b></td>
+</tr>
+
+<!-- Create a new node -->
+<tr>
+<td><b>Create a new node</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Allocate memory for node<br/>
+                    2. Store data<br/>
+                    3. Set Left = NULL<br/>
+                    4. Set Right = NULL<br/>
+                    5. Return Node
+                    </b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>struct Node* createNode(int data)
+{
+    struct Node *newNode =
+        (struct Node*)malloc(sizeof(struct Node));
+
+    newNode-&gt;data = data;
+    newNode-&gt;left = NULL;
+    newNode-&gt;right = NULL;
+
+    return newNode;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(1) or O(n)</b></td>
+</tr>
+<!-- Insertion -->
+<tr>
+<td><b>Insertion</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. If tree is empty, Create a node<br/>
+                    2. If Data &lt; Root, insert in the left subtree<br/>
+                    3. If Data &gt; Root, insert in the right subtree<br/>
+                    4. Return root<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>struct Node* insert(struct Node *root, int data)
+{
+    if(root == NULL)
+        return createNode(data);
+
+    if(data &lt; root-&gt;data)
+        root-&gt;left = insert(root-&gt;left, data);
+
+    else if(data &gt; root-&gt;data)
+        root-&gt;right = insert(root-&gt;right, data);
+
+    return root;
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(log n)</b></td>
+</tr>
+<!--Search-->
+<tr>
+<td><b>Search</b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Compare key with root<br/>
+                    2. If equal then print found<br/>
+                    3. If smaller then move left <br/>
+                    4. If greater then move right <br/>
+                    5. Repeat untill found or null<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>struct Node* search(struct Node *root, int key)
+{
+    if(root == NULL || root-&gt;data == key)
+        return root;
+
+    if(key &lt; root-&gt;data)
+        return search(root-&gt;left, key);
+
+    return search(root-&gt;right, key);
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(log n)</b></td>
+</tr>
+<!-- Inorder Traversal-->
+<tr>
+<td><b>Inorder Traversal</b><br/>
+<b>(Left -&gt; Root-&gt; Right)<br/></b><br/>
+                First visit <b>Left Subtree</b>, then <b>Root</b>, then <b>Right Subtree</b> </td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Traverse Left Subtree<br/>
+                    2. Visit Root<br/>
+                    3. Traverse Right Subtree<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void inorder(struct Node *root)
+{
+    if(root != NULL)
+    {
+        inorder(root-&gt;left);
+        printf("%d ", root-&gt;data);
+        inorder(root-&gt;right);
+    }
+}</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!--Preorder-->
+<tr>
+<td><b>Preorder Traversal</b><br/>
+<b>(Root -&gt; Left-&gt; Right)<br/></b><br/>
+                First visit <b>Root</b>, then <b>Left Subtree</b>, then <b>Right Subtree</b> </td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. First visit Root<br/>
+                    2. Traverse Left Subtree<br/>
+                    3. Traverse Right Subtree<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void preorder(struct Node *root)
+{
+    if(root != NULL)
+    {
+        printf("%d ", root-&gt;data);
+        preorder(root-&gt;left);
+        preorder(root-&gt;right);
+    }
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!--Postorder-->
+<tr>
+<td><b>Postorder Traversal</b><br/>
+<b>(Left -&gt; Right -&gt; Root)<br/></b><br/>
+                First visit <b>Left Subtree</b>, then <b>Right Subtree</b>, then <b>Root</b> </td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. Traverse Left Subtree<br/>
+                    2. Traverse Right Subtree<br/>
+                    3. Visit Root<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>void postorder(struct Node *root)
+{
+    if(root != NULL)
+    {
+        postorder(root-&gt;left);
+        postorder(root-&gt;right);
+        printf("%d ", root-&gt;data);
+    }
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(n)</b></td>
+</tr>
+<!--Deletion-->
+<tr>
+<td><b>Deletion of a node </b></td>
+<td>
+<div class="accordion-container">
+<details class="algo-box">
+<summary>Algorithm</summary>
+<div class="result">
+<b>
+                    1. If you want to delete Leaf Node, Delete directly<br/>
+                    2. If you want to delete One Child, Replace node with child<br/>
+                    3. If you want to delete Two Children, Replace with inorder successor and Delete successor<br/>
+</b>
+</div>
+</details>
+<details class="code-box">
+<summary>Code</summary>
+<div class="result">
+<pre><b>struct Node* deleteNode(struct Node *root, int key)
+{
+    if(root == NULL)
+        return root;
+
+    if(key &lt; root-&gt;data)
+        root-&gt;left = deleteNode(root-&gt;left, key);
+
+    else if(key &gt; root-&gt;data)
+        root-&gt;right = deleteNode(root-&gt;right, key);
+
+    else
+    {
+        if(root-&gt;left == NULL)
+        {
+            struct Node *temp = root-&gt;right;
+            free(root);
+            return temp;
+        }
+
+        else if(root-&gt;right == NULL)
+        {
+            struct Node *temp = root-&gt;left;
+            free(root);
+            return temp;
+        }
+
+        struct Node *temp =
+            findMin(root-&gt;right);
+
+        root-&gt;data = temp-&gt;data;
+
+        root-&gt;right =
+            deleteNode(root-&gt;right,
+                       temp-&gt;data);
+    }
+
+    return root;
+}
+</b></pre>
+</div>
+</details>
+</div>
+</td>
+<td><b>O(log n)</b></td>
+</tr>
+</tbody>
+</table></div>
+<script>
+function toggleAlgorithm(checkbox) {
+
+    const parentCell = checkbox.closest("td");
+
+    const codeBox = parentCell.querySelector(".codeBox");
+    const textBox = parentCell.querySelector(".textBox");
+
+    if (checkbox.checked) {
+        codeBox.classList.add("hidden");
+        textBox.classList.remove("hidden");
+    } else {
+        codeBox.classList.remove("hidden");
+        textBox.classList.add("hidden");
+    }
+}
+
+function searchOperation() {
+
+    let input = document
+        .getElementById("searchBox")
+        .value
+        .toLowerCase();
+
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+
+        let operation =
+            row.cells[0]
+            .innerText
+            .toLowerCase();
+
+        if(operation.includes(input))
+            row.style.display = "";
+        else
+            row.style.display = "none";
+    });
+}
+</script>
+</li></b></ol></div><script src="nav.js"></script></body>
+</html>
