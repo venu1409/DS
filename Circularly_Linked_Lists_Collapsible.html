@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +71,8 @@
             transition: all 0.3s;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: #ffffff;
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -144,7 +146,7 @@
             padding: 30px 24px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .page-header h1 {
@@ -279,7 +281,8 @@
         .algorithm-text {
             font-size: 14px;
             line-height: 1.7;
-            white-space: pre-wrap; /* Supports tabs/indentations and linebreaks */
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
             color: var(--text);
             font-family: inherit;
         }
@@ -367,9 +370,10 @@
         }
     </style>
 </head>
+
 <body>
 
-    
+
     <nav class="navbar">
         <a href="index.html" class="nav-brand">AlgoInsight</a>
         <button class="hamburger" aria-label="Toggle navigation">
@@ -467,79 +471,79 @@
     <script>
         // Inline Database of Operations
         const OPERATIONS_DATA = {
-        "node-structure": {
+            "node-structure": {
                 "name": "Node Structure",
-                "algorithm": "",
+                "algorithm": "1. Define structure with data and next pointer.",
                 "code": "struct Node\n{\n    int data;\n    struct Node *next;\n};\n\nstruct Node *head = NULL;",
                 "complexity": "No Time Complexity"
-        },
-        "traversal": {
+            },
+            "traversal": {
                 "name": "Traversal",
-                "algorithm": "",
+                "algorithm": "1. Start from head\n2. Print node\n3. Move to next node\n4. Stop when head is reached again",
                 "code": "void display()\n{\n    if(head == NULL)\n        return;\n\n    struct Node *temp = head;\n\n    do\n    {\n        printf(\"%d \", temp->data);\n        temp = temp->next;\n    }\n    while(temp != head);\n}",
                 "complexity": "O(n)"
-        },
-        "insertion-beginning": {
+            },
+            "insertion-beginning": {
                 "name": "Insertion (Beginning)",
-                "algorithm": "",
+                "algorithm": "1. Create a new node\n2. If list is empty:\n\u00a0\u00a0\u00a0\u00a0Make node point to itself\n\u00a0\u00a0\u00a0\u00a0Make it head\n3. Otherwise:\n\u00a0\u00a0\u00a0\u00a0Traverse to last node\n\u00a0\u00a0\u00a0\u00a0Set new node's next as head\n\u00a0\u00a0\u00a0\u00a0Set last node's next as new node\n\u00a0\u00a0\u00a0\u00a0Update head",
                 "code": "void insertBeginning(int data)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = data;\n    if(head == NULL)\n    {\n        newNode->next = newNode;\n        head = newNode;\n        return;\n    }\n    struct Node *temp = head;\n    while(temp->next != head)\n        temp = temp->next;\n    newNode->next = head;\n    temp->next = newNode;\n    head = newNode;}",
                 "complexity": "O(n)"
-        },
-        "insertion-end": {
+            },
+            "insertion-end": {
                 "name": "Insertion (End)",
-                "algorithm": "",
+                "algorithm": "1. Create a new node\n2. If list empty:\n\u00a0\u00a0\u00a0\u00a0Make node point to itself\n\u00a0\u00a0\u00a0\u00a0Make it head\n3. Traverse to last node\n4. Link last node to new node\n5. Link new node to head",
                 "code": "void insertEnd(int data)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = data;\n    if(head == NULL)\n    {\n        newNode->next = newNode;\n        head = newNode;\n        return;\n    }\n    struct Node *temp = head;\n    while(temp->next != head)\n        temp = temp->next;\n    temp->next = newNode;\n    newNode->next = head;\n}",
                 "complexity": "O(n)"
-        },
-        "insertion-at-specific-position": {
+            },
+            "insertion-at-specific-position": {
                 "name": "Insertion (At Specific Position)",
-                "algorithm": "",
+                "algorithm": "1. Create a new node\n2. Traverse to position-1\n3. Insert node between nodes\n4. Adjust links",
                 "code": "void insertPosition(int data, int pos)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n\n    newNode->data = data;\n\n    struct Node *temp = head;\n\n    for(int i=1;i < pos-1 ; i++)\n        temp = temp->next;\n\n    newNode->next = temp->next;\n    temp->next = newNode;\n}",
                 "complexity": "O(n)"
-        },
-        "deletion-at-beginning": {
+            },
+            "deletion-at-beginning": {
                 "name": "Deletion (At Beginning)",
-                "algorithm": "",
+                "algorithm": "1. If only one node:\n\u00a0\u00a0\u00a0\u00a0Delete node\n\u00a0\u00a0\u00a0\u00a0Set head = NULL\n2. Traverse to last node\n3. Move head to next node\n4. Make last node point to new head\n5. Delete old head",
                 "code": "void deleteBeginning()\n{\n    if(head == NULL)\n        return;\n    if(head->next == head)\n    {\n        free(head);\n        head = NULL;\n        return;\n    }\n    struct Node *temp = head;\n    struct Node *last = head;\n    while(last->next != head)\n        last = last->next;\n    head = head->next;\n    last->next = head;\n    free(temp);}",
                 "complexity": "O(n)"
-        },
-        "deletion-at-end": {
+            },
+            "deletion-at-end": {
                 "name": "Deletion (At End)",
-                "algorithm": "",
+                "algorithm": "1. Traverse to last node\n2. Move to previous node\n3. Set prev node point to head\n4. Delete last node",
                 "code": "void deleteEnd()\n{\n    if(head == NULL)\n        return;\n    if(head->next == head)\n    {\n        free(head);\n        head = NULL;\n        return;\n    }\n    struct Node *temp = head;\n    while(temp->next->next != head)\n        temp = temp->next;\n    free(temp->next);\n    temp->next = head;\n}",
                 "complexity": "O(n)"
-        },
-        "deletion-at-specific-position": {
+            },
+            "deletion-at-specific-position": {
                 "name": "Deletion (At Specific Position)",
-                "algorithm": "",
+                "algorithm": "1. Traverse to position-1\n2. Store node to delete\n3. Skip that node\n4. Free deleted node",
                 "code": "void deletePosition(int pos)\n{\n    struct Node *temp = head;\n\n    for(int i=1;i < pos-1;i++)\n        temp = temp->next;\n\n    struct Node *del = temp->next;\n\n    temp->next = del->next;\n\n    free(del);\n}",
                 "complexity": "O(n)"
-        },
-        "searching-a-node": {
+            },
+            "searching-a-node": {
                 "name": "Searching a node",
-                "algorithm": "",
+                "algorithm": "1. Start from head\n2. Compare each node with key\n3. If found, return position\n4. Otherwise continue untill head is reached again",
                 "code": "void search(int key)\n{\n    if(head == NULL)\n        return;\n    struct Node *temp = head;\n    int pos = 1;\n    do\n    {   if(temp->data == key)\n        {   printf(\"Found at Position %d\", pos);\n            return;\n        }\n        temp = temp->next;\n        pos++;\n    }\n    while(temp != head);\n    printf(\"Not Found\");\n}",
                 "complexity": "O(n)"
-        },
-        "updating-a-node": {
+            },
+            "updating-a-node": {
                 "name": "Updating a node",
-                "algorithm": "",
+                "algorithm": "1. Traverse list\n2. Find old value\n3. Replace with new value",
                 "code": "void update(int oldValue, int newValue)\n{\n    if(head == NULL)\n        return;\n    struct Node *temp = head;\n    do\n    {\n        if(temp->data == oldValue)\n        {\n            temp->data = newValue;\n            return;\n        }\n        temp = temp->next;\n    }\n    while(temp != head);\n}",
                 "complexity": "O(n)"
-        },
-        "reversing": {
+            },
+            "reversing": {
                 "name": "Reversing",
-                "algorithm": "",
+                "algorithm": "1. Initialise:\n\u00a0\u00a0\u00a0\u00a0prev = NULL\n\u00a0\u00a0\u00a0\u00a0current = head\n2. Reverse links one by one\n3. Continue untill current reaches head again\n4. Adjust last node and head",
                 "code": "void reverse()\n{\n    if(head == NULL || head->next == head)\n        return;\n    struct Node *prev = NULL;\n    struct Node *current = head;\n    struct Node *nextNode;\n    do\n    {\n        nextNode = current->next;\n        current->next = prev;\n        prev = current;\n        current = nextNode;\n    }\n    while(current != head);\n    head->next = prev;\n    head = prev;    }",
                 "complexity": "O(n)"
-        },
-        "count-number-of-nodes": {
+            },
+            "count-number-of-nodes": {
                 "name": "Count number of nodes",
-                "algorithm": "",
+                "algorithm": "1. Initialize count = 0\n2. Traverse once around the circle\n3. Increment count for each node\n4. return count",
                 "code": "int countNodes()\n{\n    if(head == NULL)\n        return 0;\n\n    int count = 0;\n    struct Node *temp = head;\n\n    do\n    {\n        count++;\n        temp = temp->next;\n    }\n    while(temp != head);\n\n    return count;\n}",
                 "complexity": "O(n)"
-        }
-};
+            }
+        };
 
         // DOM elements
         const tabButtonsContainer = document.getElementById("tabButtons");
@@ -591,7 +595,7 @@
         function generateSidebar() {
             const keys = Object.keys(OPERATIONS_DATA);
             tabButtonsContainer.innerHTML = "";
-            
+
             keys.forEach((key, idx) => {
                 const btn = document.createElement("button");
                 btn.className = "tab-button" + (idx === 0 ? " active" : "");
@@ -646,4 +650,5 @@
         window.onload = generateSidebar;
     </script>
 </body>
+
 </html>
