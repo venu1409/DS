@@ -563,8 +563,8 @@
                         "algorithm": "",
                         "code": {
                                     "c": "void inorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        inorder(root->left);\n        printf(\"%d \", root->data);\n        inorder(root->right);\n    }\n}",
-                                    "java": "",
-                                    "python": ""
+                                    "java": "void inorder(Node root) {\n    if (root != null) {\n        inorder(root.left);\n        System.out.print(root.data + \" \");\n        inorder(root.right);\n    }\n}",
+                                    "python": "def inorder(root):\n    if root:\n        inorder(root.left)\n        print(root.data, end=\" \")\n        inorder(root.right)"
                         },
                         "complexity": "O(n)"
             },
@@ -573,8 +573,8 @@
                         "algorithm": "",
                         "code": {
                                     "c": "void preorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        printf(\"%d \", root->data);\n        preorder(root->left);\n        preorder(root->right);\n    }\n}",
-                                    "java": "",
-                                    "python": ""
+                                    "java": "void preorder(Node root) {\n    if (root != null) {\n        System.out.print(root.data + \" \");\n        preorder(root.left);\n        preorder(root.right);\n    }\n}",
+                                    "python": "def preorder(root):\n    if root:\n        print(root.data, end=\" \")\n        preorder(root.left)\n        preorder(root.right)"
                         },
                         "complexity": "O(n)"
             },
@@ -583,8 +583,8 @@
                         "algorithm": "",
                         "code": {
                                     "c": "void postorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        postorder(root->left);\n        postorder(root->right);\n        printf(\"%d \", root->data);\n    }\n}",
-                                    "java": "",
-                                    "python": ""
+                                    "java": "void postorder(Node root) {\n    if (root != null) {\n        postorder(root.left);\n        postorder(root.right);\n        System.out.print(root.data + \" \");\n    }\n}",
+                                    "python": "def postorder(root):\n    if root:\n        postorder(root.left)\n        postorder(root.right)\n        print(root.data, end=\" \")"
                         },
                         "complexity": "O(n)"
             },

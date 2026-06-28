@@ -544,8 +544,8 @@
                         "algorithm": "In Open Hashing (Separate Chaining), each index of the hash table stores a linked list.\nWhen a collision occurs, the new element is inserted at the head of the linked list.\n\nOperations Complexity:\n- Insert: Best O(1), Avg O(1), Worst O(n)\n- Search: Best O(1), Avg O(1), Worst O(n)\n- Delete: Best O(1), Avg O(1), Worst O(n)",
                         "code": {
                                     "c": "void insert(int key) {\n    int index = key % SIZE;\n    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = key;\n    newNode->next = table[index];\n    table[index] = newNode;\n}\n\nint search(int key) {\n    int index = key % SIZE;\n    struct Node *temp = table[index];\n    while(temp != NULL) {\n        if(temp->data == key) return 1; // Found\n        temp = temp->next;\n    }\n    return 0; // Not Found\n}",
-                                    "java": "",
-                                    "python": ""
+                                    "java": "void insert(int key) {\n    int index = key % SIZE;\n    Node newNode = new Node(key);\n    newNode.next = table[index];\n    table[index] = newNode;\n}\n\nboolean search(int key) {\n    int index = key % SIZE;\n    Node temp = table[index];\n    while (temp != null) {\n        if (temp.data == key) return true;\n        temp = temp.next;\n    }\n    return false;\n}",
+                                    "python": "def insert(key):\n    index = key % SIZE\n    new_node = Node(key)\n    new_node.next = table[index]\n    table[index] = new_node\n\ndef search(key):\n    index = key % SIZE\n    temp = table[index]\n    while temp:\n        if temp.data == key:\n            return True\n        temp = temp.next\n    return False"
                         }
             },
             "closed-hashing": {
@@ -554,8 +554,8 @@
                         "algorithm": "In Closed Hashing (Open Addressing), all elements are stored directly inside the hash table array.\nWhen a collision occurs, a free location is searched (probed) sequentially.\n\nLinear Probing Formula:\nh(k, i) = (h(k) + i) % size\n\nOperations Complexity:\n- Insert: Best O(1), Avg O(1), Worst O(n)\n- Search: Best O(1), Avg O(1), Worst O(n)\n- Delete: Best O(1), Avg O(1), Worst O(n)",
                         "code": {
                                     "c": "void insert(int key) {\n    int index = key % SIZE;\n    while(hashTable[index] != -1) {\n        index = (index + 1) % SIZE; // Linear probe\n    }\n    hashTable[index] = key;\n}\n\nint search(int key) {\n    int index = key % SIZE;\n    while(hashTable[index] != -1) {\n        if(hashTable[index] == key) return 1; // Found\n        index = (index + 1) % SIZE;\n    }\n    return 0; // Not Found\n}",
-                                    "java": "",
-                                    "python": ""
+                                    "java": "void insert(int key) {\n    int index = key % SIZE;\n    while (hashTable[index] != -1) {\n        index = (index + 1) % SIZE; // Linear probe\n    }\n    hashTable[index] = key;\n}\n\nboolean search(int key) {\n    int index = key % SIZE;\n    while (hashTable[index] != -1) {\n        if (hashTable[index] == key) return true;\n        index = (index + 1) % SIZE;\n    }\n    return false;\n}",
+                                    "python": "def insert(key):\n    index = key % SIZE\n    while hashTable[index] != -1:\n        index = (index + 1) % SIZE # Linear probe\n    hashTable[index] = key\n\ndef search(key):\n    index = key % SIZE\n    while hashTable[index] != -1:\n        if hashTable[index] == key:\n            return True\n        index = (index + 1) % SIZE\n    return False"
                         }
             }
 };
