@@ -1,296 +1,753 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Infix to Postfix Conversion Using Stack</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infix to Postfix Conversion - Operations and Complexity</title>
+    <style>
+        /* CSS Variables & Theme */
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --radius: 8px;
+        }
 
-<link href="style.css" rel="stylesheet"/></head>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Navbar Dropdowns */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--primary);
+            min-width: 180px;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            list-style: none;
+            padding: 8px 0;
+            top: 100%;
+            left: 0;
+            z-index: 1001;
+        }
+
+        .dropdown-content li {
+            width: 100%;
+        }
+
+        .dropdown-content li a {
+            display: block;
+            padding: 10px 16px;
+            font-size: 13.5px;
+            color: #cbd5e1 !important;
+            background: none !important;
+            border-radius: 0;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .dropdown-content li a:hover,
+        .dropdown-content li a.active {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Page Header */
+        .page-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 30px 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .layout-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px 24px;
+            gap: 30px;
+        }
+
+        /* Sidebar for Tabs */
+        .tab-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.5px;
+        }
+
+        .tab-button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            text-align: left;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+            transition: all 0.2s;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .tab-button:hover {
+            background-color: #f1f5f9;
+            color: var(--accent);
+        }
+
+        .tab-button.active {
+            background-color: #eff6ff;
+            color: var(--accent);
+            border-left-color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Main Content Viewport */
+        .content-viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .op-header {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .op-title {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .complexity-badge {
+            background-color: #eff6ff;
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #bfdbfe;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .algorithm-text {
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        pre {
+            margin: 0;
+            padding: 15px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Styles for tabular structures in algorithm cards */
+        .inner-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: var(--card-bg);
+        }
+
+        .inner-table th,
+        .inner-table td {
+            border: 1px solid var(--border);
+            padding: 10px;
+            text-align: center;
+            font-size: 13.5px;
+        }
+
+        .inner-table th {
+            background-color: #f8fafc;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                height: 60px;
+                padding: 0 16px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links li a {
+                display: block;
+                width: 100%;
+                padding: 10px 16px;
+            }
+
+            .dropdown-content {
+                position: static;
+                display: block;
+                background-color: rgba(0, 0, 0, 0.1);
+                box-shadow: none;
+                padding-left: 15px;
+                border-radius: 0;
+                width: 100%;
+            }
+
+            .layout-container {
+                flex-direction: column;
+                padding: 0 16px 30px 16px;
+                gap: 20px;
+            }
+
+            .tab-sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
 <body>
-<nav class="navbar">
-<a class="nav-brand" href="index.html">AlgoInsight</a>
-<button aria-label="Toggle navigation" class="hamburger">
-<span></span>
-<span></span>
-<span></span>
-</button>
-<ul class="nav-links">
-<li><a href="index.html">Home</a></li>
-<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
-<li><a href="Stack.html">Stack &amp; Queue</a></li>
-<li><a href="Binary_Tree.html">Trees</a></li>
-<li><a href="Graphs.html">Graphs</a></li>
-<li><a href="Linear_Search.html">Searching</a></li>
-<li><a href="Insertion_Sort.html">Sorting</a></li>
-<li><a href="Hashtable.html">Hashing</a></li>
-</ul>
-</nav>
-<header class="page-header"><h1>Infix to Postfix Conversion Using Stack</h1><p>Learn about the operations, implementation, and time complexity of Infix to Postfix Conversion Using Stack.</p></header><div class="container"><div class="section">
-<h2>Contents</h2>
-<ul>
-<li><a href="#types">Types of Expressions</a></li>
-<li><a href="#precedence">Operator Precedence</a></li>
-<li><a href="#algorithm">Algorithm</a></li>
-<li><a href="#example1">Example 1</a></li>
-<li><a href="#example2">Example 2</a></li>
-<li><a href="#program">C Program</a></li>
-<li><a href="#complexity">Complexity Analysis</a></li>
-</ul>
-</div><div class="section">
-<h2 id="types">Types of Expressions</h2>
-<div class="table-responsive"><table>
-<tr>
-<th>Expression Type</th>
-<th>Example</th>
-</tr>
-<tr>
-<td><b>Infix</b></td>
-<td><b>A + B</b></td>
-</tr>
-<tr>
-<td><b>Prefix</b></td>
-<td><b>+AB</b></td>
-</tr>
-<tr>
-<td><b>Postfix</b></td>
-<td><b>AB+</b></td>
-</tr>
-</table></div>
-</div><div class="section">
-<h2 id="precedence">Operator Precedence Table</h2>
-<div class="table-responsive"><table>
-<tr>
-<th>Operator</th>
-<th>Precedence</th>
-</tr>
-<tr>
-<td><b>^</b></td>
-<td><b>3</b></td>
-</tr>
-<tr>
-<td><b>*, /</b></td>
-<td><b>2</b></td>
-</tr>
-<tr>
-<td><b>+, -</b></td>
-<td><b>1</b></td>
-</tr>
-<tr>
-<td><b>(</b></td>
-<td><b>0</b></td>
-</tr>
-</table></div>
-</div><div class="section">
-<h2 id="algorithm">Algorithm</h2>
-<ol>
-<b>
-<li>Create an empty stack</li>
-<li>Scan the infix expression from left to right</li>
-<li>If the symbol is an operand, add it directly to the postfix expression</li>
-<li>If the symbol is '(', push it onto the stack</li>
-<li>If the symbol is ')':
-<ul>
-<li>Pop and output operators until '(' is encountered</li>
-<li>Remove '(' from the stack</li>
-</ul>
-</li>
-<li>If the symbol is an operator:
-<ul>
-<li>While stack top has higher or equal precedence, pop operators</li>
-<li>Push current operator</li>
-</ul>
-</li>
-<li>After scanning the expression, pop all remaining operators</li>
-<li>Display the postfix expression</li>
-</b></ol>
 
-</div><div class="section">
-<h2 id="example1">Example 1</h2>
-<h3>Infix Expression</h3>
-<pre><b>A+B*C</b></pre>
-<h3>Conversion Steps</h3>
-<pre><b>
-Read A → Output = A
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">DEVENU</a>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Linked Lists</a>
+                <ul class="dropdown-content">
+                    <li><a href="Singly_Linked_Lists_Collapsible.html">Singly Linked List</a></li>
+                    <li><a href="Doubly_Linked_Lists_Collapsible.html">Doubly Linked List</a></li>
+                    <li><a href="Circularly_Linked_Lists_Collapsible.html">Circular Linked List</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Stack & Queue</a>
+                <ul class="dropdown-content">
+                    <li><a href="Stack.html">Stack Operations</a></li>
+                    <li><a href="Queue.html">Queue Operations</a></li>
+                    <li><a href="Infix.html">Infix to Postfix</a></li>
+                    <li><a href="Postfix.html">Postfix Evaluation</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Trees</a>
+                <ul class="dropdown-content">
+                    <li><a href="Binary_Tree.html">Binary Tree</a></li>
+                    <li><a href="Binary_Search_Tree.html">Binary Search Tree</a></li>
+                </ul>
+            </li>
+            <li><a href="Graphs.html">Graphs</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Searching</a>
+                <ul class="dropdown-content">
+                    <li><a href="Linear_Search.html">Linear Search</a></li>
+                    <li><a href="Binary_Search.html">Binary Search</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Sorting</a>
+                <ul class="dropdown-content">
+                    <li><a href="Insertion_Sort.html">Insertion Sort</a></li>
+                    <li><a href="Quick_Sort.html">Quick Sort</a></li>
+                    <li><a href="Merge_Sort.html">Merge Sort</a></li>
+                    <li><a href="Heap_Sort.html">Heap Sort</a></li>
+                </ul>
+            </li>
+            <li><a href="Hashtable.html">Hashing</a></li>
+            <li><a href="time_complexity.html">Time Complexity</a></li>
+        </ul>
+    </nav>
 
-Read + → Push +
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Infix to Postfix Conversion</h1>
+        <p>Learn about infix, prefix, and postfix expressions, operator precedence, and conversion using stacks.</p>
+    </header>
 
-Read B → Output = AB
+    <!-- Layout Container -->
+    <div class="layout-container">
+        <!-- Sidebar Navigation (Tabs) -->
+        <aside class="tab-sidebar">
+            <div class="sidebar-title">Operations</div>
+            <div id="tabButtons">
+                <!-- Tab buttons will be generated dynamically -->
+            </div>
+        </aside>
 
-Read * → Push *
+        <!-- Main Content Panel -->
+        <main class="content-viewport">
+            <!-- Header for Selected Operation -->
+            <div class="op-header">
+                <h2 class="op-title" id="opTitle">Operation Title</h2>
+                <div class="complexity-badge" id="complexityBadge">Time Complexity</div>
+            </div>
 
-Read C → Output = ABC
+            <!-- Algorithm Section -->
+            <div class="content-card" id="algoCard">
+                <div class="card-title">Algorithm Description</div>
+                <div class="algorithm-text" id="algoContent">Step-by-step description...</div>
+            </div>
 
-Pop * → Output = ABC*
+            <!-- Code Section -->
+            <div class="content-card" id="codeCard">
+                <div class="card-header-actions">
+                    <div class="card-title">Source Code</div>
+                    <div class="lang-selector">
+                        <button class="lang-btn" data-lang="c">C</button>
+                        <button class="lang-btn" data-lang="java">Java</button>
+                        <button class="lang-btn" data-lang="python">Python</button>
+                    </div>
+                </div>
+                <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
+            </div>
+        </main>
+    </div>
 
-Pop + → Output = ABC*+
-</b>
-</pre>
-<h3>Postfix Expression</h3>
-<pre><b>ABC*+</b></pre>
-</div><div class="section">
-<h2 id="example2">Example 2</h2>
-<h3>Infix Expression</h3>
-<pre>(A+B)*C</pre>
-<h3>Example Table</h3>
-<div class="table-responsive"><table>
-<tr>
-<th>Symbol</th>
-<th>Stack</th>
-<th>Postfix</th>
-</tr>
-<tr>
-<td>(</td>
-<td>(</td>
-<td></td>
-</tr>
-<tr>
-<td>A</td>
-<td>(</td>
-<td>A</td>
-</tr>
-<tr>
-<td>+</td>
-<td>( +</td>
-<td>A</td>
-</tr>
-<tr>
-<td>B</td>
-<td>( +</td>
-<td>AB</td>
-</tr>
-<tr>
-<td>)</td>
-<td>Empty</td>
-<td>AB+</td>
-</tr>
-<tr>
-<td>*</td>
-<td>*</td>
-<td>AB+</td>
-</tr>
-<tr>
-<td>C</td>
-<td>*</td>
-<td>AB+C</td>
-</tr>
-<tr>
-<td>End</td>
-<td>Empty</td>
-<td>AB+C*</td>
-</tr>
-</table></div>
-<h3>Result</h3>
-<pre>AB+C*</pre>
-</div><div class="section">
-<h2 id="program">C Program</h2><details open=""><summary>C Program</summary><pre>
-#include &lt;stdio.h&gt;
-#include &lt;ctype.h&gt;
-#include &lt;string.h&gt;
+    <!-- Inline Logic Database & Page Switching Script -->
+    <script>
+        // Inline Database of Operations
+        const OPERATIONS_DATA = {
+            "expressions": {
+                "name": "Types of Expressions",
+                "complexity": "N/A",
+                "algorithm": "Arithmetic expressions can be written in three forms based on operator position:\n\n1. Infix Expression: The operator is placed between the operands. (e.g. A + B)\n2. Prefix Expression: The operator is placed before the operands. (e.g. +AB)\n3. Postfix Expression: The operator is placed after the operands. (e.g. AB+)\n\nComparison Table:\n<table class='inner-table'><thead><tr><th>Type</th><th>Format</th><th>Example</th></tr></thead><tbody><tr><td>Infix</td><td>Operand1 Operator Operand2</td><td>A + B</td></tr><tr><td>Prefix</td><td>Operator Operand1 Operand2</td><td>+AB</td></tr><tr><td>Postfix</td><td>Operand1 Operand2 Operator</td><td>AB+</td></tr></tbody></table>",
+                "code": {
+                    "c": "",
+                    "java": "",
+                    "python": ""
+                }
+            },
+            "precedence": {
+                "name": "Operator Precedence",
+                "complexity": "N/A",
+                "algorithm": "Precedence determines which operator is evaluated first when scanning. Higher precedence operators are popped and outputted before lower precedence operators.\n\nPrecedence Hierarchy Table:\n<table class='inner-table'><thead><tr><th>Operator</th><th>Precedence Value</th><th>Associativity</th></tr></thead><tbody><tr><td>^ (Exponentiation)</td><td>3</td><td>Right-to-Left</td></tr><tr><td>* , / (Multiplication, Division)</td><td>2</td><td>Left-to-Right</td></tr><tr><td>+ , - (Addition, Subtraction)</td><td>1</td><td>Left-to-Right</td></tr><tr><td>( (Left Parenthesis)</td><td>0</td><td>N/A</td></tr></tbody></table>",
+                "code": {
+                    "c": "",
+                    "java": "",
+                    "python": ""
+                }
+            },
+            "algorithm": {
+                "name": "Conversion Algorithm",
+                "complexity": "Time: O(n) | Space: O(n)",
+                "algorithm": "1. Initialize an empty stack for operators.\n2. Scan the Infix expression from left to right symbol by symbol.\n3. If the symbol is an operand, add it directly to the Postfix output string.\n4. If the symbol is '(', push it onto the stack.\n5. If the symbol is ')':\n   - Pop and output operators from stack to Postfix until a '(' is met.\n   - Pop and discard the '(' from the stack.\n6. If the symbol is an operator:\n   - While the stack is not empty and precedence(stack[top]) >= precedence(current_operator), pop operators from stack and add to Postfix.\n   - Push the current operator onto the stack.\n7. After scanning all symbols, pop and output any remaining operators from the stack.\n8. Print/return the final Postfix expression.",
+                "code": {
+                    "c": "",
+                    "java": "",
+                    "python": ""
+                }
+            },
+            "example": {
+                "name": "Conversion Example",
+                "complexity": "N/A",
+                "algorithm": "Example 1: Convert infix 'A+B*C' to Postfix\n\n- Read A: Output = A\n- Read +: Push + to stack. Stack: [+]\n- Read B: Output = AB\n- Read *: Precedence(*) > Precedence(+). Push * to stack. Stack: [+, *]\n- Read C: Output = ABC\n- End of Input: Pop remaining operators (* then +). Output = ABC*+\n- Result: ABC*+\n\nExample 2: Convert infix '(A+B)*C' to Postfix\n\n<table class='inner-table'><thead><tr><th>Symbol Scanned</th><th>Stack State</th><th>Postfix Output</th></tr></thead><tbody><tr><td>(</td><td>[ ( ]</td><td></td></tr><tr><td>A</td><td>[ ( ]</td><td>A</td></tr><tr><td>+</td><td>[ (, + ]</td><td>A</td></tr><tr><td>B</td><td>[ (, + ]</td><td>AB</td></tr><tr><td>)</td><td>[ ]</td><td>AB+</td></tr><tr><td>*</td><td>[ * ]</td><td>AB+</td></tr><tr><td>C</td><td>[ * ]</td><td>AB+C</td></tr><tr><td>End</td><td>[ ]</td><td>AB+C*</td></tr></tbody></table>",
+                "code": {
+                    "c": "",
+                    "java": "",
+                    "python": ""
+                }
+            },
+            "program": {
+                "name": "Program Code",
+                "complexity": "Time: O(n) | Space: O(n)",
+                "algorithm": "The complete C implementation using standard structures to convert infix arithmetic expressions into postfix form.",
+                "code": {
+                    "c": "#include <stdio.h>\n#include <ctype.h>\n#include <string.h>\n\nchar stack[100];\nint top = -1;\n\nvoid push(char x)\n{\n    stack[++top] = x;\n}\n\nchar pop()\n{\n    return stack[top--];\n}\n\nint precedence(char x)\n{\n    if(x == '^')\n        return 3;\n    if(x == '*' || x == '/')\n        return 2;\n    if(x == '+' || x == '-')\n        return 1;\n    return 0;\n}\n\nint main()\n{\n    char infix[100], postfix[100];\n    int i, j = 0;\n\n    printf(\"Enter Infix Expression: \");\n    scanf(\"%s\", infix);\n\n    for(i = 0; infix[i] != '\\0'; i++)\n    {\n        char ch = infix[i];\n\n        if(isalnum(ch))\n        {\n            postfix[j++] = ch;\n        }\n        else if(ch == '(')\n        {\n            push(ch);\n        }\n        else if(ch == ')')\n        {\n            while(stack[top] != '(')\n            {\n                postfix[j++] = pop();\n            }\n            pop(); // Discard '(' \n        }\n        else\n        {\n            while(top != -1 && precedence(stack[top]) >= precedence(ch))\n            {\n                postfix[j++] = pop();\n            }\n            push(ch);\n        }\n    }\n\n    while(top != -1)\n    {\n        postfix[j++] = pop();\n    }\n    postfix[j] = '\\0';\n\n    printf(\"Postfix = %s\\n\", postfix);\n    return 0;\n}",
+                    "java": "import java.util.Stack;\n\npublic class InfixToPostfix {\n    public static int precedence(char ch) {\n        if (ch == '^') return 3;\n        if (ch == '*' || ch == '/') return 2;\n        if (ch == '+' || ch == '-') return 1;\n        return 0;\n    }\n\n    public static String infixToPostfix(String infix) {\n        StringBuilder postfix = new StringBuilder();\n        Stack<Character> stack = new Stack<>();\n        for (int i = 0; i < infix.length(); i++) {\n            char ch = infix.charAt(i);\n            if (Character.isLetterOrDigit(ch)) {\n                postfix.append(ch);\n            } else if (ch == '(') {\n                stack.push(ch);\n            } else if (ch == ')') {\n                while (!stack.isEmpty() && stack.peek() != '(') {\n                    postfix.append(stack.pop());\n                }\n                stack.pop(); // Remove '('\n            } else {\n                while (!stack.isEmpty() && precedence(stack.peek()) >= precedence(ch)) {\n                    postfix.append(stack.pop());\n                }\n                stack.push(ch);\n            }\n        }\n        while (!stack.isEmpty()) {\n            postfix.append(stack.pop());\n        }\n        return postfix.toString();\n    }\n}",
+                    "python": "def precedence(ch):\n    if ch == '^': return 3\n    if ch in ('*', '/'): return 2\n    if ch in ('+', '-'): return 1\n    return 0\n\ndef infix_to_postfix(infix):\n    postfix = []\n    stack = []\n    for ch in infix:\n        if ch.isalnum():\n            postfix.append(ch)\n        elif ch == '(':\n            stack.append(ch)\n        elif ch == ')':\n            while stack and stack[-1] != '(':\n                postfix.append(stack.pop())\n            stack.pop()\n        else:\n            while stack and precedence(stack[-1]) >= precedence(ch):\n                postfix.append(stack.pop())\n            stack.append(ch)\n    while stack:\n        postfix.append(stack.pop())\n    return \"\".join(postfix)"
+                }
+            }
+        };
 
-char stack[100];
-int top = -1;
 
-void push(char x)
-{
-    stack[++top] = x;
-}
+        // DOM elements
+        const tabButtonsContainer = document.getElementById("tabButtons");
+        const opTitle = document.getElementById("opTitle");
+        const complexityBadge = document.getElementById("complexityBadge");
+        const algoCard = document.getElementById("algoCard");
+        const algoContent = document.getElementById("algoContent");
+        const codeCard = document.getElementById("codeCard");
+        const codeContent = document.getElementById("codeContent");
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
 
-char pop()
-{
-    return stack[top--];
-}
-
-int precedence(char x)
-{
-    if(x == '^')
-        return 3;
-
-    if(x == '*' || x == '/')
-        return 2;
-
-    if(x == '+' || x == '-')
-        return 1;
-
-    return 0;
-}
-
-int main()
-{
-    char infix[100], postfix[100];
-    int i, j = 0;
-
-    printf("Enter Infix Expression: ");
-    scanf("%s", infix);
-
-    for(i = 0; infix[i] != '\0'; i++)
-    {
-        char ch = infix[i];
-
-        if(isalnum(ch))
-        {
-            postfix[j++] = ch;
+        // Mobile Hamburger menu toggle
+        if (hamburger && navLinks) {
+            hamburger.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+                const spans = hamburger.querySelectorAll("span");
+                if (navLinks.classList.contains("active")) {
+                    spans[0].style.transform = "rotate(-45deg) translate(-5px, 6px)";
+                    spans[1].style.opacity = "0";
+                    spans[2].style.transform = "rotate(45deg) translate(-5px, -6px)";
+                } else {
+                    spans[0].style.transform = "none";
+                    spans[1].style.opacity = "1";
+                    spans[2].style.transform = "none";
+                }
+            });
         }
 
-        else if(ch == '(')
-        {
-            push(ch);
+        // Dynamic Active Navbar Link Highlight
+        const currentPath = window.location.pathname.split("/").pop().toLowerCase();
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            const linkPath = link.getAttribute("href").toLowerCase();
+            if (currentPath === linkPath) {
+                link.classList.add("active");
+            } else if (currentPath === "" || currentPath === "index.html") {
+                if (linkPath === "index.html") link.classList.add("active");
+            } else {
+                if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
+                        link.classList.add("active");
+                    }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
+                }
+            }
+        });
+
+        let currentTabId = "";
+
+        // Generate Sidebar Buttons
+        function generateSidebar() {
+            const keys = Object.keys(OPERATIONS_DATA);
+            tabButtonsContainer.innerHTML = "";
+
+            keys.forEach((key, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "tab-button" + (idx === 0 ? " active" : "");
+                btn.textContent = OPERATIONS_DATA[key].name;
+                btn.setAttribute("data-tab", key);
+                btn.onclick = () => selectTab(key);
+                tabButtonsContainer.appendChild(btn);
+            });
+
+            // Load initial tab
+            if (keys.length > 0) {
+                selectTab(keys[0]);
+            }
         }
 
-        else if(ch == ')')
-        {
-            while(stack[top] != '(')
-            {
-                postfix[j++] = pop();
+        // Switch Tab Content
+        function selectTab(tabId) {
+            currentTabId = tabId;
+            // Toggle tab active styles
+            document.querySelectorAll(".tab-button").forEach(btn => {
+                if (btn.getAttribute("data-tab") === tabId) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+
+            const data = OPERATIONS_DATA[tabId];
+            if (!data) return;
+
+            // Update content viewport
+            opTitle.textContent = data.name;
+            complexityBadge.textContent = data.complexity;
+
+            // Algorithm Card show/hide
+            if (data.algorithm && data.algorithm.trim() !== "") {
+                algoCard.style.display = "block";
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
+            } else {
+                algoCard.style.display = "none";
             }
 
-            pop();
-        }
-
-        else
-        {
-            while(top != -1 &amp;&amp;
-                  precedence(stack[top]) &gt;= precedence(ch))
-            {
-                postfix[j++] = pop();
+            // Code Card show/hide
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
+                codeCard.style.display = "block";
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
+            } else {
+                codeCard.style.display = "none";
             }
-
-            push(ch);
         }
-    }
 
-    while(top != -1)
-    {
-        postfix[j++] = pop();
-    }
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
 
-    postfix[j] = '\0';
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
 
-    printf("Postfix = %s", postfix);
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
 
-    return 0;
-}
-</pre></details></div><div class="section">
-<h2 id="complexity">Time Complexity</h2>
-<div class="table-responsive"><table>
-<tr>
-<th>Case</th>
-<th>Complexity</th>
-</tr>
-<tr>
-<td>Best Case</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>Average Case</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>Worst Case</td>
-<td>O(n)</td>
-</tr>
-</table></div>
-<h3>Space Complexity</h3>
-<pre>O(n)</pre>
-</div></div><script src="nav.js"></script></body>
+        // Initialize view
+        window.onload = generateSidebar;
+
+    </script>
+</body>
+
 </html>

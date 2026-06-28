@@ -1,326 +1,721 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Hash Tables - Open and Closed Hashing</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Tables - Operations and Complexity</title>
+    <style>
+        /* CSS Variables & Theme */
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --radius: 8px;
+        }
 
-<link href="style.css" rel="stylesheet"/></head>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Navbar Dropdowns */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--primary);
+            min-width: 180px;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            list-style: none;
+            padding: 8px 0;
+            top: 100%;
+            left: 0;
+            z-index: 1001;
+        }
+
+        .dropdown-content li {
+            width: 100%;
+        }
+
+        .dropdown-content li a {
+            display: block;
+            padding: 10px 16px;
+            font-size: 13.5px;
+            color: #cbd5e1 !important;
+            background: none !important;
+            border-radius: 0;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .dropdown-content li a:hover,
+        .dropdown-content li a.active {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Page Header */
+        .page-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 30px 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .layout-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px 24px;
+            gap: 30px;
+        }
+
+        /* Sidebar for Tabs */
+        .tab-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.5px;
+        }
+
+        .tab-button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            text-align: left;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+            transition: all 0.2s;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .tab-button:hover {
+            background-color: #f1f5f9;
+            color: var(--accent);
+        }
+
+        .tab-button.active {
+            background-color: #eff6ff;
+            color: var(--accent);
+            border-left-color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Main Content Viewport */
+        .content-viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .op-header {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .op-title {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .complexity-badge {
+            background-color: #eff6ff;
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #bfdbfe;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .algorithm-text {
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        pre {
+            margin: 0;
+            padding: 15px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                height: 60px;
+                padding: 0 16px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links li a {
+                display: block;
+                width: 100%;
+                padding: 10px 16px;
+            }
+
+            /* Display dropdown contents inline on mobile */
+            .dropdown-content {
+                position: static;
+                display: block;
+                background-color: rgba(0, 0, 0, 0.1);
+                box-shadow: none;
+                padding-left: 15px;
+                border-radius: 0;
+                width: 100%;
+            }
+
+            .layout-container {
+                flex-direction: column;
+                padding: 0 16px 30px 16px;
+                gap: 20px;
+            }
+
+            .tab-sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+    
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
+    </style>
+</head>
+
 <body>
-<nav class="navbar">
-<a class="nav-brand" href="index.html">AlgoInsight</a>
-<button aria-label="Toggle navigation" class="hamburger">
-<span></span>
-<span></span>
-<span></span>
-</button>
-<ul class="nav-links">
-<li><a href="index.html">Home</a></li>
-<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
-<li><a href="Stack.html">Stack &amp; Queue</a></li>
-<li><a href="Binary_Tree.html">Trees</a></li>
-<li><a href="Graphs.html">Graphs</a></li>
-<li><a href="Linear_Search.html">Searching</a></li>
-<li><a href="Insertion_Sort.html">Sorting</a></li>
-<li><a href="Hashtable.html">Hashing</a></li>
-</ul>
-</nav>
-<header class="page-header"><h1>Hash Tables</h1><p>Learn about the operations, implementation, and time complexity of Hash Tables.</p></header><div class="container"><div class="container">
 
-<div class="card">
-<h2>What is Hashing?</h2>
-<p>
-Hashing is a technique used to store and retrieve data efficiently
-A hash function converts a key into an index of an array
-</p>
-<pre>
-Hash Function
 
-h(key) = key % table_size
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">DEVENU</a>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Linked Lists</a>
+                <ul class="dropdown-content">
+                    <li><a href="Singly_Linked_Lists_Collapsible.html">Singly Linked List</a></li>
+                    <li><a href="Doubly_Linked_Lists_Collapsible.html">Doubly Linked List</a></li>
+                    <li><a href="Circularly_Linked_Lists_Collapsible.html">Circular Linked List</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Stack & Queue</a>
+                <ul class="dropdown-content">
+                    <li><a href="Stack.html">Stack Operations</a></li>
+                    <li><a href="Queue.html">Queue Operations</a></li>
+                    <li><a href="Infix.html">Infix to Postfix</a></li>
+                    <li><a href="Postfix.html">Postfix Evaluation</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Trees</a>
+                <ul class="dropdown-content">
+                    <li><a href="Binary_Tree.html">Binary Tree</a></li>
+                    <li><a href="Binary_Search_Tree.html">Binary Search Tree</a></li>
+                </ul>
+            </li>
+            <li><a href="Graphs.html">Graphs</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Searching</a>
+                <ul class="dropdown-content">
+                    <li><a href="Linear_Search.html">Linear Search</a></li>
+                    <li><a href="Binary_Search.html">Binary Search</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Sorting</a>
+                <ul class="dropdown-content">
+                    <li><a href="Insertion_Sort.html">Insertion Sort</a></li>
+                    <li><a href="Quick_Sort.html">Quick Sort</a></li>
+                    <li><a href="Merge_Sort.html">Merge Sort</a></li>
+                    <li><a href="Heap_Sort.html">Heap Sort</a></li>
+                </ul>
+            </li>
+            <li><a href="Hashtable.html">Hashing</a></li>
+            <li><a href="time_complexity.html">Time Complexity</a></li>
+        </ul>
+    </nav>
 
-Example:
 
-Key = 25
-Table Size = 10
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Hash Tables</h1>
+        <p>Understand hashing, collisions, and open vs closed hashing implementations.</p>
+    </header>
 
-h(25) = 25 % 10 = 5
-</pre>
-<div class="highlight">
-Store key 25 at index 5
-</div>
-</div>
-<div class="card">
-<h2>Collision</h2>
-<p>
-A collision occurs when two different keys produce the same hash index
-</p>
-<pre>
-25 % 10 = 5
-35 % 10 = 5
+    <!-- Layout Container -->
+    <div class="layout-container">
+        <!-- Sidebar Navigation (Tabs) -->
+        <aside class="tab-sidebar">
+            <div class="sidebar-title">Operations</div>
+            <div id="tabButtons">
+                <!-- Tab buttons will be generated dynamically -->
+            </div>
+        </aside>
 
-Collision Occurs
-</pre>
-</div>
-<div class="card">
-<h2>Types of Hashing</h2>
-<ul>
-<li>Open Hashing (Separate Chaining)</li>
-<li>Closed Hashing (Open Addressing)</li>
-</ul>
-</div>
-<div class="card">
-<h2>Open Hashing (Separate Chaining)</h2>
-<p>
-In Open Hashing, each index stores a linked list
-When a collision occurs, the new element is inserted into the linked list
-</p>
-<pre>
-Keys:
-25, 35, 45
+        <!-- Main Content Panel -->
+        <main class="content-viewport">
+            <!-- Header for Selected Operation -->
+            <div class="op-header">
+                <h2 class="op-title" id="opTitle">Operation Title</h2>
+                <div class="complexity-badge" id="complexityBadge">Time Complexity</div>
+            </div>
 
-Hash Function:
-h(key) = key % 10
+            <!-- Algorithm Section -->
+            <div class="content-card" id="algoCard">
+                <div class="card-title">Algorithm Description</div>
+                <div class="algorithm-text" id="algoContent">Step-by-step description...</div>
+            </div>
 
-25 -&gt; 5
-35 -&gt; 5
-45 -&gt; 5
-</pre>
-<pre>
-Index
+            <!-- Code Section -->
+            <div class="content-card" id="codeCard">
+            <div class="card-header-actions">
+                <div class="card-title">Source Code</div>
+                <div class="lang-selector">
+                    <button class="lang-btn" data-lang="c">C</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                </div>
+            </div>
+                <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
+            </div>
+        </main>
+    </div>
 
-0
-1
-2
-3
-4
-5 -&gt; 25 -&gt; 35 -&gt; 45
-6
-7
-8
-9
-</pre>
-</div>
-<div class="card">
-<h2>Open Hashing Operations</h2>
-<h3>Insertion Algorithm</h3>
-<pre>
-1. Compute hash index
-2. Create new node
-3. Insert node into linked list
-4. End
-</pre>
-<h3>Insertion Code</h3>
-<pre>
-void insert(int key)
-{
-    int index = key % SIZE;
+    <!-- Inline Logic Database & Page Switching Script -->
+    <script>
+        // Inline Database of Operations
+        const OPERATIONS_DATA = {
+            "intro": {
+                        "name": "What is Hashing?",
+                        "complexity": "N/A",
+                        "algorithm": "Hashing is a technique used to store and retrieve data efficiently.\nA hash function converts a key into an index of an array.\n\nHash Function Formula:\nh(key) = key % table_size\n\nExample:\nKey = 25\nTable Size = 10\nh(25) = 25 % 10 = 5\n(Store key 25 at index 5)",
+                        "code": {
+                                    "c": "",
+                                    "java": "",
+                                    "python": ""
+                        }
+            },
+            "collision": {
+                        "name": "Collisions",
+                        "complexity": "N/A",
+                        "algorithm": "A collision occurs when two different keys produce the same hash index.\n\nExample:\nKey A: 25 % 10 = 5\nKey B: 35 % 10 = 5\nBoth point to index 5 -> Collision Occurs!",
+                        "code": {
+                                    "c": "",
+                                    "java": "",
+                                    "python": ""
+                        }
+            },
+            "open-hashing": {
+                        "name": "Open Hashing (Chaining)",
+                        "complexity": "Best: O(1) | Worst: O(n)",
+                        "algorithm": "In Open Hashing (Separate Chaining), each index of the hash table stores a linked list.\nWhen a collision occurs, the new element is inserted at the head of the linked list.\n\nOperations Complexity:\n- Insert: Best O(1), Avg O(1), Worst O(n)\n- Search: Best O(1), Avg O(1), Worst O(n)\n- Delete: Best O(1), Avg O(1), Worst O(n)",
+                        "code": {
+                                    "c": "void insert(int key) {\n    int index = key % SIZE;\n    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = key;\n    newNode->next = table[index];\n    table[index] = newNode;\n}\n\nint search(int key) {\n    int index = key % SIZE;\n    struct Node *temp = table[index];\n    while(temp != NULL) {\n        if(temp->data == key) return 1; // Found\n        temp = temp->next;\n    }\n    return 0; // Not Found\n}",
+                                    "java": "",
+                                    "python": ""
+                        }
+            },
+            "closed-hashing": {
+                        "name": "Closed Hashing (Open Addressing)",
+                        "complexity": "Best: O(1) | Worst: O(n)",
+                        "algorithm": "In Closed Hashing (Open Addressing), all elements are stored directly inside the hash table array.\nWhen a collision occurs, a free location is searched (probed) sequentially.\n\nLinear Probing Formula:\nh(k, i) = (h(k) + i) % size\n\nOperations Complexity:\n- Insert: Best O(1), Avg O(1), Worst O(n)\n- Search: Best O(1), Avg O(1), Worst O(n)\n- Delete: Best O(1), Avg O(1), Worst O(n)",
+                        "code": {
+                                    "c": "void insert(int key) {\n    int index = key % SIZE;\n    while(hashTable[index] != -1) {\n        index = (index + 1) % SIZE; // Linear probe\n    }\n    hashTable[index] = key;\n}\n\nint search(int key) {\n    int index = key % SIZE;\n    while(hashTable[index] != -1) {\n        if(hashTable[index] == key) return 1; // Found\n        index = (index + 1) % SIZE;\n    }\n    return 0; // Not Found\n}",
+                                    "java": "",
+                                    "python": ""
+                        }
+            }
+};
 
-    struct Node *newNode =
-    (struct Node*)malloc(sizeof(struct Node));
 
-    newNode-&gt;data = key;
-    newNode-&gt;next = table[index];
+        // DOM elements
+        const tabButtonsContainer = document.getElementById("tabButtons");
+        const opTitle = document.getElementById("opTitle");
+        const complexityBadge = document.getElementById("complexityBadge");
+        const algoCard = document.getElementById("algoCard");
+        const algoContent = document.getElementById("algoContent");
+        const codeCard = document.getElementById("codeCard");
+        const codeContent = document.getElementById("codeContent");
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
 
-    table[index] = newNode;
-}
-</pre>
-<h3>Search Algorithm</h3>
-<pre>
-1. Compute hash index
-2. Traverse linked list
-3. Compare each node
-4. Return found/not found
-</pre>
-<h3>Search Code</h3>
-<pre>
-int search(int key)
-{
-    int index = key % SIZE;
+        // Mobile Hamburger menu toggle
+        if (hamburger && navLinks) {
+            hamburger.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+                const spans = hamburger.querySelectorAll("span");
+                if (navLinks.classList.contains("active")) {
+                    spans[0].style.transform = "rotate(-45deg) translate(-5px, 6px)";
+                    spans[1].style.opacity = "0";
+                    spans[2].style.transform = "rotate(45deg) translate(-5px, -6px)";
+                } else {
+                    spans[0].style.transform = "none";
+                    spans[1].style.opacity = "1";
+                    spans[2].style.transform = "none";
+                }
+            });
+        }
 
-    struct Node *temp = table[index];
+        // Dynamic Active Navbar Link Highlight
+        const currentPath = window.location.pathname.split("/").pop().toLowerCase();
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            const linkPath = link.getAttribute("href").toLowerCase();
+            if (currentPath === linkPath) {
+                link.classList.add("active");
+            } else if (currentPath === "" || currentPath === "index.html") {
+                if (linkPath === "index.html") link.classList.add("active");
+            } else {
+                if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
+                        link.classList.add("active");
+                    }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
+                }
+            }
+        });
 
-    while(temp != NULL)
-    {
-        if(temp-&gt;data == key)
-            return 1;
+        let currentTabId = "";
 
-        temp = temp-&gt;next;
-    }
+        // Generate Sidebar Buttons
+        function generateSidebar() {
+            const keys = Object.keys(OPERATIONS_DATA);
+            tabButtonsContainer.innerHTML = "";
+            
+            keys.forEach((key, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "tab-button" + (idx === 0 ? " active" : "");
+                btn.textContent = OPERATIONS_DATA[key].name;
+                btn.setAttribute("data-tab", key);
+                btn.onclick = () => selectTab(key);
+                tabButtonsContainer.appendChild(btn);
+            });
 
-    return 0;
-}
-</pre>
-</div>
-<div class="card">
-<h2>Open Hashing Complexity</h2>
-<div class="table-responsive"><table>
-<tr>
-<th>Operation</th>
-<th>Best</th>
-<th>Average</th>
-<th>Worst</th>
-</tr>
-<tr>
-<td>Insert</td>
-<td>O(1)</td>
-<td>O(1)</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>Search</td>
-<td>O(1)</td>
-<td>O(1)</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>Delete</td>
-<td>O(1)</td>
-<td>O(1)</td>
-<td>O(n)</td>
-</tr>
-</table></div>
-</div>
-<div class="card">
-<h2>Closed Hashing (Open Addressing)</h2>
-<p>
-In Closed Hashing, all elements are stored inside the hash table
-When a collision occurs, another free location is searched
-</p>
-<h3>Linear Probing Formula</h3>
-<pre>
-h(k,i) = (h(k) + i) % size
-</pre>
-<h3>Example</h3>
-<pre>
-25 -&gt; Index 5
+            // Load initial tab
+            if (keys.length > 0) {
+                selectTab(keys[0]);
+            }
+        }
 
-35 -&gt; Collision at 5
-      Place at 6
+        // Switch Tab Content
+        function selectTab(tabId) {
+            currentTabId = tabId;
+            // Toggle tab active styles
+            document.querySelectorAll(".tab-button").forEach(btn => {
+                if (btn.getAttribute("data-tab") === tabId) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
 
-45 -&gt; Collision at 5
-      Collision at 6
-      Place at 7
-</pre>
-<pre>
-0
-1
-2
-3
-4
-5 -&gt; 25
-6 -&gt; 35
-7 -&gt; 45
-8
-9
-</pre>
-</div>
-<div class="card">
-<h2>Closed Hashing Operations</h2>
-<h3>Insertion Algorithm</h3>
-<pre>
-1. Compute hash index
-2. If empty insert
-3. Else probe next slot
-4. Repeat until free slot found
-</pre>
-<h3>Insertion Code</h3>
-<pre>
-void insert(int key)
-{
-    int index = key % SIZE;
+            const data = OPERATIONS_DATA[tabId];
+            if (!data) return;
 
-    while(hashTable[index] != -1)
-    {
-        index = (index + 1) % SIZE;
-    }
+            // Update content viewport
+            opTitle.textContent = data.name;
+            complexityBadge.textContent = data.complexity;
 
-    hashTable[index] = key;
-}
-</pre>
-<h3>Search Algorithm</h3>
-<pre>
-1. Compute hash index
-2. Compare current slot
-3. Continue probing
-4. Stop when found
-</pre>
-<h3>Search Code</h3>
-<pre>
-int search(int key)
-{
-    int index = key % SIZE;
+            // Algorithm Card show/hide
+            if (data.algorithm && data.algorithm.trim() !== "") {
+                algoCard.style.display = "block";
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
+            } else {
+                algoCard.style.display = "none";
+            }
 
-    while(hashTable[index] != -1)
-    {
-        if(hashTable[index] == key)
-            return 1;
+            // Code Card show/hide
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
+                codeCard.style.display = "block";
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
+            } else {
+                codeCard.style.display = "none";
+            }
+        }
 
-        index = (index + 1) % SIZE;
-    }
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+                
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
 
-    return 0;
-}
-</pre>
-</div>
-<div class="card">
-<h2>Closed Hashing Complexity</h2>
-<div class="table-responsive"><table>
-<tr>
-<th>Operation</th>
-<th>Best</th>
-<th>Average</th>
-<th>Worst</th>
-</tr>
-<tr>
-<td>Insert</td>
-<td>O(1)</td>
-<td>O(1)</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>Search</td>
-<td>O(1)</td>
-<td>O(1)</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>Delete</td>
-<td>O(1)</td>
-<td>O(1)</td>
-<td>O(n)</td>
-</tr>
-</table></div>
-</div>
-<div class="card">
-<h2>Open vs Closed Hashing</h2>
-<div class="table-responsive"><table>
-<tr>
-<th>Open Hashing</th>
-<th>Closed Hashing</th>
-</tr>
-<tr>
-<td>Uses Linked Lists</td>
-<td>Uses Array Only</td>
-</tr>
-<tr>
-<td>Separate Chaining</td>
-<td>Open Addressing</td>
-</tr>
-<tr>
-<td>Extra Memory Needed</td>
-<td>No Extra Memory</td>
-</tr>
-<tr>
-<td>Easier Deletion</td>
-<td>Complex Deletion</td>
-</tr>
-<tr>
-<td>Less Clustering</td>
-<td>More Clustering</td>
-</tr>
-</table></div>
-</div>
-</div></div><script src="nav.js"></script></body>
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
+
+        // Initialize view
+        window.onload = generateSidebar;
+
+    </script>
+</body>
+
 </html>

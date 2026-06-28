@@ -1,405 +1,761 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Binary Search Tree Operations </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Binary Search Tree - Operations and Complexity</title>
+    <style>
+        /* CSS Variables & Theme */
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --radius: 8px;
+        }
 
-<link href="style.css" rel="stylesheet"/></head>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Navbar Dropdowns */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--primary);
+            min-width: 180px;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            list-style: none;
+            padding: 8px 0;
+            top: 100%;
+            left: 0;
+            z-index: 1001;
+        }
+
+        .dropdown-content li {
+            width: 100%;
+        }
+
+        .dropdown-content li a {
+            display: block;
+            padding: 10px 16px;
+            font-size: 13.5px;
+            color: #cbd5e1 !important;
+            background: none !important;
+            border-radius: 0;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .dropdown-content li a:hover,
+        .dropdown-content li a.active {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Page Header */
+        .page-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 30px 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .layout-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px 24px;
+            gap: 30px;
+        }
+
+        /* Sidebar for Tabs */
+        .tab-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.5px;
+        }
+
+        .tab-button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            text-align: left;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+            transition: all 0.2s;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .tab-button:hover {
+            background-color: #f1f5f9;
+            color: var(--accent);
+        }
+
+        .tab-button.active {
+            background-color: #eff6ff;
+            color: var(--accent);
+            border-left-color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Main Content Viewport */
+        .content-viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .op-header {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .op-title {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .complexity-badge {
+            background-color: #eff6ff;
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #bfdbfe;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .algorithm-text {
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            /* Supports tabs/indentations and linebreaks */
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        pre {
+            margin: 0;
+            padding: 15px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                height: 60px;
+                padding: 0 16px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links li a {
+                display: block;
+                width: 100%;
+                padding: 10px 16px;
+            }
+
+            /* Display dropdown contents inline on mobile */
+            .dropdown-content {
+                position: static;
+                display: block;
+                background-color: rgba(0, 0, 0, 0.1);
+                box-shadow: none;
+                padding-left: 15px;
+                border-radius: 0;
+                width: 100%;
+            }
+
+            .layout-container {
+                flex-direction: column;
+                padding: 0 16px 30px 16px;
+                gap: 20px;
+            }
+
+            .tab-sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+    
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
+    </style>
+</head>
+
 <body>
-<nav class="navbar">
-<a class="nav-brand" href="index.html">AlgoInsight</a>
-<button aria-label="Toggle navigation" class="hamburger">
-<span></span>
-<span></span>
-<span></span>
-</button>
-<ul class="nav-links">
-<li><a href="index.html">Home</a></li>
-<li><a href="Singly_Linked_Lists_Collapsible.html">Linked Lists</a></li>
-<li><a href="Stack.html">Stack &amp; Queue</a></li>
-<li><a href="Binary_Tree.html">Trees</a></li>
-<li><a href="Graphs.html">Graphs</a></li>
-<li><a href="Linear_Search.html">Searching</a></li>
-<li><a href="Insertion_Sort.html">Sorting</a></li>
-<li><a href="Hashtable.html">Hashing</a></li>
-</ul>
-</nav>
-<header class="page-header"><h1>About Binary Search Tree</h1><p>Learn about the operations, implementation, and time complexity of About Binary Search Tree.</p></header><div class="container"><h2>Binary Search Tree Operations</h2><input id="searchBox" onkeyup="searchOperation()" placeholder="Search operation..." type="text"/><ol>
-<b>
-<li>
-    A Binary Search Tree is a binary tree in which:
 
-    <ul>
-<li><b>Left Subtree &lt; Root &lt; Right Subtree</b></li>
-</ul>
-<h4>Example:</h4>
-<div class="tree-diagram">
-<pre><b>
-          50
-         /  \
-       30    70
-      / \   / \
-    20 40 60   80
-</b></pre>
-</div>
-<div class="table-responsive"><table>
-<thead>
-<tr>
-<th>Operation</th>
-<th>Algorithm (Text / Code)</th>
-<th>Time Complexity</th>
-</tr>
-</thead>
-<tbody>
-<!-- Node Structure -->
-<tr>
-<td><b>Node Structure</b></td>
-<td>
-<div class="result codeBox">
-<pre><b>struct Node
-{
-    int data;
-    struct Node *left;
-    struct Node *right;
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">DEVENU</a>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Linked Lists</a>
+                <ul class="dropdown-content">
+                    <li><a href="Singly_Linked_Lists_Collapsible.html">Singly Linked List</a></li>
+                    <li><a href="Doubly_Linked_Lists_Collapsible.html">Doubly Linked List</a></li>
+                    <li><a href="Circularly_Linked_Lists_Collapsible.html">Circular Linked List</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Stack & Queue</a>
+                <ul class="dropdown-content">
+                    <li><a href="Stack.html">Stack Operations</a></li>
+                    <li><a href="Queue.html">Queue Operations</a></li>
+                    <li><a href="Infix.html">Infix to Postfix</a></li>
+                    <li><a href="Postfix.html">Postfix Evaluation</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Trees</a>
+                <ul class="dropdown-content">
+                    <li><a href="Binary_Tree.html">Binary Tree</a></li>
+                    <li><a href="Binary_Search_Tree.html">Binary Search Tree</a></li>
+                </ul>
+            </li>
+            <li><a href="Graphs.html">Graphs</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Searching</a>
+                <ul class="dropdown-content">
+                    <li><a href="Linear_Search.html">Linear Search</a></li>
+                    <li><a href="Binary_Search.html">Binary Search</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Sorting</a>
+                <ul class="dropdown-content">
+                    <li><a href="Insertion_Sort.html">Insertion Sort</a></li>
+                    <li><a href="Quick_Sort.html">Quick Sort</a></li>
+                    <li><a href="Merge_Sort.html">Merge Sort</a></li>
+                    <li><a href="Heap_Sort.html">Heap Sort</a></li>
+                </ul>
+            </li>
+            <li><a href="Hashtable.html">Hashing</a></li>
+            <li><a href="time_complexity.html">Time Complexity</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>About Binary Search Tree</h1>
+        <p>Learn about the operations, implementation, and time complexity of About Binary Search Tree.</p>
+    </header>
+
+    <!-- Layout Container -->
+    <div class="layout-container">
+        <!-- Sidebar Navigation (Tabs) -->
+        <aside class="tab-sidebar">
+            <div class="sidebar-title">Operations</div>
+            <div id="tabButtons">
+                <!-- Tab buttons will be generated dynamically -->
+            </div>
+        </aside>
+
+        <!-- Main Content Panel -->
+        <main class="content-viewport">
+            <!-- Header for Selected Operation -->
+            <div class="op-header">
+                <h2 class="op-title" id="opTitle">Operation Title</h2>
+                <div class="complexity-badge" id="complexityBadge">Time Complexity</div>
+            </div>
+
+            <!-- Algorithm Section -->
+            <div class="content-card" id="algoCard">
+                <div class="card-title">Algorithm Description</div>
+                <div class="algorithm-text" id="algoContent">Step-by-step description...</div>
+            </div>
+
+            <!-- Code Section -->
+            <div class="content-card" id="codeCard">
+            <div class="card-header-actions">
+                <div class="card-title">Source Code</div>
+                <div class="lang-selector">
+                    <button class="lang-btn" data-lang="c">C</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                </div>
+            </div>
+                <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
+            </div>
+        </main>
+    </div>
+
+    <!-- Inline Logic Database & Page Switching Script -->
+    <script>
+        // Inline Database of Operations
+        const OPERATIONS_DATA = {
+            "node-structure": {
+                        "name": "Node Structure",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node\n{\n    int data;\n    struct Node *left;\n    struct Node *right;\n};",
+                                    "java": "class Node {\n    int data;\n    Node left, right;\n    \n    Node(int data) {\n        this.data = data;\n        this.left = this.right = null;\n    }\n}",
+                                    "python": "class Node:\n    def __init__(self, data):\n        self.data = data\n        self.left = None\n        self.right = None"
+                        },
+                        "complexity": "No Time Complexity"
+            },
+            "create-a-new-node": {
+                        "name": "Create a new node",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* createNode(int data)\n{\n    struct Node *newNode =\n        (struct Node*)malloc(sizeof(struct Node));\n\n    newNode->data = data;\n    newNode->left = NULL;\n    newNode->right = NULL;\n\n    return newNode;\n}",
+                                    "java": "public static Node createNode(int data) {\n    return new Node(data);\n}",
+                                    "python": "def create_node(data):\n    return Node(data)"
+                        },
+                        "complexity": "O(1) or O(n)"
+            },
+            "insertion": {
+                        "name": "Insertion",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* insert(struct Node *root, int data)\n{\n    if(root == NULL)\n        return createNode(data);\n\n    if(data < root->data)\n        root->left = insert(root->left, data);\n\n    else if(data > root->data)\n        root->right = insert(root->right, data);\n\n    return root;\n}",
+                                    "java": "public static Node insert(Node root, int data) {\n    if (root == null) {\n        return createNode(data);\n    }\n    if (data < root.data) {\n        root.left = insert(root.left, data);\n    } else if (data > root.data) {\n        root.right = insert(root.right, data);\n    }\n    return root;\n}",
+                                    "python": "def insert(root, data):\n    if not root:\n        return Node(data)\n    if data < root.data:\n        root.left = insert(root.left, data)\n    elif data > root.data:\n        root.right = insert(root.right, data)\n    return root"
+                        },
+                        "complexity": "O(log n)"
+            },
+            "search": {
+                        "name": "Search",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* search(struct Node *root, int key)\n{\n    if(root == NULL || root->data == key)\n        return root;\n\n    if(key < root->data)\n        return search(root->left, key);\n\n    return search(root->right, key);\n}",
+                                    "java": "public static Node search(Node root, int key) {\n    if (root == null || root.data == key) {\n        return root;\n    }\n    if (key < root.data) {\n        return search(root.left, key);\n    }\n    return search(root.right, key);\n}",
+                                    "python": "def search(root, key):\n    if not root or root.data == key:\n        return root\n    if key < root.data:\n        return search(root.left, key)\n    return search(root.right, key)"
+                        },
+                        "complexity": "O(log n)"
+            },
+            "inorder-traversal\n\nleft-->-root->-right\n\n\n----------------first-visit-left-subtree,-then-root,-then-right-subtree": {
+                        "name": "Inorder Traversal\n\n(Left -> Root-> Right)\n\n\n                First visit Left Subtree, then Root, then Right Subtree",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "void inorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        inorder(root->left);\n        printf(\"%d \", root->data);\n        inorder(root->right);\n    }\n}",
+                                    "java": "",
+                                    "python": ""
+                        },
+                        "complexity": "O(n)"
+            },
+            "preorder-traversal\n\nroot-->-left->-right\n\n\n----------------first-visit-root,-then-left-subtree,-then-right-subtree": {
+                        "name": "Preorder Traversal\n\n(Root -> Left-> Right)\n\n\n                First visit Root, then Left Subtree, then Right Subtree",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "void preorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        printf(\"%d \", root->data);\n        preorder(root->left);\n        preorder(root->right);\n    }\n}",
+                                    "java": "",
+                                    "python": ""
+                        },
+                        "complexity": "O(n)"
+            },
+            "postorder-traversal\n\nleft-->-right-->-root\n\n\n----------------first-visit-left-subtree,-then-right-subtree,-then-root": {
+                        "name": "Postorder Traversal\n\n(Left -> Right -> Root)\n\n\n                First visit Left Subtree, then Right Subtree, then Root",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "void postorder(struct Node *root)\n{\n    if(root != NULL)\n    {\n        postorder(root->left);\n        postorder(root->right);\n        printf(\"%d \", root->data);\n    }\n}",
+                                    "java": "",
+                                    "python": ""
+                        },
+                        "complexity": "O(n)"
+            },
+            "deletion-of-a-node": {
+                        "name": "Deletion of a node",
+                        "algorithm": "",
+                        "code": {
+                                    "c": "struct Node* deleteNode(struct Node *root, int key)\n{\n    if(root == NULL)\n        return root;\n\n    if(key < root->data)\n        root->left = deleteNode(root->left, key);\n\n    else if(key > root->data)\n        root->right = deleteNode(root->right, key);\n\n    else\n    {\n        if(root->left == NULL)\n        {\n            struct Node *temp = root->right;\n            free(root);\n            return temp;\n        }\n\n        else if(root->right == NULL)\n        {\n            struct Node *temp = root->left;\n            free(root);\n            return temp;\n        }\n\n        struct Node *temp =\n            findMin(root->right);\n\n        root->data = temp->data;\n\n        root->right =\n            deleteNode(root->right,\n                       temp->data);\n    }\n\n    return root;\n}",
+                                    "java": "public static Node findMin(Node root) {\n    while (root.left != null) root = root.left;\n    return root;\n}\n\npublic static Node deleteNode(Node root, int key) {\n    if (root == null) return root;\n    if (key < root.data) {\n        root.left = deleteNode(root.left, key);\n    } else if (key > root.data) {\n        root.right = deleteNode(root.right, key);\n    } else {\n        if (root.left == null) {\n            return root.right;\n        } else if (root.right == null) {\n            return root.left;\n        }\n        Node temp = findMin(root.right);\n        root.data = temp.data;\n        root.right = deleteNode(root.right, temp.data);\n    }\n    return root;\n}",
+                                    "python": "def find_min(root):\n    while root.left:\n        root = root.left\n    return root\n\ndef delete_node(root, key):\n    if not root: return root\n    if key < root.data:\n        root.left = delete_node(root.left, key)\n    elif key > root.data:\n        root.right = delete_node(root.right, key)\n    else:\n        if not root.left:\n            return root.right\n        elif not root.right:\n            return root.left\n        temp = find_min(root.right)\n        root.data = temp.data\n        root.right = delete_node(root.right, temp.data)\n    return root"
+                        },
+                        "complexity": "O(log n)"
+            }
 };
-</b></pre>
-</div>
-<div class="result textBox hidden">
-<b>
-                    1. Create a node<br/>
-                    2. Store data in node<br/>
-                    3. Initialize left and right child pointers as NULL<br/>
-</b>
-</div>
-</td>
-<td><b>No Time Complexity</b></td>
-</tr>
 
-<!-- Create a new node -->
-<tr>
-<td><b>Create a new node</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Allocate memory for node<br/>
-                    2. Store data<br/>
-                    3. Set Left = NULL<br/>
-                    4. Set Right = NULL<br/>
-                    5. Return Node
-                    </b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>struct Node* createNode(int data)
-{
-    struct Node *newNode =
-        (struct Node*)malloc(sizeof(struct Node));
 
-    newNode-&gt;data = data;
-    newNode-&gt;left = NULL;
-    newNode-&gt;right = NULL;
+        // DOM elements
+        const tabButtonsContainer = document.getElementById("tabButtons");
+        const opTitle = document.getElementById("opTitle");
+        const complexityBadge = document.getElementById("complexityBadge");
+        const algoCard = document.getElementById("algoCard");
+        const algoContent = document.getElementById("algoContent");
+        const codeCard = document.getElementById("codeCard");
+        const codeContent = document.getElementById("codeContent");
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
 
-    return newNode;
-}</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(1) or O(n)</b></td>
-</tr>
-<!-- Insertion -->
-<tr>
-<td><b>Insertion</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. If tree is empty, Create a node<br/>
-                    2. If Data &lt; Root, insert in the left subtree<br/>
-                    3. If Data &gt; Root, insert in the right subtree<br/>
-                    4. Return root<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>struct Node* insert(struct Node *root, int data)
-{
-    if(root == NULL)
-        return createNode(data);
-
-    if(data &lt; root-&gt;data)
-        root-&gt;left = insert(root-&gt;left, data);
-
-    else if(data &gt; root-&gt;data)
-        root-&gt;right = insert(root-&gt;right, data);
-
-    return root;
-}</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(log n)</b></td>
-</tr>
-<!--Search-->
-<tr>
-<td><b>Search</b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Compare key with root<br/>
-                    2. If equal then print found<br/>
-                    3. If smaller then move left <br/>
-                    4. If greater then move right <br/>
-                    5. Repeat untill found or null<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>struct Node* search(struct Node *root, int key)
-{
-    if(root == NULL || root-&gt;data == key)
-        return root;
-
-    if(key &lt; root-&gt;data)
-        return search(root-&gt;left, key);
-
-    return search(root-&gt;right, key);
-}</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(log n)</b></td>
-</tr>
-<!-- Inorder Traversal-->
-<tr>
-<td><b>Inorder Traversal</b><br/>
-<b>(Left -&gt; Root-&gt; Right)<br/></b><br/>
-                First visit <b>Left Subtree</b>, then <b>Root</b>, then <b>Right Subtree</b> </td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Traverse Left Subtree<br/>
-                    2. Visit Root<br/>
-                    3. Traverse Right Subtree<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>void inorder(struct Node *root)
-{
-    if(root != NULL)
-    {
-        inorder(root-&gt;left);
-        printf("%d ", root-&gt;data);
-        inorder(root-&gt;right);
-    }
-}</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(n)</b></td>
-</tr>
-<!--Preorder-->
-<tr>
-<td><b>Preorder Traversal</b><br/>
-<b>(Root -&gt; Left-&gt; Right)<br/></b><br/>
-                First visit <b>Root</b>, then <b>Left Subtree</b>, then <b>Right Subtree</b> </td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. First visit Root<br/>
-                    2. Traverse Left Subtree<br/>
-                    3. Traverse Right Subtree<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>void preorder(struct Node *root)
-{
-    if(root != NULL)
-    {
-        printf("%d ", root-&gt;data);
-        preorder(root-&gt;left);
-        preorder(root-&gt;right);
-    }
-}
-</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(n)</b></td>
-</tr>
-<!--Postorder-->
-<tr>
-<td><b>Postorder Traversal</b><br/>
-<b>(Left -&gt; Right -&gt; Root)<br/></b><br/>
-                First visit <b>Left Subtree</b>, then <b>Right Subtree</b>, then <b>Root</b> </td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. Traverse Left Subtree<br/>
-                    2. Traverse Right Subtree<br/>
-                    3. Visit Root<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>void postorder(struct Node *root)
-{
-    if(root != NULL)
-    {
-        postorder(root-&gt;left);
-        postorder(root-&gt;right);
-        printf("%d ", root-&gt;data);
-    }
-}
-</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(n)</b></td>
-</tr>
-<!--Deletion-->
-<tr>
-<td><b>Deletion of a node </b></td>
-<td>
-<div class="accordion-container">
-<details class="algo-box">
-<summary>Algorithm</summary>
-<div class="result">
-<b>
-                    1. If you want to delete Leaf Node, Delete directly<br/>
-                    2. If you want to delete One Child, Replace node with child<br/>
-                    3. If you want to delete Two Children, Replace with inorder successor and Delete successor<br/>
-</b>
-</div>
-</details>
-<details class="code-box">
-<summary>Code</summary>
-<div class="result">
-<pre><b>struct Node* deleteNode(struct Node *root, int key)
-{
-    if(root == NULL)
-        return root;
-
-    if(key &lt; root-&gt;data)
-        root-&gt;left = deleteNode(root-&gt;left, key);
-
-    else if(key &gt; root-&gt;data)
-        root-&gt;right = deleteNode(root-&gt;right, key);
-
-    else
-    {
-        if(root-&gt;left == NULL)
-        {
-            struct Node *temp = root-&gt;right;
-            free(root);
-            return temp;
+        // Mobile Hamburger menu toggle
+        if (hamburger && navLinks) {
+            hamburger.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+                const spans = hamburger.querySelectorAll("span");
+                if (navLinks.classList.contains("active")) {
+                    spans[0].style.transform = "rotate(-45deg) translate(-5px, 6px)";
+                    spans[1].style.opacity = "0";
+                    spans[2].style.transform = "rotate(45deg) translate(-5px, -6px)";
+                } else {
+                    spans[0].style.transform = "none";
+                    spans[1].style.opacity = "1";
+                    spans[2].style.transform = "none";
+                }
+            });
         }
 
-        else if(root-&gt;right == NULL)
-        {
-            struct Node *temp = root-&gt;left;
-            free(root);
-            return temp;
+        // Dynamic Active Navbar Link Highlight
+        const currentPath = window.location.pathname.split("/").pop().toLowerCase();
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            const linkPath = link.getAttribute("href").toLowerCase();
+            if (currentPath === linkPath) {
+                link.classList.add("active");
+            } else if (currentPath === "" || currentPath === "index.html") {
+                if (linkPath === "index.html") link.classList.add("active");
+            } else {
+                if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
+                        link.classList.add("active");
+                    }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
+                }
+            }
+        });
+
+        let currentTabId = "";
+
+        // Generate Sidebar Buttons
+        function generateSidebar() {
+            const keys = Object.keys(OPERATIONS_DATA);
+            tabButtonsContainer.innerHTML = "";
+            
+            keys.forEach((key, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "tab-button" + (idx === 0 ? " active" : "");
+                btn.textContent = OPERATIONS_DATA[key].name;
+                btn.setAttribute("data-tab", key);
+                btn.onclick = () => selectTab(key);
+                tabButtonsContainer.appendChild(btn);
+            });
+
+            // Load initial tab
+            if (keys.length > 0) {
+                selectTab(keys[0]);
+            }
         }
 
-        struct Node *temp =
-            findMin(root-&gt;right);
+        // Switch Tab Content
+        function selectTab(tabId) {
+            currentTabId = tabId;
+            // Toggle tab active styles
+            document.querySelectorAll(".tab-button").forEach(btn => {
+                if (btn.getAttribute("data-tab") === tabId) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
 
-        root-&gt;data = temp-&gt;data;
+            const data = OPERATIONS_DATA[tabId];
+            if (!data) return;
 
-        root-&gt;right =
-            deleteNode(root-&gt;right,
-                       temp-&gt;data);
-    }
+            // Update content viewport
+            opTitle.textContent = data.name;
+            complexityBadge.textContent = data.complexity;
 
-    return root;
-}
-</b></pre>
-</div>
-</details>
-</div>
-</td>
-<td><b>O(log n)</b></td>
-</tr>
-</tbody>
-</table></div>
-<script>
-function toggleAlgorithm(checkbox) {
+            // Algorithm Card show/hide
+            if (data.algorithm && data.algorithm.trim() !== "") {
+                algoCard.style.display = "block";
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
+            } else {
+                algoCard.style.display = "none";
+            }
 
-    const parentCell = checkbox.closest("td");
+            // Code Card show/hide
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
+                codeCard.style.display = "block";
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
+            } else {
+                codeCard.style.display = "none";
+            }
+        }
 
-    const codeBox = parentCell.querySelector(".codeBox");
-    const textBox = parentCell.querySelector(".textBox");
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+                
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
 
-    if (checkbox.checked) {
-        codeBox.classList.add("hidden");
-        textBox.classList.remove("hidden");
-    } else {
-        codeBox.classList.remove("hidden");
-        textBox.classList.add("hidden");
-    }
-}
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
 
-function searchOperation() {
+        // Initialize view
+        window.onload = generateSidebar;
 
-    let input = document
-        .getElementById("searchBox")
-        .value
-        .toLowerCase();
+    </script>
+</body>
 
-    let rows = document.querySelectorAll("tbody tr");
-
-    rows.forEach(row => {
-
-        let operation =
-            row.cells[0]
-            .innerText
-            .toLowerCase();
-
-        if(operation.includes(input))
-            row.style.display = "";
-        else
-            row.style.display = "none";
-    });
-}
-</script>
-</li></b></ol></div><script src="nav.js"></script></body>
 </html>

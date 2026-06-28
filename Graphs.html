@@ -1,16 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graphs - Operations and Complexity</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Graph Operations - Operations and Complexity</title>
+    <style>
+        /* CSS Variables & Theme */
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Page Header */
+        .page-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 30px 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .layout-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 40px 24px;
+            gap: 30px;
+        }
+
+        /* Sidebar for Tabs */
+        .tab-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.5px;
+        }
+
+        .tab-button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            text-align: left;
+            background: none;
+            border: none;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+            transition: all 0.2s;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .tab-button:hover {
+            background-color: #f1f5f9;
+            color: var(--accent);
+        }
+
+        .tab-button.active {
+            background-color: #eff6ff;
+            color: var(--accent);
+            border-left-color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Main Content Viewport */
+        .content-viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .op-header {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .op-title {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .complexity-badge {
+            background-color: #eff6ff;
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid #bfdbfe;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-left: 4px solid var(--accent);
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .algorithm-text {
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-line;
+            color: var(--text);
+        }
+
+        pre {
+            margin: 0;
+            padding: 15px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                height: 60px;
+                padding: 0 16px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 250px;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+                gap: 16px;
+                transition: right 0.3s ease;
+                box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links li a {
+                display: block;
+                width: 100%;
+                padding: 12px 16px;
+            }
+
+            .layout-container {
+                flex-direction: column;
+                padding: 0 16px 30px 16px;
+                gap: 20px;
+            }
+
+            .tab-sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+    
+        /* Card Header Action Layout for Selector Placement */
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header-actions .card-title {
+            margin-bottom: 0;
+        }
+
+        /* Language Selection Tabs */
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+        }
+        .lang-btn {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            background-color: #e2e8f0;
+        }
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
+    </style>
 </head>
+
 <body>
 
-    <!-- Unified Top Navigation Bar -->
+    <!-- Top Navigation Bar -->
     <nav class="navbar">
-        <a href="index.html" class="nav-brand">AlgoInsight</a>
+        <a href="index.html" class="nav-brand">DEVENU</a>
         <button class="hamburger" aria-label="Toggle navigation">
             <span></span>
             <span></span>
@@ -25,244 +370,258 @@
             <li><a href="Linear_Search.html">Searching</a></li>
             <li><a href="Insertion_Sort.html">Sorting</a></li>
             <li><a href="Hashtable.html">Hashing</a></li>
+            <li><a href="time_complexity.html">Time Complexity</a></li>
         </ul>
     </nav>
 
     <!-- Page Header -->
     <header class="page-header">
         <h1>Graph Operations</h1>
-        <p>Explore algorithms and operations performed on Graphs, including representation, traversal, and shortest path calculations.</p>
+        <p>Explore algorithms and operations performed on Graphs, including representation, traversal, and shortest path
+            calculations.</p>
     </header>
 
-    <!-- Content Container -->
-    <div class="container">
-        
-        <!-- Search Input -->
-        <div class="search-container">
-            <input type="text" id="searchBox" placeholder="Search operations..." onkeyup="searchOperation()">
-        </div>
+    <!-- Layout Container -->
+    <div class="layout-container">
+        <!-- Sidebar Navigation (Tabs) -->
+        <aside class="tab-sidebar">
+            <div class="sidebar-title">Operations</div>
+            <div id="tabButtons">
+                <!-- Tab buttons will be generated dynamically -->
+            </div>
+        </aside>
 
-        <!-- Table -->
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 25%;">Operation</th>
-                        <th style="width: 60%;">Algorithm (Text / Code)</th>
-                        <th style="width: 15%; text-align: center;">Time Complexity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <!-- Adjacency Matrix -->
-                    <tr>
-                        <td class="op-name-cell"><b>Graph Representation<br>(Adjacency Matrix)</b></td>
-                        <td>
-                            <div class="accordion-container">
-                                <details class="algo-box">
-                                    <summary>Algorithm</summary>
-                                    <div class="details-content text-algorithm">
-                                        1. Initialize a 2D array matrix of size V x V with 0.
-                                        2. For each edge connecting vertex u to v, set matrix[u][v] = 1.
-                                        3. For undirected graphs, also set matrix[v][u] = 1.
-                                    </div>
-                                </details>
-                                <details class="code-box">
-                                    <summary>Code</summary>
-                                    <div class="details-content">
-                                        <pre><code>#include &lt;stdio.h&gt;
-#define V 5
+        <!-- Main Content Panel -->
+        <main class="content-viewport">
+            <!-- Header for Selected Operation -->
+            <div class="op-header">
+                <h2 class="op-title" id="opTitle">Operation Title</h2>
+                <div class="complexity-badge" id="complexityBadge">Time Complexity</div>
+            </div>
 
-int adjMatrix[V][V];
+            <!-- Algorithm Section -->
+            <div class="content-card" id="algoCard">
+                <div class="card-title">Algorithm Description</div>
+                <div class="algorithm-text" id="algoContent">Step-by-step description...</div>
+            </div>
 
-void initMatrix() {
-    for(int i = 0; i &lt; V; i++)
-        for(int j = 0; j &lt; V; j++)
-            adjMatrix[i][j] = 0;
-}
-
-void addEdge(int u, int v) {
-    adjMatrix[u][v] = 1;
-    adjMatrix[v][u] = 1; // For undirected graph
-}</code></pre>
-                                    </div>
-                                </details>
-                            </div>
-                        </td>
-                        <td class="op-complexity-cell"><b>O(V²)</b></td>
-                    </tr>
-
-                    <!-- BFS -->
-                    <tr>
-                        <td class="op-name-cell"><b>Breadth First Search<br>(BFS)</b></td>
-                        <td>
-                            <div class="accordion-container">
-                                <details class="algo-box">
-                                    <summary>Algorithm</summary>
-                                    <div class="details-content text-algorithm">
-                                        1. Create a queue and a visited array.
-                                        2. Mark the starting node as visited and enqueue it.
-                                        3. While the queue is not empty:
-                                           - Dequeue a node and visit/print it.
-                                           - Enqueue all its unvisited adjacent nodes and mark them visited.
-                                    </div>
-                                </details>
-                                <details class="code-box">
-                                    <summary>Code</summary>
-                                    <div class="details-content">
-                                        <pre><code>#include &lt;stdio.h&gt;
-
-int queue[100], front = -1, rear = -1;
-int visited[5];
-
-void enqueue(int val) {
-    if(front == -1) front = 0;
-    queue[++rear] = val;
-}
-
-int dequeue() {
-    int item = queue[front];
-    if(front == rear) front = rear = -1;
-    else front++;
-    return item;
-}
-
-void bfs(int adjMatrix[5][5], int startNode, int n) {
-    enqueue(startNode);
-    visited[startNode] = 1;
-
-    while(front != -1) {
-        int curr = dequeue();
-        printf("%d ", curr);
-
-        for(int i = 0; i &lt; n; i++) {
-            if(adjMatrix[curr][i] == 1 && !visited[i]) {
-                enqueue(i);
-                visited[i] = 1;
-            }
-        }
-    }
-}</code></pre>
-                                    </div>
-                                </details>
-                            </div>
-                        </td>
-                        <td class="op-complexity-cell"><b>O(V + E)</b></td>
-                    </tr>
-
-                    <!-- DFS -->
-                    <tr>
-                        <td class="op-name-cell"><b>Depth First Search<br>(DFS)</b></td>
-                        <td>
-                            <div class="accordion-container">
-                                <details class="algo-box">
-                                    <summary>Algorithm</summary>
-                                    <div class="details-content text-algorithm">
-                                        1. Start from the target vertex.
-                                        2. Mark the vertex as visited and print it.
-                                        3. For each adjacent vertex of this node, recursively call DFS if it has not been visited yet.
-                                    </div>
-                                </details>
-                                <details class="code-box">
-                                    <summary>Code</summary>
-                                    <div class="details-content">
-                                        <pre><code>#include &lt;stdio.h&gt;
-
-int visited[5];
-
-void dfs(int adjMatrix[5][5], int node, int n) {
-    visited[node] = 1;
-    printf("%d ", node);
-
-    for(int i = 0; i &lt; n; i++) {
-        if(adjMatrix[node][i] == 1 && !visited[i]) {
-            dfs(adjMatrix, i, n);
-        }
-    }
-}</code></pre>
-                                    </div>
-                                </details>
-                            </div>
-                        </td>
-                        <td class="op-complexity-cell"><b>O(V + E)</b></td>
-                    </tr>
-
-                    <!-- Dijkstra -->
-                    <tr>
-                        <td class="op-name-cell"><b>Dijkstra's Shortest Path</b></td>
-                        <td>
-                            <div class="accordion-container">
-                                <details class="algo-box">
-                                    <summary>Algorithm</summary>
-                                    <div class="details-content text-algorithm">
-                                        1. Create a dist array (initialized to infinity, source = 0) and a sptSet (Shortest Path Tree) boolean array.
-                                        2. Loop V - 1 times:
-                                           - Select vertex u not in sptSet with minimum distance.
-                                           - Include u in sptSet.
-                                           - Update distance values of all adjacent vertices of u.
-                                    </div>
-                                </details>
-                                <details class="code-box">
-                                    <summary>Code</summary>
-                                    <div class="details-content">
-                                        <pre><code>#include &lt;stdio.h&gt;
-#include &lt;limits.h&gt;
-#define V 5
-
-int minDistance(int dist[], int sptSet[]) {
-    int min = INT_MAX, min_index;
-    for (int v = 0; v &lt; V; v++)
-        if (sptSet[v] == 0 && dist[v] &lt;= min)
-            min = dist[v], min_index = v;
-    return min_index;
-}
-
-void dijkstra(int graph[V][V], int src) {
-    int dist[V];
-    int sptSet[V];
-
-    for (int i = 0; i &lt; V; i++)
-        dist[i] = INT_MAX, sptSet[i] = 0;
-
-    dist[src] = 0;
-
-    for (int count = 0; count &lt; V - 1; count++) {
-        int u = minDistance(dist, sptSet);
-        sptSet[u] = 1;
-
-        for (int v = 0; v &lt; V; v++)
-            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
-                && dist[u] + graph[u][v] &lt; dist[v])
-                dist[v] = dist[u] + graph[u][v];
-    }
-}</code></pre>
-                                    </div>
-                                </details>
-                            </div>
-                        </td>
-                        <td class="op-complexity-cell"><b>O(V²)</b></td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-
+            <!-- Code Section -->
+            <div class="content-card" id="codeCard">
+            <div class="card-header-actions">
+                <div class="card-title">Source Code</div>
+                <div class="lang-selector">
+                    <button class="lang-btn" data-lang="c">C</button>
+                    <button class="lang-btn" data-lang="java">Java</button>
+                    <button class="lang-btn" data-lang="python">Python</button>
+                </div>
+            </div>
+                <pre><code id="codeContent">#include &lt;stdio.h&gt; ...</code></pre>
+            </div>
+        </main>
     </div>
 
-    <!-- Scripts -->
+    <!-- Inline Logic Database & Page Switching Script -->
     <script>
-        function searchOperation() {
-            let input = document.getElementById("searchBox").value.toLowerCase();
-            let rows = document.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                let operation = row.cells[0].innerText.toLowerCase();
-                if(operation.includes(input))
-                    row.style.display = "";
-                else
-                    row.style.display = "none";
+        // Inline Database of Operations
+        const OPERATIONS_DATA = {
+            "graph-representationadjacency-matrix": {
+                        "name": "Graph Representation(Adjacency Matrix)",
+                        "algorithm": "1. Initialize a 2D array matrix of size V x V with 0.\n                                        2. For each edge connecting vertex u to v, set matrix[u][v] = 1.\n                                        3. For undirected graphs, also set matrix[v][u] = 1.",
+                        "code": {
+                                    "c": "#include <stdio.h>\n#define V 5\n\nint adjMatrix[V][V];\n\nvoid initMatrix() {\n    for(int i = 0; i < V; i++)\n        for(int j = 0; j < V; j++)\n            adjMatrix[i][j] = 0;\n}\n\nvoid addEdge(int u, int v) {\n    adjMatrix[u][v] = 1;\n    adjMatrix[v][u] = 1; // For undirected graph\n}",
+                                    "java": "public class Graph {\n    static final int V = 5;\n    int[][] adjMatrix = new int[V][V];\n\n    void addEdge(int u, int v) {\n        adjMatrix[u][v] = 1;\n        adjMatrix[v][u] = 1;\n    }\n}",
+                                    "python": "class Graph:\n    def __init__(self, v):\n        self.V = v\n        self.adj_matrix = [[0]*v for _ in range(v)]\n\n    def add_edge(self, u, v):\n        self.adj_matrix[u][v] = 1\n        self.adj_matrix[v][u] = 1"
+                        },
+                        "complexity": "O(V\u00b2)"
+            },
+            "breadth-first-searchbfs": {
+                        "name": "Breadth First Search(BFS)",
+                        "algorithm": "1. Create a queue and a visited array.\n                                        2. Mark the starting node as visited and enqueue it.\n                                        3. While the queue is not empty:\n                                           - Dequeue a node and visit/print it.\n                                           - Enqueue all its unvisited adjacent nodes and mark them visited.",
+                        "code": {
+                                    "c": "#include <stdio.h>\n\nint queue[100], front = -1, rear = -1;\nint visited[5];\n\nvoid enqueue(int val) {\n    if(front == -1) front = 0;\n    queue[++rear] = val;\n}\n\nint dequeue() {\n    int item = queue[front];\n    if(front == rear) front = rear = -1;\n    else front++;\n    return item;\n}\n\nvoid bfs(int adjMatrix[5][5], int startNode, int n) {\n    enqueue(startNode);\n    visited[startNode] = 1;\n\n    while(front != -1) {\n        int curr = dequeue();\n        printf(\"%d \", curr);\n\n        for(int i = 0; i < n; i++) {\n            if(adjMatrix[curr][i] == 1 && !visited[i]) {\n                enqueue(i);\n                visited[i] = 1;\n            }\n        }\n    }\n}",
+                                    "java": "import java.util.LinkedList;\nimport java.util.Queue;\n\npublic class BFS {\n    public static void bfs(int[][] adjMatrix, int startNode, int n) {\n        boolean[] visited = new boolean[n];\n        Queue<Integer> queue = new LinkedList<>();\n        visited[startNode] = true;\n        queue.add(startNode);\n        while (!queue.isEmpty()) {\n            int curr = queue.poll();\n            System.out.print(curr + \" \");\n            for (int i = 0; i < n; i++) {\n                if (adjMatrix[curr][i] == 1 && !visited[i]) {\n                    queue.add(i);\n                    visited[i] = true;\n                }\n            }\n        }\n    }\n}",
+                                    "python": "from collections import deque\n\ndef bfs(adj_matrix, start_node, n):\n    visited = [False] * n\n    queue = deque([start_node])\n    visited[start_node] = True\n    while queue:\n        curr = queue.popleft()\n        print(curr, end=\" \")\n        for i in range(n):\n            if adj_matrix[curr][i] == 1 and not visited[i]:\n                queue.append(i)\n                visited[i] = True"
+                        },
+                        "complexity": "O(V + E)"
+            },
+            "depth-first-searchdfs": {
+                        "name": "Depth First Search(DFS)",
+                        "algorithm": "1. Start from the target vertex.\n                                        2. Mark the vertex as visited and print it.\n                                        3. For each adjacent vertex of this node, recursively call DFS if it has not been visited yet.",
+                        "code": {
+                                    "c": "#include <stdio.h>\n\nint visited[5];\n\nvoid dfs(int adjMatrix[5][5], int node, int n) {\n    visited[node] = 1;\n    printf(\"%d \", node);\n\n    for(int i = 0; i < n; i++) {\n        if(adjMatrix[node][i] == 1 && !visited[i]) {\n            dfs(adjMatrix, i, n);\n        }\n    }\n}",
+                                    "java": "public class DFS {\n    public static void dfs(int[][] adjMatrix, int node, int n, boolean[] visited) {\n        visited[node] = true;\n        System.out.print(node + \" \");\n        for (int i = 0; i < n; i++) {\n            if (adjMatrix[node][i] == 1 && !visited[i]) {\n                dfs(adjMatrix, i, n, visited);\n            }\n        }\n    }\n}",
+                                    "python": "def dfs(adj_matrix, node, n, visited):\n    visited[node] = True\n    print(node, end=\" \")\n    for i in range(n):\n        if adj_matrix[node][i] == 1 and not visited[i]:\n            dfs(adj_matrix, i, n, visited)"
+                        },
+                        "complexity": "O(V + E)"
+            },
+            "dijkstra's-shortest-path": {
+                        "name": "Dijkstra's Shortest Path",
+                        "algorithm": "1. Create a dist array (initialized to infinity, source = 0) and a sptSet (Shortest Path Tree) boolean array.\n                                        2. Loop V - 1 times:\n                                           - Select vertex u not in sptSet with minimum distance.\n                                           - Include u in sptSet.\n                                           - Update distance values of all adjacent vertices of u.",
+                        "code": {
+                                    "c": "#include <stdio.h>\n#include <limits.h>\n#define V 5\n\nint minDistance(int dist[], int sptSet[]) {\n    int min = INT_MAX, min_index;\n    for (int v = 0; v < V; v++)\n        if (sptSet[v] == 0 && dist[v] <= min)\n            min = dist[v], min_index = v;\n    return min_index;\n}\n\nvoid dijkstra(int graph[V][V], int src) {\n    int dist[V];\n    int sptSet[V];\n\n    for (int i = 0; i < V; i++)\n        dist[i] = INT_MAX, sptSet[i] = 0;\n\n    dist[src] = 0;\n\n    for (int count = 0; count < V - 1; count++) {\n        int u = minDistance(dist, sptSet);\n        sptSet[u] = 1;\n\n        for (int v = 0; v < V; v++)\n            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX\n                && dist[u] + graph[u][v] < dist[v])\n                dist[v] = dist[u] + graph[u][v];\n    }\n}",
+                                    "java": "public class Dijkstra {\n    static final int V = 5;\n    \n    static int minDistance(int[] dist, boolean[] sptSet) {\n        int min = Integer.MAX_VALUE, min_index = -1;\n        for (int v = 0; v < V; v++) {\n            if (!sptSet[v] && dist[v] <= min) {\n                min = dist[v];\n                min_index = v;\n            }\n        }\n        return min_index;\n    }\n\n    public static void dijkstra(int[][] graph, int src) {\n        int[] dist = new int[V];\n        boolean[] sptSet = new boolean[V];\n        for (int i = 0; i < V; i++) {\n            dist[i] = Integer.MAX_VALUE;\n            sptSet[i] = false;\n        }\n        dist[src] = 0;\n        for (int count = 0; count < V - 1; count++) {\n            int u = minDistance(dist, sptSet);\n            sptSet[u] = true;\n            for (int v = 0; v < V; v++) {\n                if (!sptSet[v] && graph[u][v] != 0 && dist[u] != Integer.MAX_VALUE && dist[u] + graph[u][v] < dist[v]) {\n                    dist[v] = dist[u] + graph[u][v];\n                }\n            }\n        }\n    }\n}",
+                                    "python": "import sys\n\ndef dijkstra(graph, src, V):\n    dist = [sys.maxsize] * V\n    spt_set = [False] * V\n    dist[src] = 0\n    for _ in range(V):\n        u = -1\n        min_dist = sys.maxsize\n        for i in range(V):\n            if not spt_set[i] and dist[i] < min_dist:\n                min_dist = dist[i]\n                u = i\n        spt_set[u] = True\n        for v in range(V):\n            if not spt_set[v] and graph[u][v] != 0 and dist[u] != sys.maxsize and dist[u] + graph[u][v] < dist[v]:\n                dist[v] = dist[u] + graph[u][v]"
+                        },
+                        "complexity": "O(V\u00b2)"
+            }
+};
+
+
+        // DOM elements
+        const tabButtonsContainer = document.getElementById("tabButtons");
+        const opTitle = document.getElementById("opTitle");
+        const complexityBadge = document.getElementById("complexityBadge");
+        const algoCard = document.getElementById("algoCard");
+        const algoContent = document.getElementById("algoContent");
+        const codeCard = document.getElementById("codeCard");
+        const codeContent = document.getElementById("codeContent");
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        // Mobile Hamburger menu toggle
+        if (hamburger && navLinks) {
+            hamburger.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+                const spans = hamburger.querySelectorAll("span");
+                if (navLinks.classList.contains("active")) {
+                    spans[0].style.transform = "rotate(-45deg) translate(-5px, 6px)";
+                    spans[1].style.opacity = "0";
+                    spans[2].style.transform = "rotate(45deg) translate(-5px, -6px)";
+                } else {
+                    spans[0].style.transform = "none";
+                    spans[1].style.opacity = "1";
+                    spans[2].style.transform = "none";
+                }
             });
         }
+
+        // Dynamic Active Navbar Link Highlight
+        const currentPath = window.location.pathname.split("/").pop().toLowerCase();
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            const linkPath = link.getAttribute("href").toLowerCase();
+            if (currentPath === linkPath) {
+                link.classList.add("active");
+            } else if (currentPath === "" || currentPath === "index.html") {
+                if (linkPath === "index.html") link.classList.add("active");
+            } else {
+                if (linkPath.includes("singly_linked_lists") || linkPath.includes("doubly_linked_lists") || linkPath.includes("circularly_linked_lists")) {
+                    if (currentPath.includes("linked_list") && linkPath.includes("singly_linked_lists")) {
+                        link.classList.add("active");
+                    }
+                } else if (linkPath === "stack.html") {
+                    if (["stack.html", "queue.html", "infix.html", "postfix.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "binary_tree.html") {
+                    if (["binary_tree.html", "binary_search_tree.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "linear_search.html") {
+                    if (["linear_search.html", "binary_search.html"].includes(currentPath)) link.classList.add("active");
+                } else if (linkPath === "insertion_sort.html") {
+                    if (["insertion_sort.html", "quick_sort.html", "merge_sort.html", "heap_sort.html"].includes(currentPath)) link.classList.add("active");
+                }
+            }
+        });
+
+        let currentTabId = "";
+
+        // Generate Sidebar Buttons
+        function generateSidebar() {
+            const keys = Object.keys(OPERATIONS_DATA);
+            tabButtonsContainer.innerHTML = "";
+            
+            keys.forEach((key, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "tab-button" + (idx === 0 ? " active" : "");
+                btn.textContent = OPERATIONS_DATA[key].name;
+                btn.setAttribute("data-tab", key);
+                btn.onclick = () => selectTab(key);
+                tabButtonsContainer.appendChild(btn);
+            });
+
+            // Load initial tab
+            if (keys.length > 0) {
+                selectTab(keys[0]);
+            }
+        }
+
+        // Switch Tab Content
+        function selectTab(tabId) {
+            currentTabId = tabId;
+            // Toggle tab active styles
+            document.querySelectorAll(".tab-button").forEach(btn => {
+                if (btn.getAttribute("data-tab") === tabId) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+
+            const data = OPERATIONS_DATA[tabId];
+            if (!data) return;
+
+            // Update content viewport
+            opTitle.textContent = data.name;
+            complexityBadge.textContent = data.complexity;
+
+            // Algorithm Card show/hide
+            if (data.algorithm && data.algorithm.trim() !== "") {
+                algoCard.style.display = "block";
+                if (data.algorithm.includes("<table")) {
+                    algoContent.innerHTML = data.algorithm;
+                } else {
+                    algoContent.textContent = data.algorithm;
+                }
+            } else {
+                algoCard.style.display = "none";
+            }
+
+            // Code Card show/hide
+            if (data.code && (typeof data.code === "string" ? data.code.trim() !== "" : Object.keys(data.code).some(k => data.code[k].trim() !== ""))) {
+                codeCard.style.display = "block";
+                const lang = localStorage.getItem("preferredLanguage") || "c";
+                updateLanguageButtons(lang);
+                if (typeof data.code === "string") {
+                    codeContent.textContent = data.code;
+                    document.querySelector(".lang-selector").style.display = "none";
+                } else {
+                    codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    document.querySelector(".lang-selector").style.display = "flex";
+                }
+            } else {
+                codeCard.style.display = "none";
+            }
+        }
+
+        // Bind Language Selector Click Listeners
+        document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const lang = e.target.getAttribute("data-lang");
+                localStorage.setItem("preferredLanguage", lang);
+                updateLanguageButtons(lang);
+                
+                const data = OPERATIONS_DATA[currentTabId];
+                if (data && data.code) {
+                    if (typeof data.code === "string") {
+                        codeContent.textContent = data.code;
+                    } else {
+                        codeContent.textContent = data.code[lang] || data.code["c"] || "";
+                    }
+                }
+            });
+        });
+
+        function updateLanguageButtons(lang) {
+            document.querySelectorAll(".lang-btn").forEach(btn => {
+                if (btn.getAttribute("data-lang") === lang) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+        }
+
+        // Initialize view
+        window.onload = generateSidebar;
+
     </script>
-    <script src="nav.js"></script>
 </body>
+
 </html>
